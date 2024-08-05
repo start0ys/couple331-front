@@ -1,11 +1,7 @@
-import { Calendar } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import CalendarHelper from "../common/calendarHelper.js";
+
+const CALENDAR_ID = 'calendar';
 
 document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new Calendar(calendarEl, {
-      plugins: [dayGridPlugin],
-      initialView: 'dayGridMonth'
-    });
-    calendar.render();
-  });
+  CalendarHelper.init(CALENDAR_ID);
+});
