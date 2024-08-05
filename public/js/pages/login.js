@@ -1,1 +1,2 @@
-// 추후 개발
+import '@fontsource/lobster';
+import 'bootstrap/dist/css/bootstrap.min.css';

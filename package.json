@@ -6,16 +6,26 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "webpack"
   },
   "license": "ISC",
   "dependencies": {
+    "@fontsource/lobster": "^5.0.20",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "bootstrap": "^3.4.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-ejs-layouts": "^2.5.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.2",
+    "nodemon": "^3.1.4",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
   }
 }

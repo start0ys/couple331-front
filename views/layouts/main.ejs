@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Couple331</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&effect=shadow-multiple">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/common/common.css">
     <link rel="stylesheet" href="/css/common/main.css">
-    <% if (css && css.length > 0) { %>
-        <% css.forEach(function(file) { %>
-            <link rel="stylesheet" href="<%= file %>">
-        <% }); %>
+    <% if (css) { %>
+        <link rel="stylesheet" href="/css/<%= file %>.css">
     <% } %>
 </head>
 <body>
@@ -24,16 +20,9 @@
         <%- body %>
     </div>
 
-    <script src="/js/common/main.js"></script>
-    <% if (js && js.length > 0) { %>
-        <% js.forEach(function(file) { %>
-            <% if (file.type) { %>
-                <script type="<%= file.type %>" src="<%= file.path %>"></script>
-            <% } else { %> 
-                <script src="<%= file.path %>">
-            </script>
-            <% } %> 
-        <% }); %>
+    <script src="main.js"></script>
+    <% if (js) { %>
+        <script src="<%= js %>.js"></script>
     <% } %>
     
 </body>
