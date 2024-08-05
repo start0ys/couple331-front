@@ -1,0 +1,28 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+#wrapper{
+    width: 80%;
+    height: 80vh;
+    /* margin: 0 auto; */
+    position: absolute;
+    top: 10%;
+    left: 10%;
+}
+.w3-lobster {
+  font-family: "Lobster", Sans-serif;
+}
+
+input{
+    width: 65%;
+    height: 40px;
+    font-size: 15px;
+    border: 0.5px solid gray;
+    padding-left: 10px;
+    border-radius: 5px 5px 5px 5px;
+}
+.pointer:hover{
+    color: #f13050;
+    cursor: pointer;
+}
