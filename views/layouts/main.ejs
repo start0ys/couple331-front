@@ -8,6 +8,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/common/main.css">
+    <% if (css && css.length > 0) { %>
+        <% css.forEach(function(file) { %>
+            <link rel="stylesheet" href="<%= file %>">
+        <% }); %>
+    <% } %>
 </head>
 <body>
     
@@ -20,5 +25,16 @@
     </div>
 
     <script src="/js/common/main.js"></script>
+    <% if (js && js.length > 0) { %>
+        <% js.forEach(function(file) { %>
+            <% if (file.type) { %>
+                <script type="<%= file.type %>" src="<%= file.path %>"></script>
+            <% } else { %> 
+                <script src="<%= file.path %>">
+            </script>
+            <% } %> 
+        <% }); %>
+    <% } %>
+    
 </body>
 </html>
