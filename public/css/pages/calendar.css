@@ -1,0 +1,74 @@
+/* 캘린더 위의 해더 스타일(날짜가 있는 부분) */
+.fc-header-toolbar {
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+.fc-day a{
+    text-decoration: none !important;
+    color: black;
+  }
+
+  td.todoList a.fc-daygrid-day-number::before{
+    content: "";
+    background: #ff1965;
+    margin: 5px 0 0 1px;
+    width: 5px;
+    height: 4px;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    top: -9px;
+    left: -3px;
+}
+
+td.finishList a.fc-daygrid-day-number::before{
+  content: "";
+  background: #58b716;
+  margin: 5px 0 0 1px;
+  width: 5px;
+  height: 4px;
+  display: inline-block;
+  border-radius: 50%;
+  position: relative;
+  top: -9px;
+  left: -3px;
+}
+
+th.fc-col-header-cell > div{
+  background-color: #efefef;
+}
+
+.fc-daygrid {
+    border-top: 3px solid black;
+  }
+  
+  .fc-toolbar-title {
+    font-weight: bold;
+    font-size: 20px !important;
+    padding-left: 30px;
+  }
+
+  /* 토요일 날짜 파란색 */
+.fc-day-sat a {
+    color: blue !important;
+  }
+  
+  /* 일요일, 공휴일 날짜 빨간색 */
+  .fc-day-sun a, td.fc-daygrid-day:has(.holiday) a {
+    color: red !important;
+  }
+
+  .fc-day-today  .fc-daygrid-day-number {
+    font-weight: bold;
+  }
+
+  #calendar-container{
+    width: 65%;
+    float: left;
+    height: 645px;
+  }
+  .fc .fc-button {
+    font-size: 12px !important;
+  }
+  

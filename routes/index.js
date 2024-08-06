@@ -10,8 +10,16 @@ router.get('/login', (req, res) => {
   res.render('pages/login', { layout: false });
 });
 
+router.get('/signUp', (req, res) => {
+  res.render('pages/signUp', { layout: false });
+});
+
+router.get('/myPage', (req, res) => {
+  res.render('pages/myPage', { css: '', js: '' });
+});
+
 router.get('/calendar', (req, res) => {
-  res.render('pages/calendar', { css: '', js: '/calendar' });
+  res.render('pages/calendar', { css: 'pages/calendar', js: '/calendar' });
 });
 
 export default router;
