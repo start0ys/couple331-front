@@ -11,7 +11,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/calendar', (req, res) => {
-  res.render('pages/calendar', { css: '', js: 'calendar' });
+  res.render('pages/calendar', { css: '', js: '/calendar' });
 });
 
 export default router;

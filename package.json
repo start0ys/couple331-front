@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "webpack"
+    "build": "webpack --config webpack.config.js"
   },
   "license": "ISC",
   "dependencies": {
@@ -26,6 +26,8 @@
     "nodemon": "^3.1.4",
     "style-loader": "^4.0.0",
     "webpack": "^5.93.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-middleware": "^7.3.0",
+    "webpack-hot-middleware": "^2.26.1"
   }
 }
