@@ -24,16 +24,13 @@ input{
     cursor: pointer;
 }
 
-.custom-a {
-    text-decoration: none;
-    color: black;
+.page-move-span {
     cursor: pointer;
 }
 
-.custom-a:hover {
+.page-move-span:hover {
     color: #f13050;
     transition: 0.2s;
-    text-decoration: none;
 }
 
 #logo-container {
@@ -59,4 +56,10 @@ input{
 .form-control:focus {
     border-color: #f13050 !important;
     box-shadow: 0 0 0 .25rem #f1b9c2 !important;
+}
+
+.form-floating {
+    margin: 0 auto;
+    width: 325px;
+    margin-bottom: 12px;
 }

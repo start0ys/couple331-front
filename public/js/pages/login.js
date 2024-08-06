@@ -13,4 +13,12 @@ const bindEvent = () => {
             changeTheme(toggle);
           })
     })
+
+    document.querySelectorAll('.page-move-span').forEach(span => {
+        span.addEventListener('click', () => {
+            const page = span.getAttribute('page-move') || '';
+            if(page)
+                window.location.href = page;
+          })
+    })
 }
