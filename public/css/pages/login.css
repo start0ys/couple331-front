@@ -23,3 +23,23 @@ input{
     color: #f13050;
     cursor: pointer;
 }
+
+#logo-container {
+    text-align: center;
+}
+
+#logo-couple331 {
+    margin-top: 70px;
+}
+
+#logo-couple {
+    font-size: 63px;
+}
+
+#logo-331 {
+    font-size: 27px;
+}
+
+/* #toggle-sidebar {
+    display: none;
+} */

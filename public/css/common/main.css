@@ -41,3 +41,24 @@ body {
 .close-main {
     margin-left: 50px !important;
 }
+
+#logo-container {
+    margin-left: 10px;
+}
+
+#logo-couple331 {
+    cursor:pointer;
+}
+
+#logo-couple {
+    font-size: 46px;
+}
+
+#logo-331 {
+    font-size: 20px;
+}
+
+/* #toggle-sidebar {
+    font-size:30px;
+    cursor:pointer;
+} */
