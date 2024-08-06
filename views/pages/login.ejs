@@ -1,37 +1,19 @@
-<!DOCTYPE html>
-<html lang="ko" data-bs-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Couple331</title>
-    <link rel="stylesheet" href="/css/common/common.css">
-    <link rel="stylesheet" href="/css/pages/login.css">
-</head>
-</head>
-<body>
-    <%- include('../partials/theme') %>
-    <div id="wrapper">
-        <%- include('../partials/logo') %>
-        <div style="width: 500px; margin: 0 auto; text-align: center;">
-            <div class="form-floating">
-                <input type="email" class="form-control" id="email" placeholder="Email">
-                <label for="floatingInput"><i class="bi bi-envelope-fill" style="margin-right: 5px;"></i>이메일</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="password" placeholder="password">
-                <label for="floatingInput"><i class="bi bi-lock-fill" style="margin-right: 5px;"></i>비밀번호</label>
-            </div>
+<div class="form-floating">
+    <input type="email" class="form-control" id="email" placeholder="Email">
+    <label for="floatingInput"><i class="bi bi-envelope-fill" style="margin-right: 5px;"></i>이메일</label>
+</div>
+<div class="form-floating">
+    <input type="password" class="form-control" id="password" placeholder="password">
+    <label for="floatingInput"><i class="bi bi-lock-fill" style="margin-right: 5px;"></i>비밀번호</label>
+</div>
 
-            <input type="button" value="로그인" class="btn btn-info" style="width: 65%; margin-bottom: 40px; height: 50px; background-color: #f13050; border-radius: 5px 5px 5px 5px;border-color: #f13050; font-size: 15px; font-weight: bold; color: white;">
-            
-            <div style="width: 65%; margin: 0 auto;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span class="page-move-span" page-move="/signUp">회원가입</span>
-                    <span class="page-move-span">비밀번호 찾기</span>
-                </div>
-            </div>
-        </div>
+<div class="form-floating">
+    <input type="button" value="로그인" class="btn btn-info" style="width: 100%; margin-bottom: 40px; height: 50px; background-color: #f13050; border-radius: 5px 5px 5px 5px;border-color: #f13050; font-size: 15px; font-weight: bold; color: white;">
+</div>
+
+<div style="width: 65%; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between;">
+        <span class="page-move-span" page-move="/signUp">회원가입</span>
+        <span class="page-move-span">비밀번호 찾기</span>
     </div>
-    <script src="/login.js"></script>
-</body>
-</html>
+</div>

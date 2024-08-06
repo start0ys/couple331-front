@@ -1,34 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko" data-bs-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Couple331</title>
-    <link rel="stylesheet" href="/css/common/common.css">
-    <link rel="stylesheet" href="/css/pages/login.css">
-</head>
-</head>
-<body>
-    <%- include('../partials/theme') %>
-    <div id="wrapper">
-        <%- include('../partials/logo') %>
-        <div style="width: 500px; margin: 0 auto;">
-            <label for="email" class="form-label">이메일</label>
-            <div class="input-group">
-                <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                <button type="submit" class="btn btn-secondary">인증</button>
-              </div>
-            <div class="col-12">
-                <label for="name" class="form-label">이름</label>
-                <input type="text" class="form-control" id="name" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                    Valid  name is required.
-                </div>
-              </div>
-            
-            <input type="button" value="회원가입" class="btn btn-info" style="width: 65%; margin-top: 13px; margin-bottom: 40px; height: 50px; background-color: #f13050; border-radius: 5px 5px 5px 5px;border-color: #f13050; font-size: 15px; font-weight: bold; color: white;">
-        </div>
+<label for="email" class="form-label">이메일</label>
+<div class="input-group">
+    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+    <button type="submit" class="btn btn-secondary">인증</button>
+</div>
+<div class="col-12">
+    <label for="name" class="form-label">이름</label>
+    <input type="text" class="form-control" id="name" placeholder="" value="" required>
+    <div class="invalid-feedback">
+        Valid  name is required.
     </div>
-    <script src="/login.js"></script>
-</body>
-</html>
+</div>
+
+<input type="button" value="회원가입" class="btn btn-info" style="width: 65%; margin-top: 13px; margin-bottom: 40px; height: 50px; background-color: #f13050; border-radius: 5px 5px 5px 5px;border-color: #f13050; font-size: 15px; font-weight: bold; color: white;">

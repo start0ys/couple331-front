@@ -7,11 +7,11 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('pages/login', { layout: false });
+  res.render('pages/login', { layout: 'layouts/auth' });
 });
 
 router.get('/signUp', (req, res) => {
-  res.render('pages/signUp', { layout: false });
+  res.render('pages/signUp', { layout: 'layouts/auth' });
 });
 
 router.get('/myPage', (req, res) => {
