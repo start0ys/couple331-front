@@ -15,7 +15,7 @@ class CalendarHelper {
             center: 'title',
             right: 'today prev,next'
           };
-        const calendarEl = document.querySelector('#calendar');
+        const calendarEl = document.querySelector(`#${calendarId}`);
         let calendar = new Calendar(calendarEl, {
             plugins: [dayGridPlugin],
             height: 'calc(100% - 25px)', // calendar 높이 설정

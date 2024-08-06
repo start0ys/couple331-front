@@ -55,3 +55,8 @@ input{
 /* #toggle-sidebar {
     display: none;
 } */
+
+.form-control:focus {
+    border-color: #f13050 !important;
+    box-shadow: 0 0 0 .25rem #f1b9c2 !important;
+}
