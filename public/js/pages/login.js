@@ -1,3 +1,16 @@
-import '@fontsource/lobster';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import { initTheme, changeTheme } from "../common/common.js";
+
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    bindEvent();
+});
+
+
+
+const bindEvent = () => {
+    document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            changeTheme(toggle);
+          })
+    })
+}

@@ -1,3 +1,20 @@
-<%- include('./logo') %>
-<a href="/calendar">Calendar</a>
-<a href="/myPage">마이페이지</a>
+<ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="/" class="nav-link active" aria-current="page">
+        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+        Home
+      </a>
+    </li>
+    <li>
+      <a href="/calendar" class="nav-link link-body-emphasis">
+        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+        Calendar
+      </a>
+    </li>
+    <li>
+      <a href="/myPage" class="nav-link link-body-emphasis">
+        <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+        마이페이지
+      </a>
+    </li>
+  </ul>

@@ -16,6 +16,7 @@ export default {
         // main: './public/js/common/main.js', // 운영 환경 모드
         // login: './public/js/pages/login.js', // 운영 환경 모드
         // calendar: './public/js/pages/calendar.js' // 운영 환경 모드
+        common: [HMR_CLIENT, `${COMMON_JS_DIR}/common.js`],
         main: [HMR_CLIENT, `${COMMON_JS_DIR}/main.js`],
         login: [HMR_CLIENT, `${PAGES_JS_DIR}/login.js`],
         calendar: [HMR_CLIENT, `${PAGES_JS_DIR}/calendar.js`]
