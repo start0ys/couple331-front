@@ -11,7 +11,7 @@ const setTheme = theme => {
     document.documentElement.setAttribute('data-bs-theme', theme)
   }
 
-const showActiveTheme = (theme, focus = false) => {
+const showActiveTheme = (theme) => {
     const themeSwitcher = document.querySelector('#bd-theme')
 
     if (!themeSwitcher) {
@@ -30,28 +30,25 @@ const showActiveTheme = (theme, focus = false) => {
 
     btnToActive.classList.add('active')
     btnToActive.setAttribute('aria-pressed', 'true')
-    // activeThemeIcon.setAttribute('href', svgOfActiveBtn)
     activeThemeIcon.className = btnToActive.getAttribute('icon-class');
     const themeSwitcherLabel = `${themeSwitcherText.textContent} (${btnToActive.dataset.bsThemeValue})`
     themeSwitcher.setAttribute('aria-label', themeSwitcherLabel)
 
-    if (focus) {
-      themeSwitcher.focus()
-    }
+
 }
 
 const changeTheme = (toggle) => {
     const theme = toggle.getAttribute('data-bs-theme-value');
     setStoredTheme(theme);
     setTheme(theme);
-    showActiveTheme(theme, true);
+    showActiveTheme(theme);
 }
 
 const initTheme = () => {
     const theme = getStoredTheme();
     setStoredTheme(theme);
     setTheme(theme);
-    showActiveTheme(theme, true);
+    showActiveTheme(theme);
 }
 
 export { changeTheme, initTheme }
