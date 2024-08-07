@@ -1,8 +1,15 @@
-<label for="email" class="form-label">이메일</label>
-<div class="input-group">
-    <input type="email" class="form-control" id="email" placeholder="you@example.com">
-    <button type="submit" class="btn btn-secondary red-btn">인증</button>
+<div>
+    <label for="sexOption" class="form-label">성별</label>
+    <div class="form-check form-check-inline" style="margin-left: 5px;">
+        <input class="form-check-input" type="radio" name="sexOption" id="sexOptionMan" value="man">
+        <label class="form-check-label" for="sexOptionMan">남성</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="sexOption" id="sexOptionWoman" value="woman">
+        <label class="form-check-label" for="sexOptionWoman">여성</label>
+    </div>
 </div>
+
 <div class="col-12">
     <label for="name" class="form-label">이름</label>
     <input type="text" class="form-control" id="name" placeholder="" value="" required>
@@ -11,4 +18,53 @@
     </div>
 </div>
 
-<input type="button" value="회원가입" class="btn btn-info red-btn" style="width: 65%; margin-top: 13px; margin-bottom: 40px; height: 50px;">
+<div>
+    <label for="email" class="form-label">이메일</label>
+    <div class="input-group">
+        <input type="email" class="form-control" id="email" placeholder="you@example.com">
+        <button type="submit" class="btn btn-secondary red-btn">인증</button>
+    </div>
+</div>
+
+<div class="col-12">
+    <label for="password" class="form-label">비밀번호</label>
+    <input type="password" class="form-control" id="password" placeholder="" value="" required>
+    <div class="invalid-feedback">
+        Valid  name is Password.
+    </div>
+</div>
+
+<div class="col-12">
+    <label for="passwordCheck" class="form-label">비밀번호 확인</label>
+    <input type="password" class="form-control" id="passwordCheck" placeholder="" value="" required>
+</div>
+
+<div class="col-12">
+    <label for="nickName" class="form-label">닉네임</label>
+    <input type="text" class="form-control" id="nickName" placeholder="" value="" required>
+    <div class="invalid-feedback">
+        Valid  name is required.
+    </div>
+</div>
+
+<div class="col-12">
+    <label for="coupleSelect" class="form-label">커플 설정</label>
+    <input type="text" class="form-control" id="coupleSelect" placeholder="" value="" required>
+    <div class="invalid-feedback">
+        Valid  name is required.
+    </div>
+</div>
+
+<div class="col-12">
+    <label for="desc" class="form-label">소개</label>
+    <textarea class="form-control" id="desc" rows="3"></textarea>
+</div>
+
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" value="" id="agreeCheck">
+    <label class="form-check-label" for="agreeCheck" style="font-weight: bold">
+      동의체크
+    </label>
+</div>
+
+<input type="button" value="회원가입" class="btn btn-info red-btn" style="width: 100%; margin-top: 13px; margin-bottom: 40px; height: 50px;">

@@ -18,7 +18,9 @@ export default {
         // calendar: './public/js/pages/calendar.js' // 운영 환경 모드
         common: [HMR_CLIENT, `${COMMON_JS_DIR}/common.js`],
         main: [HMR_CLIENT, `${COMMON_JS_DIR}/main.js`],
+        auth: [HMR_CLIENT, `${COMMON_JS_DIR}/auth.js`],
         login: [HMR_CLIENT, `${PAGES_JS_DIR}/login.js`],
+        signUp: [HMR_CLIENT, `${PAGES_JS_DIR}/signUp.js`],
         calendar: [HMR_CLIENT, `${PAGES_JS_DIR}/calendar.js`]
     },
     output: {

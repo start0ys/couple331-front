@@ -8,7 +8,10 @@
     <!-- 저작자 표시 -->
     <meta name="copyright" content="This favicon was generated using the following graphics from Twitter Twemoji: Graphics Title: 1f495.svg, Graphics Author: Copyright 2020 Twitter, Inc and other contributors (https://github.com/twitter/twemoji), Graphics Source: https://github.com/twitter/twemoji/blob/master/assets/svg/1f495.svg, Graphics License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/).">
     <link rel="stylesheet" href="/css/common/common.css">
-    <link rel="stylesheet" href="/css/pages/login.css">
+    <link rel="stylesheet" href="/css/common/auth.css">
+    <% if (css) { %>
+        <link rel="stylesheet" href="/css/<%= css %>.css">
+    <% } %>
 </head>
 </head>
 <body>
@@ -19,6 +22,9 @@
             <%- body %>
         </div>
     </div>
-    <script src="/login.js"></script>
+    <script src="/auth.js"></script>
+    <% if (js) { %>
+        <script src="<%= js %>.js"></script>
+    <% } %>
 </body>
 </html>
