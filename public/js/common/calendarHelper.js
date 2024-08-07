@@ -2,8 +2,7 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
 class CalendarHelper {
-    constructor() {
-    }
+    constructor() {}
 
     init(calendarId) {
         let mode = '02';
@@ -15,7 +14,7 @@ class CalendarHelper {
             center: 'title',
             right: 'today prev,next'
           };
-        const calendarEl = document.querySelector(`#${calendarId}`);
+        const calendarEl = document.getElementById(calendarId);
         let calendar = new Calendar(calendarEl, {
             plugins: [dayGridPlugin],
             height: 'calc(100% - 25px)', // calendar 높이 설정

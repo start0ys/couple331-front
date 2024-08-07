@@ -21,7 +21,8 @@ export default {
         auth: [HMR_CLIENT, `${COMMON_JS_DIR}/auth.js`],
         login: [HMR_CLIENT, `${PAGES_JS_DIR}/login.js`],
         signUp: [HMR_CLIENT, `${PAGES_JS_DIR}/signUp.js`],
-        calendar: [HMR_CLIENT, `${PAGES_JS_DIR}/calendar.js`]
+        calendar: [HMR_CLIENT, `${PAGES_JS_DIR}/calendar.js`],
+        board: [HMR_CLIENT, `${PAGES_JS_DIR}/board.js`]
     },
     output: {
         path: path.resolve('dist'),
