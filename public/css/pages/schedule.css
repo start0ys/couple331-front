@@ -59,9 +59,6 @@ th.fc-col-header-cell > div{
     color: red !important;
   }
 
-  .fc-day-today  .fc-daygrid-day-number {
-    font-weight: bold;
-  }
 
   #calendar-container{
     width: 50%;
@@ -77,5 +74,34 @@ th.fc-col-header-cell > div{
 
   .fc .fc-button {
     font-size: 12px !important;
+  }
+
+  .fc-day-today {
+    background-color: transparent !important;
+  }
+
+  .fc-day-today .fc-daygrid-day-number::before{
+    content: "";
+    background: #ff1965;
+    margin: 5px 0 0 1px;
+    width: 5px;
+    height: 4px;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    top: -9px;
+    left: -3px;
+  }
+
+  .active-calendar {
+    background-color: #fffadf !important;
+  }
+
+  .active-calendar  .fc-daygrid-day-number, .fc-day-today .fc-daygrid-day-number{
+    font-weight: bold;
+  }
+
+  .fc-day {
+    cursor: pointer;
   }
   

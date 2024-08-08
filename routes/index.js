@@ -3,7 +3,7 @@ import express from "express";
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('pages/index', { css: '', js: '' });
+  res.render('pages/index', { css: '', js: '/index' });
 });
 
 router.get('/login', (req, res) => {
