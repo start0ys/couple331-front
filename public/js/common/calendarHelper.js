@@ -2,10 +2,13 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 
 class CalendarHelper {
-    constructor() {}
+    constructor() {
+      this.calendars = {};
+    }
+
 
     init(calendarId) {
-        let mode = '02';
+        let mode = '01';
         const headerToolbar = mode === '01' ? {
             left: 'title',
             right: 'today'
@@ -49,6 +52,27 @@ class CalendarHelper {
         });
         
         calendar.render();
+
+        this.calendars[calendarId] = calendar;
+    }
+
+    getCalendar(calendarId) {
+      return this.calendars[calendarId] || null;
+    }
+
+    /**
+     * @param {String} calendarId 
+     * @param {"next" | "prev" | "today"} target 
+     */
+    changeMonth(calendarId, target) {
+      const calendar = this.getCalendar(calendarId);
+        
+      if (!calendar || !['next', 'prev', 'today'].includes(target)) {
+          return;
+      }
+
+      calendar[target]();
+
     }
 }
 

@@ -14,8 +14,8 @@ router.get('/signUp', (req, res) => {
   res.render('pages/signUp', { layout: 'layouts/auth', css: 'pages/signUp', js: '' });
 });
 
-router.get('/calendar', (req, res) => {
-  res.render('pages/calendar', { css: 'pages/calendar', js: '/calendar' });
+router.get('/schedule', (req, res) => {
+  res.render('pages/schedule', { css: 'pages/schedule', js: '/schedule' });
 });
 
 router.get('/board', (req, res) => {
