@@ -25,6 +25,10 @@ const bindEvent = () => {
      })
      document.getElementById('closeModal').click();
   })
+
+  document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('scheduleText').value='';
+  })
 }
 
 const getDateStr = (date) =>{
