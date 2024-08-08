@@ -4,4 +4,4 @@ const GRID_ID = 'grid';
 
 document.addEventListener('DOMContentLoaded', function() {
     GridHelper.init(GRID_ID);
-  });
+});

@@ -68,6 +68,13 @@ th.fc-col-header-cell > div{
     float: left;
     height: 645px;
   }
+
+  #todo-container{
+    width: 50%;
+    float: right;
+    height: 645px;
+  }
+
   .fc .fc-button {
     font-size: 12px !important;
   }

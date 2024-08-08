@@ -1,10 +1,36 @@
 <div id='calendar-container'>
-    <button type="submit" class="btn btn-secondary red-btn calendar-btn" change-type="prev">왼쪽</button>
-    <button type="submit" class="btn btn-secondary red-btn calendar-btn" change-type="today">오늘</button>
-    <button type="submit" class="btn btn-secondary red-btn calendar-btn" change-type="next">오른쪽</button>
+    <button type="button" class="btn btn-primary red-btn" change-type="prev">왼쪽</button>
+    <button type="button" class="btn btn-primary red-btn" change-type="today">오늘</button>
+    <button type="button" class="btn btn-primary red-btn" change-type="next">오른쪽</button>
     <div id='calendar'></div>
 </div>
 
 <div id='todo-container'>
-    
+    <button type="button" class="btn btn-primary red-btn" data-bs-toggle="modal" data-bs-target="#scheduleModal">추가</button>
+    <div class="schedule-container">
+        <div id="todoDayStr" class="bold f23"></div>
+        <input type="hidden" name="todoDay" id="todoDay">
+        <div id="todolist"></div>
+    </div>
 </div>
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="scheduleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="scheduleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModal"></button>
+        </div>
+        <div class="modal-body">
+            <input type="text" class="form-control" id="scheduleText" placeholder="일정 입력해봐">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary red-btn" id="addSchedule">추가</button>
+        </div>
+      </div>
+    </div>
+  </div>
