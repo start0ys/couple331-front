@@ -1,26 +1,35 @@
 <div id='calendar-container'>
-  <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-    <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" checked>
-    <label class="btn btn-outline-primary" for="btncheck1">커플</label>
-  
-    <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btncheck2">개인</label>
-  
-  </div>
-    <div class="btn-group" role="group" aria-label="Basic outlined example">
-      <button type="button" class="btn btn-outline-primary" change-type="prev">왼쪽</button>
-      <button type="button" class="btn btn-outline-primary" change-type="prev">오늘</button>
-      <button type="button" class="btn btn-outline-primary" change-type="next">오른쪽</button>
+  <div class="card" style="width: 100%;">
+    <div class="card-body">
+      <div id='calendar'></div>
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" checked>
+        <label class="btn btn-outline-primary small-btn" for="btncheck1">커플</label>
+      
+        <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+        <label class="btn btn-outline-primary small-btn" for="btncheck2">개인</label>
+      
+      </div>
     </div>
-    <div id='calendar'></div>
-</div>
+    </div>
+  </div>
 
 <div id='todo-container'>
-    <button type="button" class="btn btn-primary red-btn" data-bs-toggle="modal" data-bs-target="#scheduleModal" id="addSchedule">추가</button>
-    <div class="schedule-container">
-        <div id="todoDayStr" class="bold f23"></div>
-        <input type="hidden" name="todoDay" id="todoDay">
-        <div id="todolist"></div>
+    <div class="card mb-3" style="width: 100%; min-height: 40vh;">
+      <div class="card-body">
+        <button type="button" style="position: absolute;" class="btn btn-primary red-small-btn schedule-modal-opener" data-bs-toggle="modal" data-bs-target="#scheduleModal">추가</button>
+        <h5 class="card-title" id="targetDayKo" style="text-align: center; font-weight: bold;">Special title treatment</h5>
+        <input type="hidden" name="targetDay" id="targetDay">
+        <div id="detailList"></div>
+      </div>
+    </div>
+    
+    <div class="card" style="width: 100%;">
+      <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>할 일</h5>
+        
+        <div>테스트</div>
+      </div>
     </div>
 </div>
 
@@ -50,7 +59,7 @@
         </div>
         <div class="modal-footer">
           <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-          <button type="button" class="btn btn-primary red-btn" id="editSchedule">저장</button>
+          <button type="button" class="btn btn-primary red-small-btn" id="editSchedule">저장</button>
         </div>
       </div>
     </div>

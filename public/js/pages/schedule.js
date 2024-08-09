@@ -6,22 +6,12 @@ const CALENDAR_ID = 'calendar';
 let picker = null;
 
 document.addEventListener('DOMContentLoaded', function() {
-	CalendarHelper.init(CALENDAR_ID, {dateClick: dateClick});
-  	bindEvent();
+	initCalendar();
+	bindEvent();
   	setDatePicker();
-  	dateClick({
-		date: new Date(),
-		dayEl: document.querySelector('.fc-day-today')
-	});
 });
 
 const bindEvent = () => {
-  	document.querySelectorAll('[change-type]').forEach(btn => {
-    	btn.addEventListener('click', () => {
-        	CalendarHelper.changeMonth(CALENDAR_ID, btn.getAttribute('change-type'));      
-    	})
-  	})
-
 	document.querySelectorAll('[target-date]').forEach(dateIcon => {
     	dateIcon.addEventListener('click', () => {
         	const targetId = dateIcon.getAttribute('target-date');
@@ -29,8 +19,8 @@ const bindEvent = () => {
     	})
   	})
 
-	document.getElementById('addSchedule').addEventListener('click', () => {
- 		const date = new Date(document.getElementById('todoDay').value);
+	document.querySelector('.schedule-modal-opener').addEventListener('click', () => {
+ 		const date = new Date(document.getElementById('targetDay').value);
     	picker.setStartDate(date);
     	picker.setEndDate(date);
   	})
@@ -43,7 +33,7 @@ const bindEvent = () => {
 		if(startDateStr !== endDateStr) {
 			const endDate = new Date(endDateStr);
 			const tomorrow = new Date(endDate.setDate(endDate.getDate() + 1)); // fullcalender에 기간 표시될 때 마지막날에서 하루 더 해야함
-			endDateStr = getDateStr(tomorrow).day;
+			endDateStr = CalendarHelper.getDateStr(tomorrow, 'yyyy-MM-dd');
 		}
 
 		CalendarHelper.setSchedule(CALENDAR_ID, {
@@ -59,29 +49,14 @@ const bindEvent = () => {
 	})
 }
 
-const getDateStr = (date) =>{
-	const dayObj = { 0 : '일요일' ,1: '월요일' ,2: '화요일' ,3: '수요일' ,4: '목요일' ,5: '금요일' ,6: '토요일' };
-	const getTimeNumber = time => time < 10 ? '0' + time : time;
-	const year = date.getFullYear();
-	const month = getTimeNumber(date.getMonth() + 1);
-	const day = getTimeNumber(date.getDate());
-	return {
-		dayStr: `${year}년 ${month}월 ${day}일 ${dayObj[date.getDay()]}`,
-		day: `${year}-${month}-${day}`
-	}
-}
-
 const scheduleDetail = (date) => {
 	if(!date) return;
 
-	const todoDayStrEl = document.getElementById('todoDayStr');
-	const todoDayEl = document.getElementById('todoDay');
+	const targetDayKoEl = document.getElementById('targetDayKo');
+	const targetDayEl = document.getElementById('targetDay');
 
-
-	const dateObj = getDateStr(date)
-
-	todoDayStrEl.innerText = dateObj.dayStr;
-	todoDayEl.value = dateObj.day;
+	targetDayKoEl.innerText = CalendarHelper.getDateStr(date, 'yyyy년 MM월 dd일 E요일');
+	targetDayEl.value = CalendarHelper.getDateStr(date, 'yyyy-MM-dd');
 }
 
 const dateClick = (info) => {
@@ -92,10 +67,16 @@ const dateClick = (info) => {
 	document.querySelectorAll(`.${className}`).forEach(i => i.classList.remove(className));
 
 	info.dayEl.classList.add(className);
+
+	const day = CalendarHelper.getDateStr(info.date);
+	const detailEl = document.getElementById('detailList');
+	const TITLE_TEMPLATE = (title) => '<div>'+title+'</div>';
+	detailEl.innerHTML = '';
+	CalendarHelper.getDetailSchedules(day).forEach(title => detailEl.insertAdjacentHTML("beforeend", TITLE_TEMPLATE(title)))
 }
 
 const setDatePicker = () => {
-	const date = document.getElementById('todoDay').value;
+	const date = document.getElementById('targetDay').value;
 	picker = DatePicker.createRangePicker({
 			startpicker: {
 				date: new Date(date),
@@ -111,5 +92,41 @@ const setDatePicker = () => {
 			format: 'YYYY-MM-dd'
 		});
 
+}
+
+const initCalendar = () => {
+	const calendarOption = {
+		dateClick: dateClick,
+		headerToolbar: {
+            left: 'prev',
+            center: 'title',
+            right: 'customToday next'
+        },
+		customButtons:{
+			prev:{ text:'<', click: () => CalendarHelper.changeMonth(CALENDAR_ID, 'prev') },
+			next:{ text:'>', click: () => CalendarHelper.changeMonth(CALENDAR_ID, 'next') },
+			customToday:{ text:'오늘', click: () => {
+				CalendarHelper.changeMonth(CALENDAR_ID, 'today');
+				dateClick({
+					date: new Date(),
+					dayEl: document.querySelector('.fc-day-today')
+				}); }
+			}
+		},
+		dayCellContent: info => {
+			const number = document.createElement('a');
+			number.classList.add('view-mode-day-number');
+			number.innerHTML = info.dayNumberText.replace('일', '');
+			return {
+				html : number.outerHTML
+			};
+		  }
+	}
+
+	CalendarHelper.init(CALENDAR_ID, calendarOption);
+  	dateClick({
+		date: new Date(),
+		dayEl: document.querySelector('.fc-day-today')
+	});
 }
 

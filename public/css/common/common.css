@@ -40,3 +40,13 @@
     font-weight: bold !important; 
     color: white !important;
   }
+
+  .btn.red-small-btn{
+    background-color: #f13050 !important; 
+    border-radius: 5px 5px 5px 5px;
+    border-color: #f13050 !important; 
+    font-size: 13px !important;
+    font-weight: bold !important; 
+    color: white !important;
+    padding: 4px 8px !important;
+  }
