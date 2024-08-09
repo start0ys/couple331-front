@@ -1,12 +1,12 @@
 import { Calendar } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { getDateStr } from './common.js';
 
 class CalendarHelper {
     constructor() {
         this.calendars = {};
         this.schedules = {};
-        this.dayObj = { 0 : '일요일' ,1: '월요일' ,2: '화요일' ,3: '수요일' ,4: '목요일' ,5: '금요일' ,6: '토요일' };
     }
 
 
@@ -66,30 +66,6 @@ class CalendarHelper {
         calendar[target]();
     }
 
-    getDateStr(date, pattern = 'yyyy-MM-dd') {
-        if(!date instanceof Date) return '';
-
-        const getTimeNumber = time => time < 10 ? '0' + time : time;
-        const year = date.getFullYear();
-        const month = getTimeNumber(date.getMonth() + 1);
-        const day = getTimeNumber(date.getDate());
-
-        let str = '';
-
-        switch(pattern) {
-            case 'yyyy-MM-dd':
-                str = `${year}-${month}-${day}`;
-                break
-            case 'yyyy년 MM월 dd일 E요일': 
-                str = `${year}년 ${month}월 ${day}일 ${this.dayObj[date.getDay()]}`;
-                break;
-        }
-
-        return str;
-    }
-
-    
-
     setSchedule(calendarId, schedule) {
         const calendar = this.getCalendar(calendarId);
             
@@ -111,7 +87,7 @@ class CalendarHelper {
             this.schedules[startDate] = details;
         } else {
             while (currentDate < new Date(endDate)) {
-                const date = this.getDateStr(currentDate, 'yyyy-MM-dd');
+                const date = getDateStr(currentDate, 'yyyy-MM-dd');
                 const details = this.schedules[date] || [];
                 details.push(title);
                 this.schedules[date] = details;

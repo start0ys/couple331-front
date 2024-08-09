@@ -1,3 +1,7 @@
+import '@fontsource/lobster';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import { initTheme, changeTheme } from "../common/common.js";
 
 document.addEventListener('DOMContentLoaded', () => {

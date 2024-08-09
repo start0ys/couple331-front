@@ -1,6 +1,7 @@
-import CalendarHelper from "../common/calendarHelper.js";
 import DatePicker from 'tui-date-picker';
 import 'tui-date-picker/dist/tui-date-picker.css';
+import CalendarHelper from "../common/calendarHelper.js";
+import { getDateStr } from '../common/common.js';
 
 const CALENDAR_ID = 'calendar';
 let picker = null;
@@ -33,7 +34,7 @@ const bindEvent = () => {
 		if(startDateStr !== endDateStr) {
 			const endDate = new Date(endDateStr);
 			const tomorrow = new Date(endDate.setDate(endDate.getDate() + 1)); // fullcalender에 기간 표시될 때 마지막날에서 하루 더 해야함
-			endDateStr = CalendarHelper.getDateStr(tomorrow, 'yyyy-MM-dd');
+			endDateStr = getDateStr(tomorrow, 'yyyy-MM-dd');
 		}
 
 		CalendarHelper.setSchedule(CALENDAR_ID, {
@@ -55,8 +56,8 @@ const scheduleDetail = (date) => {
 	const targetDayKoEl = document.getElementById('targetDayKo');
 	const targetDayEl = document.getElementById('targetDay');
 
-	targetDayKoEl.innerText = CalendarHelper.getDateStr(date, 'yyyy년 MM월 dd일 E요일');
-	targetDayEl.value = CalendarHelper.getDateStr(date, 'yyyy-MM-dd');
+	targetDayKoEl.innerText = getDateStr(date, 'yyyy년 MM월 dd일 E요일');
+	targetDayEl.value = getDateStr(date, 'yyyy-MM-dd');
 }
 
 const dateClick = (info) => {
@@ -68,7 +69,7 @@ const dateClick = (info) => {
 
 	info.dayEl.classList.add(className);
 
-	const day = CalendarHelper.getDateStr(info.date);
+	const day = getDateStr(info.date);
 	const detailEl = document.getElementById('detailList');
 	const TITLE_TEMPLATE = (title) => '<div>'+title+'</div>';
 	detailEl.innerHTML = '';

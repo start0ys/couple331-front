@@ -1,8 +1,4 @@
-import '@fontsource/lobster';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "bootstrap-icons/font/bootstrap-icons.css";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-
+const dayObj = { 0 : '일요일' ,1: '월요일' ,2: '화요일' ,3: '수요일' ,4: '목요일' ,5: '금요일' ,6: '토요일' };
 
 const setStoredTheme = theme => localStorage.setItem('couple331-theme', theme);
 const getStoredTheme = () => localStorage.getItem('couple331-theme') || 'light';
@@ -51,4 +47,26 @@ const initTheme = () => {
     showActiveTheme(theme);
 }
 
-export { changeTheme, initTheme }
+const getDateStr = (date, pattern = 'yyyy-MM-dd') => {
+  if(!date instanceof Date) return '';
+
+  const getTimeNumber = time => time < 10 ? '0' + time : time;
+  const year = date.getFullYear();
+  const month = getTimeNumber(date.getMonth() + 1);
+  const day = getTimeNumber(date.getDate());
+
+  let str = '';
+
+  switch(pattern) {
+      case 'yyyy-MM-dd':
+          str = `${year}-${month}-${day}`;
+          break
+      case 'yyyy년 MM월 dd일 E요일': 
+          str = `${year}년 ${month}월 ${day}일 ${dayObj[date.getDay()]}`;
+          break;
+  }
+
+  return str;
+}
+
+export { changeTheme, initTheme, getDateStr }
