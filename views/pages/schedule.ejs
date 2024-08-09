@@ -28,26 +28,19 @@
       <div class="card-body">
         <h5 class="card-title" style="text-align: center; font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>할 일</h5>
         
-        
-        <ul class="list-group list-group-horizontal rounded-0 bg-transparent">
-          <li
-            class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-            <div class="form-check">
-              <input class="form-check-input me-0" type="checkbox" value="" id="flexCheckChecked1"
-                aria-label="..." checked />
-            </div>
-          </li>
-          <li
-            class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-            <p class="lead fw-normal mb-0">할 일 테스트</p>
-          </li>
-          <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
-            <div class="d-flex flex-row justify-content-end mb-1">
-              <a href="#!" class="text-info" data-mdb-tooltip-init title="Edit todo"><i class="bi bi-pencil-fill"></i></a>
-              <a href="#!" class="text-danger" data-mdb-tooltip-init title="Delete todo"><i class="bi bi-trash3-fill"></i></a>
-            </div>
-          </li>
-        </ul>
+        <div id="todoList">
+          <div class="list-group list-group-horizontal rounded-0 bg-transparent">
+              <div class="form-check">
+                <input class="form-check-input me-0" type="checkbox" value="" id="flexCheckChecked1"
+                  aria-label="..." checked />
+              </div>
+              <p>할 일 테스트</p>
+              <div class="d-flex flex-row justify-content-end mb-1">
+                <a href="#!" class="text-info" data-mdb-tooltip-init title="Edit todo"><i class="bi bi-pencil-fill"></i></a>
+                <a href="#!" class="text-danger" data-mdb-tooltip-init title="Delete todo"><i class="bi bi-trash3-fill"></i></a>
+              </div>
+          </div>
+        </div>
       </div>
     </div>
 </div>
