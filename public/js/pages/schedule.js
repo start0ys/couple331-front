@@ -29,6 +29,7 @@ const bindEvent = () => {
 	document.getElementById('editSchedule').addEventListener('click', () => {
 		const scheduleText = document.getElementById('scheduleText').value;
 		const startDateStr = document.getElementById('startDate').value;
+		const targetDayStr = document.getElementById('targetDay').value;
 		let endDateStr = document.getElementById('endDate').value;
 
 		if(startDateStr !== endDateStr) {
@@ -42,12 +43,22 @@ const bindEvent = () => {
 			start: startDateStr,
 			end: endDateStr
 		})
+
+		setDetailSchedule(targetDayStr);
 		document.getElementById('closeModal').click();
 	})
 
 	document.getElementById('closeModal').addEventListener('click', () => {
 		document.getElementById('scheduleText').value='';
 	})
+}
+
+const setDetailSchedule = (day) => {
+	if(!day) return;
+	const detailEl = document.getElementById('detailList');
+	const TITLE_TEMPLATE = (title) => '<div>'+title+'</div>';
+	detailEl.innerHTML = '';
+	CalendarHelper.getDetailSchedules(day).forEach(title => detailEl.insertAdjacentHTML("beforeend", TITLE_TEMPLATE(title)))
 }
 
 const scheduleDetail = (date) => {
@@ -70,10 +81,7 @@ const dateClick = (info) => {
 	info.dayEl.classList.add(className);
 
 	const day = getDateStr(info.date);
-	const detailEl = document.getElementById('detailList');
-	const TITLE_TEMPLATE = (title) => '<div>'+title+'</div>';
-	detailEl.innerHTML = '';
-	CalendarHelper.getDetailSchedules(day).forEach(title => detailEl.insertAdjacentHTML("beforeend", TITLE_TEMPLATE(title)))
+	setDetailSchedule(day);
 }
 
 const setDatePicker = () => {
