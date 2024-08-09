@@ -50,3 +50,7 @@
     color: white !important;
     padding: 4px 8px !important;
   }
+
+  i {
+    margin-right: 5px;
+  }

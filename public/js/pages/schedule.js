@@ -56,9 +56,19 @@ const bindEvent = () => {
 const setDetailSchedule = (day) => {
 	if(!day) return;
 	const detailEl = document.getElementById('detailList');
-	const TITLE_TEMPLATE = (title) => '<div>'+title+'</div>';
+	const TITLE_TEMPLATE = (detail) => {
+		const start = detail.start;
+		const end = detail.end;
+		const period = start === end ? start : `${start}~${end}`;
+		return `<li>
+			<span>${detail.title}</span>
+			<small class="text-body-secondary">
+				<i class="bi bi-calendar-event"></i>${period}
+			</small>
+		</li>`
+	};
 	detailEl.innerHTML = '';
-	CalendarHelper.getDetailSchedules(day).forEach(title => detailEl.insertAdjacentHTML("beforeend", TITLE_TEMPLATE(title)))
+	CalendarHelper.getDetailSchedules(day).forEach(detail => detailEl.insertAdjacentHTML("beforeend", TITLE_TEMPLATE(detail)))
 }
 
 const scheduleDetail = (date) => {

@@ -85,4 +85,8 @@ th.fc-col-header-cell > div{
   .btn-group {
     margin-bottom: 15px;
   }
+
+  #detailList {
+    padding: 5px; 
+  }
   

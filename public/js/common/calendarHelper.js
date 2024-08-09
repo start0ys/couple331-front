@@ -78,18 +78,24 @@ class CalendarHelper {
         const startDate = schedule.start;
         const endDate = schedule.end;
         const title = schedule.title;
+        const detail = {
+            title: title,
+            start: startDate
+        }
 
         let currentDate = new Date(startDate);
 
         if(startDate === endDate) {
             const details = this.schedules[startDate] || [];
-            details.push(title);
+            detail.end = startDate;
+            details.push(detail);
             this.schedules[startDate] = details;
         } else {
             while (currentDate < new Date(endDate)) {
                 const date = getDateStr(currentDate, 'yyyy-MM-dd');
                 const details = this.schedules[date] || [];
-                details.push(title);
+                detail.end = date;
+                details.push(detail);
                 this.schedules[date] = details;
                 currentDate.setDate(currentDate.getDate() + 1);
             }
