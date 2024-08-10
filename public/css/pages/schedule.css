@@ -89,4 +89,22 @@ th.fc-col-header-cell > div{
   #detailList {
     padding: 5px; 
   }
+
+  .fc-button {
+    color: black !important;
+    background-color: #efefef !important;
+    border-top: 3px solid black !important;
+  }
+
+  .fc-customToday-button {
+    background-color: #0d6efd !important; 
+    border-radius: 5px 5px 5px 5px;
+    border-color: #0d6efd !important; 
+    font-size: 13px !important;
+    font-weight: bold !important; 
+    color: white !important;
+    padding: 4px 8px !important;
+  }
+
+
   

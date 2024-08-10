@@ -7,6 +7,7 @@ class CalendarHelper {
     constructor() {
         this.calendars = {};
         this.schedules = {};
+        this.todos = {};
     }
 
 
@@ -104,6 +105,32 @@ class CalendarHelper {
 
     getDetailSchedules(day) {
         return this.schedules[day] || [];
+    }
+
+    setTodo(day, id, todo) {
+        if(!day || !id || !todo) return;
+
+        const todos = this.todos[day] || [];
+        todos.push({
+            id: id,
+            todo: todo,
+            isFinish: false
+        });
+        this.todos[day] = todos;
+    }
+
+    getTodos(day) {
+        return this.todos[day] || [];
+    }
+
+    removeTodo(day, id) {
+        if(!day || !id) return;
+        this.todos[day] = this.todos[day].filter(todo => todo.id !== id)
+    }
+
+    changeTodo(day, id, isFinish) {
+        if(!day || !id) return;
+        this.todos[day].find(todo => todo.id === id).isFinish = isFinish;
     }
 }
 

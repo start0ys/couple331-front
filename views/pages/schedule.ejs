@@ -18,7 +18,7 @@
     <div class="card mb-3" style="width: 100%; min-height: 40vh;">
       <div class="card-body">
         <button type="button" style="position: absolute;" class="btn btn-primary red-small-btn schedule-modal-opener" data-bs-toggle="modal" data-bs-target="#scheduleModal">추가</button>
-        <h5 class="card-title" id="targetDayKo" style="text-align: center; font-weight: bold;">Special title treatment</h5>
+        <p class="card-title" id="targetDayKo" style="text-align: center; font-weight: bold;     padding-left: 15px;"></p>
         <input type="hidden" name="targetDay" id="targetDay">
         <ui id="detailList"></ui>
       </div>
@@ -26,21 +26,12 @@
     
     <div class="card" style="width: 100%;">
       <div class="card-body">
-        <h5 class="card-title" style="text-align: center; font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>할 일</h5>
-        
-        <div id="todoList">
-          <div class="list-group list-group-horizontal rounded-0 bg-transparent">
-              <div class="form-check">
-                <input class="form-check-input me-0" type="checkbox" value="" id="flexCheckChecked1"
-                  aria-label="..." checked />
-              </div>
-              <p>할 일 테스트</p>
-              <div class="d-flex flex-row justify-content-end mb-1">
-                <a href="#!" class="text-info" data-mdb-tooltip-init title="Edit todo"><i class="bi bi-pencil-fill"></i></a>
-                <a href="#!" class="text-danger" data-mdb-tooltip-init title="Delete todo"><i class="bi bi-trash3-fill"></i></a>
-              </div>
-          </div>
+        <p class="card-title" style="text-align: center; font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>할 일</p>
+        <div style="margin: 10px 0;">
+            <input type="text" style="text-align: center;" class="form-control" id="todoText" placeholder="할일을 작성하고 Enter를 눌러주세요.">
         </div>
+        
+        <div id="todoList"></div>
       </div>
     </div>
 </div>
@@ -56,17 +47,26 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModal"></button>
         </div>
         <div class="modal-body">
-            <input type="text" class="form-control" id="scheduleText" placeholder="일정 입력해봐">
-            <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                <input id="startDate" type="text" aria-label="Date">
-                <span class="tui-ico-date" target-date="startDate"></span>
-                <div id="startpicker-container" style="margin-left: -1px;"></div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="scheduleText" placeholder="일정을 입력해주세요.">
             </div>
-            <span>~</span>
-            <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                <input id="endDate" type="text" aria-label="Date">
-                <span class="tui-ico-date" target-date="endDate"></span>
-                <div id="endpicker-container" style="margin-left: -1px;"></div>
+            <div class="mb-3">
+                <label for="scheduleColor" style="display: block;" class="form-label">일정 기간</label>
+                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                    <input id="startDate" type="text" class="form-control" aria-label="Date">
+                    <span class="tui-ico-date" target-date="startDate"></span>
+                    <div id="startpicker-container" style="margin-left: -1px;"></div>
+                </div>
+                <span>~</span>
+                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                    <input id="endDate" type="text" class="form-control" aria-label="Date">
+                    <span class="tui-ico-date" target-date="endDate"></span>
+                    <div id="endpicker-container" style="margin-left: -1px;"></div>
+                </div>
+            </div>
+            <div>
+                <label for="scheduleColor" class="form-label">일정 색상</label>
+                <input type="color" class="form-control form-control-color" id="scheduleColor" value="#3788d8">
             </div>
         </div>
         <div class="modal-footer">
