@@ -52,9 +52,22 @@ th.fc-col-header-cell > div{
     background-color: transparent !important;
   }
 
-  .fc-day-today .fc-daygrid-day-number::before{
+  td.todoList a.fc-daygrid-day-number::before{
     content: "";
     background: #ff1965;
+    margin: 5px 0 0 1px;
+    width: 5px;
+    height: 4px;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    top: -9px;
+    left: -3px;
+  }
+
+  td.finishList a.fc-daygrid-day-number::before{
+    content: "";
+    background: #58b716;
     margin: 5px 0 0 1px;
     width: 5px;
     height: 4px;
@@ -69,8 +82,13 @@ th.fc-col-header-cell > div{
     background-color: #fffadf !important;
   }
 
-  .active-calendar  .fc-daygrid-day-number, .fc-day-today .fc-daygrid-day-number{
+  .active-calendar  .fc-daygrid-day-number {
     font-weight: bold;
+  }
+
+  .fc-day-today a.view-mode-day-number {
+    font-weight: bold;
+    color: #781be8  !important;
   }
 
   .fc-day {
@@ -97,9 +115,9 @@ th.fc-col-header-cell > div{
   }
 
   .fc-customToday-button {
-    background-color: #0d6efd !important; 
+    background-color: #781be8  !important; 
     border-radius: 5px 5px 5px 5px;
-    border-color: #0d6efd !important; 
+    border-color: #781be8  !important; 
     font-size: 13px !important;
     font-weight: bold !important; 
     color: white !important;

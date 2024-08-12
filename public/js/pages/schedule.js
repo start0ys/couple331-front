@@ -1,6 +1,7 @@
 import DatePicker from 'tui-date-picker';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import CalendarHelper from "../common/calendarHelper.js";
+import TodoHelper from "../common/todoHelper.js";
 import { getDateStr, generateUUID } from '../common/common.js';
 
 const CALENDAR_ID = 'calendar';
@@ -85,36 +86,64 @@ const bindEvent = () => {
 	})
 
 	document.getElementById('todoText').addEventListener('keyup', function(e) {
-		if(e.keyCode === 13 && !!this.value) {
+		if(e.key === 'Enter' && !!this.value) {
 			const todoEl = document.getElementById('todoList');
 			const targetDayStr = document.getElementById('targetDay').value;
 			const id = generateUUID();
 			todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(id, this.value, false));
-			CalendarHelper.setTodo(targetDayStr, id, this.value);
+			TodoHelper.setTodo(targetDayStr, id, this.value);
+			setTodoCheckPoint(targetDayStr);
 			this.value = '';
 		}
 	})
 
-	document.getElementById('todoList').addEventListener('click', function(e) {
+	document.getElementById('todoList').addEventListener('click', (e) => {
 		const target = e.target;
+		const todoId = target.getAttribute('targe-id');
+		const targetDayStr = document.getElementById('targetDay').value;
 	
 		if (target.classList.contains('todo-check')) {
-			const todoId = target.getAttribute('targe-id');
-			const targetDayStr = document.getElementById('targetDay').value;
 			const isFinish = target.checked;
-			CalendarHelper.changeTodo(targetDayStr, todoId, isFinish);
+			TodoHelper.changeStateTodo(targetDayStr, todoId, isFinish);
+			setTodoCheckPoint(targetDayStr);
 		}
 	
 		if (target.classList.contains('todo-edit')) {
-			const todoId = target.getAttribute('targe-id');
-			const targetDayStr = document.getElementById('targetDay').value;
+			const todoElement = document.getElementById(todoId);
+
+			const pElement = todoElement.querySelector('p');
+			const currentTodo = pElement.textContent;
+
+			const inputElement = document.createElement('input');
+			inputElement.type = 'text';
+			inputElement.value = currentTodo;
+			inputElement.classList.add('form-control');
+
+			pElement.replaceWith(inputElement);
+
+			inputElement.focus();
+
+			const updateTodo = () => {
+				const newTodo = inputElement.value;
+				const pElement = document.createElement('p');
+
+				pElement.textContent = newTodo;
+				inputElement.replaceWith(pElement);
+				TodoHelper.updateTodo(targetDayStr, todoId, newTodo);
+				setTodoCheckPoint(targetDayStr);
+			}
+
+			inputElement.addEventListener('blur', updateTodo);
+			inputElement.addEventListener('keyup', (e) => {
+				if (e.key === 'Enter') updateTodo();
+			});
+
 		}
 	
 		if (target.classList.contains('todo-delete')) {
-			const todoId = target.getAttribute('targe-id');
-			const targetDayStr = document.getElementById('targetDay').value;
 			document.getElementById(todoId).remove();
-			CalendarHelper.removeTodo(targetDayStr, todoId);
+			TodoHelper.removeTodo(targetDayStr, todoId);
+			setTodoCheckPoint(targetDayStr);
 		}
 	});
 }
@@ -126,11 +155,11 @@ const setDetailSchedule = (day) => {
 	CalendarHelper.getDetailSchedules(day).forEach(detail => detailEl.insertAdjacentHTML("beforeend", SCHEDULE_DETAIL_TEMPLATE(detail)))
 }
 
-const setTodo = (day) => {
+const setDetailTodo = (day) => {
 	if(!day) return;
 	const todoEl = document.getElementById('todoList');
 	todoEl.innerHTML = '';
-	CalendarHelper.getTodos(day).forEach(todo => todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(todo.id, todo.todo, todo.isFinish)))
+	TodoHelper.getTodos(day).forEach(todo => todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(todo.id, todo.todo, todo.isFinish)))
 }
 
 const scheduleDetail = (date) => {
@@ -154,7 +183,7 @@ const dateClick = (info) => {
 
 	const day = getDateStr(info.date);
 	setDetailSchedule(day);
-	setTodo(day);
+	setDetailTodo(day);
 }
 
 const setDatePicker = () => {
@@ -174,6 +203,16 @@ const setDatePicker = () => {
 			format: 'YYYY-MM-dd'
 		});
 
+	// const month = new tui.DatePicker('#datepicker-month-ko', {
+	// 	date: new Date(date),
+	// 	language: 'ko',
+	// 	type: 'month',
+	// 	input: {
+	// 		element: '#datepicker-input-ko',
+	// 		format: 'yyyy-MM'
+	// 	}
+	// });
+
 }
 
 const initCalendar = () => {
@@ -185,8 +224,24 @@ const initCalendar = () => {
             right: 'customToday next'
         },
 		customButtons:{
-			prev:{ text:'<', click: () => CalendarHelper.changeMonth(CALENDAR_ID, 'prev') },
-			next:{ text:'>', click: () => CalendarHelper.changeMonth(CALENDAR_ID, 'next') },
+			prev:{ text:'<', click: () => {
+					CalendarHelper.changeMonth(CALENDAR_ID, 'prev');
+					calendarTodoCheck();
+					dateClick({
+						date: CalendarHelper.getDate(CALENDAR_ID),
+						dayEl: document.querySelector(`td[data-date='${CalendarHelper.getDateStr(CALENDAR_ID, 'yyyy-MM-dd')}']`)
+					});
+				}
+			},
+			next:{ text:'>', click: () => {
+					CalendarHelper.changeMonth(CALENDAR_ID, 'next');
+					calendarTodoCheck();
+					dateClick({
+						date: CalendarHelper.getDate(CALENDAR_ID),
+						dayEl: document.querySelector(`td[data-date='${CalendarHelper.getDateStr(CALENDAR_ID, 'yyyy-MM-dd')}']`)
+					});
+				}
+			},
 			customToday:{ text:'오늘', click: () => {
 				CalendarHelper.changeMonth(CALENDAR_ID, 'today');
 				dateClick({
@@ -239,4 +294,36 @@ const textColor = (color) => {
      // 색상 선택
      return luma < 170.5 ? "#fff" : "#302c2c";
  };
+
+ const calendarTodoCheck = () => {
+	const calendar = CalendarHelper.getCalendar(CALENDAR_ID);
+	if (!calendar)
+		return;
+
+	const day = CalendarHelper.getDateStr(CALENDAR_ID, 'yyyy-MM');
+	const todos = TodoHelper.getTodos();
+
+	const todoList = Object.keys(todos)?.filter(d => d.startsWith(day));
+
+	for(const todoDay of todoList) {
+		setTodoCheckPoint(todoDay);
+	}
+ }
+
+ const setTodoCheckPoint = (day) => {
+	const todos = TodoHelper.getTodos(day);
+	const targetEl = document.querySelector(`td[data-date='${day}']`);
+
+	if(todos.length > 0) {
+		const isNotFinish = todos.some(data => !data.isFinish);
+		const remove = isNotFinish ? 'finishList' : 'todoList';
+		const add = isNotFinish ? 'todoList' : 'finishList';
+		if(targetEl.classList.contains(remove)) targetEl.classList.remove(remove);
+		if(!targetEl.classList.contains(add)) targetEl.classList.add(add);
+	} else if(targetEl.classList.contains('finishList')){
+		targetEl.classList.remove('finishList');
+	} else if(targetEl.classList.contains('todoList')) {
+		targetEl.classList.remove('todoList');
+	}   
+}
 

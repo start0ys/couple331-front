@@ -7,7 +7,6 @@ class CalendarHelper {
     constructor() {
         this.calendars = {};
         this.schedules = {};
-        this.todos = {};
     }
 
 
@@ -55,16 +54,21 @@ class CalendarHelper {
 
     /**
      * @param {String} calendarId 
-     * @param {"next" | "prev" | "today"} target 
+     * @param {String} target 
+     * @param {String} day 
      */
-    changeMonth(calendarId, target) {
+    changeMonth(calendarId, target, day) {
         const calendar = this.getCalendar(calendarId);
         
-        if (!calendar || !['next', 'prev', 'today'].includes(target)) {
+        if (!calendar) {
             return;
         }
 
-        calendar[target]();
+        if(['next', 'prev', 'today'].includes(target)) {
+            calendar[target]();
+        } else if(!!day) {
+            calendar.gotoDate(new Date(day));
+        }
     }
 
     setSchedule(calendarId, schedule) {
@@ -107,31 +111,20 @@ class CalendarHelper {
         return this.schedules[day] || [];
     }
 
-    setTodo(day, id, todo) {
-        if(!day || !id || !todo) return;
+    getDate(calendarId) {
+        const calendar = this.getCalendar(calendarId);
+        
+        if (!calendar) {
+            return null;
+        }
 
-        const todos = this.todos[day] || [];
-        todos.push({
-            id: id,
-            todo: todo,
-            isFinish: false
-        });
-        this.todos[day] = todos;
+        return calendar.getDate();
     }
 
-    getTodos(day) {
-        return this.todos[day] || [];
+    getDateStr(calendarId, pattern) {
+        return getDateStr(this.getDate(calendarId), pattern);
     }
 
-    removeTodo(day, id) {
-        if(!day || !id) return;
-        this.todos[day] = this.todos[day].filter(todo => todo.id !== id)
-    }
-
-    changeTodo(day, id, isFinish) {
-        if(!day || !id) return;
-        this.todos[day].find(todo => todo.id === id).isFinish = isFinish;
-    }
 }
 
 export default new CalendarHelper();

@@ -60,6 +60,9 @@ const getDateStr = (date, pattern = 'yyyy-MM-dd') => {
   switch(pattern) {
       case 'yyyy-MM-dd':
           str = `${year}-${month}-${day}`;
+          break;
+        case 'yyyy-MM':
+          str = `${year}-${month}`;
           break
       case 'yyyy년 MM월 dd일 E요일': 
           str = `${year}년 ${month}월 ${day}일 ${dayObj[date.getDay()]}`;
