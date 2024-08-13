@@ -64,9 +64,22 @@
                     <div id="endpicker-container" style="margin-left: -1px;"></div>
                 </div>
             </div>
-            <div>
+            <div class="mb-3">
                 <label for="scheduleColor" class="form-label">일정 색상</label>
                 <input type="color" class="form-control form-control-color" id="scheduleColor" value="#3788d8">
+            </div>
+            <div>
+              <label class="form-label">일정 타입</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="scheduleType" id="scheduleType-couple" value="01" checked>
+                    <label class="form-check-label" for="scheduleType-couple">커플</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="scheduleType" id="scheduleType-private" value="02">
+                    <label class="form-check-label" for="scheduleType-private">개인</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">

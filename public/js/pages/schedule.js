@@ -53,6 +53,10 @@ const bindEvent = () => {
  		const date = new Date(document.getElementById('targetDay').value);
     	picker.setStartDate(date);
     	picker.setEndDate(date);
+		document.getElementById('scheduleText').value='';
+		document.getElementById('scheduleColor').value='#3788d8';
+		document.getElementById('scheduleType-couple').checked = true;
+		document.getElementById('scheduleType-private').checked = false;
   	})
 
 	document.getElementById('editSchedule').addEventListener('click', () => {
@@ -78,11 +82,6 @@ const bindEvent = () => {
 
 		setDetailSchedule(targetDayStr);
 		document.getElementById('closeModal').click();
-	})
-
-	document.getElementById('closeModal').addEventListener('click', () => {
-		document.getElementById('scheduleText').value='';
-		document.getElementById('scheduleColor').value='#3788d8';
 	})
 
 	document.getElementById('todoText').addEventListener('keyup', function(e) {
