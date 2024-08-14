@@ -44,6 +44,7 @@ class CalendarHelper {
         calendar.render();
 
         this.calendars[calendarId] = calendar;
+        this.schedules[calendarId] = [];
     }
 
     /**
@@ -100,17 +101,17 @@ class CalendarHelper {
         let currentDate = new Date(startDate);
 
         if(startDate === endDate) {
-            const details = this.schedules[startDate] || [];
+            const details = this.schedules[calendarId][startDate] || [];
             detail.end = startDate;
             details.push(detail);
-            this.schedules[startDate] = details;
+            this.schedules[calendarId][startDate] = details;
         } else {
             while (currentDate < new Date(endDate)) {
                 const date = getDateStr(currentDate, 'yyyy-MM-dd');
-                const details = this.schedules[date] || [];
+                const details = this.schedules[calendarId][date] || [];
                 detail.end = date;
                 details.push(detail);
-                this.schedules[date] = details;
+                this.schedules[calendarId][date] = details;
                 currentDate.setDate(currentDate.getDate() + 1);
             }
         }
@@ -118,11 +119,12 @@ class CalendarHelper {
 
     /**
      * 해당 날짜의 일정 가져오기
+     * @param {String} calendarId
      * @param {String} day 
      * @returns {Array}
      */
-    getSchedules(day) {
-        return this.schedules[day] || [];
+    getSchedules(calendarId, day) {
+        return this.schedules[calendarId][day] || [];
     }
 
     /**

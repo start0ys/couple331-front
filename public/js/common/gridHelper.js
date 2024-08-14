@@ -1,4 +1,5 @@
 import Grid from 'tui-grid';
+import 'tui-grid/dist/tui-grid.css';
 
 class GridHelper {
     constructor() {
@@ -14,7 +15,14 @@ class GridHelper {
         const gridEl = document.getElementById(gridId);
 
         const defaultOption = {
-            el: gridEl
+            el: gridEl,
+            scrollX: false,
+            scrollY: false,
+            rowHeight: 35,
+            rowHeaders: ['rowNum'],
+            header: {
+              height: 40
+            },
         };
 
         const grid = new Grid(Object.assign({}, defaultOption, option));
