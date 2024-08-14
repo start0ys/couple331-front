@@ -11,7 +11,9 @@ class CalendarHelper {
 
 
     /**
-     * @param {string} calendarId 
+     * 달력 생성
+     * @param {String} calendarId 
+     * @param {Object} option 
      */
     init(calendarId, option = {}) {
         const calendarEl = document.getElementById(calendarId);
@@ -45,7 +47,8 @@ class CalendarHelper {
     }
 
     /**
-     * @param {string} calendarId 
+     * 달력 가져오기
+     * @param {String} calendarId 
      * @returns {Calendar}
      */
     getCalendar(calendarId) {
@@ -53,6 +56,7 @@ class CalendarHelper {
     }
 
     /**
+     * 달력 월 변경
      * @param {String} calendarId 
      * @param {String} target 
      * @param {String} day 
@@ -71,6 +75,11 @@ class CalendarHelper {
         }
     }
 
+    /**
+     * 달력 일정 등록
+     * @param {String} calendarId 
+     * @param {Object} schedule 
+     */
     setSchedule(calendarId, schedule) {
         const calendar = this.getCalendar(calendarId);
             
@@ -107,10 +116,20 @@ class CalendarHelper {
         }
     }
 
-    getDetailSchedules(day) {
+    /**
+     * 해당 날짜의 일정 가져오기
+     * @param {String} day 
+     * @returns {Array}
+     */
+    getSchedules(day) {
         return this.schedules[day] || [];
     }
 
+    /**
+     * 현재 달력의 날짜 가져오기
+     * @param {String} calendarId 
+     * @returns {Date}
+     */
     getDate(calendarId) {
         const calendar = this.getCalendar(calendarId);
         
@@ -121,6 +140,12 @@ class CalendarHelper {
         return calendar.getDate();
     }
 
+    /**
+     * 현재 달력의 날짜 패턴으로 가져오기
+     * @param {String} calendarId 
+     * @param {String} pattern 
+     * @returns {String}
+     */
     getDateStr(calendarId, pattern) {
         return getDateStr(this.getDate(calendarId), pattern);
     }

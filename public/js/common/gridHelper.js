@@ -1,54 +1,35 @@
 import Grid from 'tui-grid';
 
 class GridHelper {
-    constructor() {}
+    constructor() {
+      this.grids = {};
+    }
 
-    init(gridId) {
-        const instance = new Grid({
-            el: document.getElementById(gridId), // Container element
-            columns: [
-              {
-                header: 'Name',
-                name: 'name'
-              },
-              {
-                header: 'Artist',
-                name: 'artist'
-              },
-              {
-                header: 'Release',
-                name: 'release'
-              },
-              {
-                header: 'Genre',
-                name: 'genre'
-              }
-            ],
-            data: [
-              {
-                name: 'Beautiful Lies',
-                artist: 'Birdy',
-                release: '2016.03.26',
-                genre: 'Pop'
-              },
-              {
-                name: 'Beautiful Lies',
-                artist: 'Birdy',
-                release: '2016.03.26',
-                genre: 'Pop'
-              },
-              {
-                name: 'Beautiful Lies',
-                artist: 'Birdy',
-                release: '2016.03.26',
-                genre: 'Pop'
-              }
-            ]
-          });
-          
-          // instance.resetData(newData); // Call API of instance's public method
-          
-          // Grid.applyTheme('striped'); // Call API of static method
+    /**
+     * 그리드 생성
+     * @param {String} gridId 
+     * @param {Object} option 
+     */
+    init(gridId, option = {}) {
+        const gridEl = document.getElementById(gridId);
+
+        const defaultOption = {
+            el: gridEl
+        };
+
+        const grid = new Grid(Object.assign({}, defaultOption, option));
+
+        
+        this.grids[gridId] = grid;
+    }
+
+    /**
+     * 그리드 가져오기
+     * @param {String} gridId 
+     * @returns {Grid}
+     */
+    getGrid(gridId) {
+        return this.grids[gridId] || null;
     }
 }
 

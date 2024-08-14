@@ -151,7 +151,7 @@ const setDetailSchedule = (day) => {
 	if(!day) return;
 	const detailEl = document.getElementById('detailList');
 	detailEl.innerHTML = '';
-	CalendarHelper.getDetailSchedules(day).forEach(detail => detailEl.insertAdjacentHTML("beforeend", SCHEDULE_DETAIL_TEMPLATE(detail)))
+	CalendarHelper.getSchedules(day).forEach(detail => detailEl.insertAdjacentHTML("beforeend", SCHEDULE_DETAIL_TEMPLATE(detail)))
 }
 
 const setDetailTodo = (day) => {
