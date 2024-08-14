@@ -23,7 +23,7 @@ export default {
         login: [HMR_CLIENT, `${PAGES_JS_DIR}/login.js`],
         signUp: [HMR_CLIENT, `${PAGES_JS_DIR}/signUp.js`],
         schedule: [HMR_CLIENT, `${PAGES_JS_DIR}/schedule.js`],
-        board: [HMR_CLIENT, `${PAGES_JS_DIR}/board.js`]
+        boardList: [HMR_CLIENT, `${PAGES_JS_DIR}/boardList.js`]
     },
     output: {
         path: path.resolve('dist'),

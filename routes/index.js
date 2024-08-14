@@ -19,7 +19,12 @@ router.get('/schedule', (req, res) => {
 });
 
 router.get('/board', (req, res) => {
-  res.render('pages/board', { css: '', js: '/board' });
+  res.render('pages/boardList', { css: '', js: '/boardList' });
+});
+
+router.get('/board/:id', (req, res) => {
+  const id = req.params.id;
+  res.render('pages/boardView', { css: '', js: '', id: id });
 });
 
 router.get('/myPage', (req, res) => {

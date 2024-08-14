@@ -61,6 +61,6 @@ const initGrid = () => {
 }
 
 const gridClickEvent = (gridId, rowKey, rowData) => {
-    console.log(rowKey);
-    console.log(rowData);
+    const id = rowData.id;
+    window.location.href = `/board/${id}`;
 }
