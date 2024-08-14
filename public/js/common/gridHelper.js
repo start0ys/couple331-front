@@ -17,8 +17,11 @@ class GridHelper {
         const defaultOption = {
             el: gridEl,
             scrollX: false,
-            scrollY: false,
+            // bodyHeight: 500,
             rowHeight: 35,
+            // pageOptions: {
+            //     perPage: 5
+            // },
             rowHeaders: ['rowNum'],
             header: {
               height: 40
@@ -38,6 +41,39 @@ class GridHelper {
      */
     getGrid(gridId) {
         return this.grids[gridId] || null;
+    }
+
+    /**
+     * Row 데이터 가져오기
+     * @param {String} gridId 
+     * @param {Number} rowKey 
+     * @returns {Object}
+     */
+    getRowData(gridId, rowKey) {
+        const grid = this.getGrid(gridId);
+        if(!grid) {
+            return {};
+        }
+
+        return grid.getRow(rowKey);
+    }
+
+    /**
+     * Click Event Setting
+     * @param {String} gridId 
+     * @param {"click" | "dblclick"} clickType 
+     * @param {Function} callback 
+     */
+    setClickEvent(gridId, clickType, callback) {
+        const grid = this.getGrid(gridId);
+
+        if(grid && ['click', 'dblclick'].includes(clickType) && callback && typeof callback === 'function') {
+            grid.on(clickType, (ev) => {
+                const rowKey = ev.rowKey;
+                const rowData = this.getRowData(gridId, rowKey);
+                callback(grid, rowKey, rowData);
+            });
+        }
     }
 }
 
