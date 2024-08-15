@@ -24,7 +24,7 @@ router.get('/board', (req, res) => {
 
 router.get('/board/:id', (req, res) => {
   const id = req.params.id;
-  res.render('pages/boardView', { css: '', js: '', id: id });
+  res.render('pages/boardView', { css: '', js: '/boardView', id: id });
 });
 
 router.get('/myPage', (req, res) => {

@@ -35,7 +35,7 @@ const TODO_TEMPLATE = (id, todo, isFinish) => {
 }
 let picker = null;
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 	initCalendar();
 	bindEvent();
   	setDatePicker();
@@ -279,7 +279,7 @@ const textColor = (color) => {
     }else {
        if (color.search("rgb") == -1 )  return '#fff';
        color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?\)$/);
-         function hex(x) {
+         const hex = (x) => {
               return ("0" + parseInt(x).toString(16)).slice(-2);
          }
          hexColor = hex(color[1]) + hex(color[2]) + hex(color[3]); 
