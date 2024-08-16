@@ -17,15 +17,21 @@ const initGrid = () => {
             },
             {
                 header: '제목',
-                name: 'title'
+                name: 'title',
+                width: '800',
+                align: 'left'
             },
             {
                 header: '작성자',
-                name: 'author'
+                name: 'author',
+                width: '100',
+                align: 'center'
             },
             {
                 header: '등록일',
-                name: 'createDate'
+                name: 'createDate',
+                width: '100',
+                align: 'center'
             }
           ],
           data: [
@@ -57,7 +63,7 @@ const initGrid = () => {
     };
 
     GridHelper.init(GRID_ID, gridOption);
-    GridHelper.setClickEvent(GRID_ID, 'dblclick', gridClickEvent);
+    GridHelper.setClickEvent(GRID_ID, 'click', gridClickEvent);
 }
 
 const gridClickEvent = (gridId, rowKey, rowData) => {

@@ -54,3 +54,22 @@
   i {
     margin-right: 5px;
   }
+
+  .tui-grid-cell {
+    background-color: transparent !important;
+    cursor: pointer;
+  }
+
+  .tui-grid-header-area {
+    border-top: 3px solid black !important;
+    background-color: #efefef !important;
+  }
+
+/* 
+  .tui-grid-row-hover {
+    background-color: #f7a6b3 !important;
+  }
+
+  .tui-grid-row-hover .tui-grid-cell-content {
+    color: #fff !important;
+  } */
