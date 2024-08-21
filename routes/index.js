@@ -22,10 +22,15 @@ router.get('/board', (req, res) => {
   res.render('pages/boardList', { css: '', js: '/boardList' });
 });
 
+router.get('/board/new', (req, res) => {
+  res.render('pages/boardEdit', { css: '', js: '/boardEdit' });
+});
+
 router.get('/board/:id', (req, res) => {
   const id = req.params.id;
   res.render('pages/boardView', { css: '', js: '/boardView', id: id });
 });
+
 
 router.get('/myPage', (req, res) => {
   res.render('pages/myPage', { css: '', js: '' });

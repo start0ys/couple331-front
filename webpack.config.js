@@ -24,7 +24,8 @@ export default {
         signUp: [HMR_CLIENT, `${PAGES_JS_DIR}/signUp.js`],
         schedule: [HMR_CLIENT, `${PAGES_JS_DIR}/schedule.js`],
         boardList: [HMR_CLIENT, `${PAGES_JS_DIR}/boardList.js`],
-        boardView: [HMR_CLIENT, `${PAGES_JS_DIR}/boardView.js`]
+        boardView: [HMR_CLIENT, `${PAGES_JS_DIR}/boardView.js`],
+        boardEdit: [HMR_CLIENT, `${PAGES_JS_DIR}/boardEdit.js`]
     },
     output: {
         path: path.resolve('dist'),
