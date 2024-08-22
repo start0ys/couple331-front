@@ -1,13 +1,20 @@
 import path from "path";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import webpack from 'webpack';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // 개발 환경에서 사용할 웹팩 핫 모듈 리플레이스먼트 클라이언트
 const HMR_CLIENT = 'webpack-hot-middleware/client?reload=true';
 
 // 자바스크립트 소스 디렉토리
-const COMMON_JS_DIR = './public/js/common';
-const PAGES_JS_DIR = './public/js/pages';
+const COMMON_JS_DIR = path.join(__dirname, 'public','js','common');
+const PAGES_JS_DIR = path.join(__dirname, 'public','js','pages');
+
+
 
 export default {
     mode: 'development',
@@ -16,16 +23,16 @@ export default {
         // main: './public/js/common/main.js', // 운영 환경 모드
         // login: './public/js/pages/login.js', // 운영 환경 모드
         // calendar: './public/js/pages/calendar.js' // 운영 환경 모드
-        common: [HMR_CLIENT, `${COMMON_JS_DIR}/common.js`],
-        main: [HMR_CLIENT, `${COMMON_JS_DIR}/main.js`],
-        auth: [HMR_CLIENT, `${COMMON_JS_DIR}/auth.js`],
-        index: [HMR_CLIENT, `${PAGES_JS_DIR}/index.js`],
-        login: [HMR_CLIENT, `${PAGES_JS_DIR}/login.js`],
-        signUp: [HMR_CLIENT, `${PAGES_JS_DIR}/signUp.js`],
-        schedule: [HMR_CLIENT, `${PAGES_JS_DIR}/schedule.js`],
-        boardList: [HMR_CLIENT, `${PAGES_JS_DIR}/boardList.js`],
-        boardView: [HMR_CLIENT, `${PAGES_JS_DIR}/boardView.js`],
-        boardEdit: [HMR_CLIENT, `${PAGES_JS_DIR}/boardEdit.js`]
+        common: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'common.js')],
+        main: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'main.js')],
+        auth: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'auth.js')],
+        index: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'index.js')],
+        login: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'login.js')],
+        signUp: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'signUp.js')],
+        schedule: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'schedule.js')],
+        boardList: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardList.js')],
+        boardView: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardView.js')],
+        boardEdit: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardEdit.js')]
     },
     output: {
         path: path.resolve('dist'),
