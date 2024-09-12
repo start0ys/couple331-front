@@ -1,0 +1,39 @@
+<div style="width: 100%; padding: 20px; text-align: center; background-color: #e2dcdc;">
+    <div style="width: 50%; margin: 0 auto; margin-top: 100px; background-color: #fff; border-radius: 19px; padding: 30px;">
+        <h3 style="margin-bottom: 35px;">커플 신청</h3>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <div>
+                <select id="coupleSelect" class="form-select d-none">
+                    <option></option>
+                    <option value="1">홍길동 [aa@aa.com]</option>
+                    <option value="2">박길동 [bb@aa.com]</option>
+                    <option value="3">홍인수 [cc@cc.com]</option>
+                    <option value="4">박최수 [cc@dd.com]</option>
+                    <option value="5">김동구 [ee@ee.com]</option>
+                </select>
+                <label for="startDate" class="form-label">사귄 날짜</label>
+                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                    <input type="text" id="datepicker-input" aria-label="Date-Time">
+                    <span class="tui-ico-date"></span>
+                </div>
+                <div id="startDate" style="margin-top: -1px;"></div>
+            </div>
+            <div>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="displayCoupleSelect" data-bs-toggle="dropdown" aria-expanded="false">커플 선택</button>
+                    <ul class="dropdown-menu" aria-labelledby="displayCoupleSelect" id="displayCopleOption">
+                        <li class="dropdown-item">
+                            <input id="searchInput" class="form-control" placeholder="Search...">
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div id='editor'></div>
+    
+        <input type="button" id="applyBtn" value="신청" class="btn btn-info red-btn" style="width: 100%; margin-top: 13px; height: 50px;">
+    </div>
+</div>

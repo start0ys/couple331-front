@@ -23,16 +23,30 @@ export default {
         // main: './public/js/common/main.js', // 운영 환경 모드
         // login: './public/js/pages/login.js', // 운영 환경 모드
         // calendar: './public/js/pages/calendar.js' // 운영 환경 모드
-        common: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'common.js')],
-        main: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'main.js')],
-        auth: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'auth.js')],
-        index: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'index.js')],
-        login: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'login.js')],
-        signUp: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'signUp.js')],
-        schedule: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'schedule.js')],
-        boardList: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardList.js')],
-        boardView: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardView.js')],
-        boardEdit: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardEdit.js')]
+
+        // common: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'common.js')],
+        // main: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'main.js')],
+        // auth: [HMR_CLIENT, path.join(COMMON_JS_DIR, 'auth.js')],
+        // index: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'index.js')],
+        // login: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'login.js')],
+        // signUp: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'signUp.js')],
+        // schedule: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'schedule.js')],
+        // boardList: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardList.js')],
+        // boardView: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardView.js')],
+        // boardEdit: [HMR_CLIENT, path.join(PAGES_JS_DIR, 'boardEdit.js')]
+
+        common: path.join(COMMON_JS_DIR, 'common.js'),
+        main: path.join(COMMON_JS_DIR, 'main.js'),
+        auth: path.join(COMMON_JS_DIR, 'auth.js'),
+        index: path.join(PAGES_JS_DIR, 'index.js'),
+        login: path.join(PAGES_JS_DIR, 'login.js'),
+        signUp: path.join(PAGES_JS_DIR, 'signUp.js'),
+        schedule: path.join(PAGES_JS_DIR, 'schedule.js'),
+        boardList: path.join(PAGES_JS_DIR, 'boardList.js'),
+        boardView: path.join(PAGES_JS_DIR, 'boardView.js'),
+        boardEdit: path.join(PAGES_JS_DIR, 'boardEdit.js'),
+        coupleEdit: path.join(PAGES_JS_DIR, 'coupleEdit.js'),
+        coupleView: path.join(PAGES_JS_DIR, 'coupleView.js'),
     },
     output: {
         path: path.resolve('dist'),

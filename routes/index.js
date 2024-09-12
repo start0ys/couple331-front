@@ -31,6 +31,14 @@ router.get('/board/:id', (req, res) => {
   res.render('pages/boardView', { css: '', js: '/boardView', id: id });
 });
 
+router.get('/couple', (req, res) => {
+  const isCouple = false;
+  const page = isCouple ? 'pages/coupleView' : 'pages/coupleEdit';
+  const css = '';
+  const js = isCouple ? '/coupleView' : '/coupleEdit';
+  res.render(page, { css: css, js: js });
+});
+
 
 router.get('/myPage', (req, res) => {
   res.render('pages/myPage', { css: '', js: '' });
