@@ -38,6 +38,7 @@ export default {
         common: path.join(COMMON_JS_DIR, 'common.js'),
         main: path.join(COMMON_JS_DIR, 'main.js'),
         auth: path.join(COMMON_JS_DIR, 'auth.js'),
+        axios: path.join(COMMON_JS_DIR, 'axios.js'),
         index: path.join(PAGES_JS_DIR, 'index.js'),
         login: path.join(PAGES_JS_DIR, 'login.js'),
         signUp: path.join(PAGES_JS_DIR, 'signUp.js'),
