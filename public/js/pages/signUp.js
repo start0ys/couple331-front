@@ -25,6 +25,25 @@ const bindEvent = () => {
     document.getElementById('signup').addEventListener('click', () => {
         signUp();
     })
+
+    document.getElementById('password').addEventListener('keyup', function() {
+        const target = document.getElementById('passwordMsg');
+        if(!this.value || PASSWORD_REGEX.test(this.value)) {
+            target.style.display = 'none';
+        } else {
+            target.style.display = 'block';
+        }
+    })
+
+    document.getElementById('passwordCheck').addEventListener('keyup', function() {
+        const target = document.getElementById('passwordCheckMsg');
+        const password = document.getElementById('password').value;
+        if(!this.value || password === this.value) {
+            target.style.display = 'none';
+        } else {
+            target.style.display = 'block';
+        }
+    })
 }
 
 const signUp = () => {
@@ -90,14 +109,6 @@ const signUpValidation = (data) => {
     return errMsgs;
 }
 
-
-const isEmailError = (email) => {
-    return !email || !EMAIL_REGEX.test(email);
-}
-
-const isPasswordError = (password, confirmPassword) => {
-    return !password || !PASSWORD_REGEX.test(password) || password != confirmPassword;
-}
 
 const showErrorMsg = (err = '오류가 발생하였습니다.') => {
     // TODO 모달로 변경 필요
