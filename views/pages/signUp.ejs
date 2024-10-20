@@ -19,8 +19,15 @@
     <label for="email" class="form-label">이메일</label>
     <div class="input-group">
         <input type="email" class="form-control" id="email" placeholder="you@example.com">
-        <button type="button" class="btn btn-secondary red-btn">인증</button>
+        <button type="button" id="emailBtn" class="btn btn-secondary red-btn">인증</button>
     </div>
+    <div id="emailMsg" class="check-msg">이메일의 형식이 올바르지 않습니다.</div>
+</div>
+
+<div class="input-group" id="temporaryNumberDiv" style="width: 280px; margin-top: 7px; display: none;">
+    <input type="text" class="form-control" id="temporaryNumber" placeholder="인증번호">
+    <button type="button" id="temporaryNumberBtn" class="btn btn-secondary red-btn">인증</button>
+    <span id="timer" style="margin: 5px 0px 0px 5px; font-weight: bold;">03:00</span>
 </div>
 
 <div class="col-12">

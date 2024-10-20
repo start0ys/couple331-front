@@ -1,4 +1,5 @@
 import { request } from "../common/axios.js";
+import { targetShowOn } from '../common/common.js';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
 const EMAIL_REGEX = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
@@ -8,13 +9,20 @@ const MESSAGE = Object.freeze({
     PASSWORD_CONFRIM_CHECK: "입력한 비밀번호와 일치하지 않습니다.",
     EMAIL_CHECK: "이메일의 형식이 올바르지 않습니다.",
     AGREE_EMPTY: "동의를 체크해주세요.",
-    EMAIL_AUTH: "이메을 인증을 완료해주세요.",
+    EMAIL_AUTH: "이메일 인증을 완료해주세요.",
+    TEMP_NUM_EMPTY: "인증번호를 입력해주세요.",
+    TEMP_NUM_cHECK: "인증번호가 일치하지 않습니다.",
+    EMAIL_SUCCESS: "이메일 인증이 완료되었습니다.",
     gender: "성별을 체크해주세요.",
     email: "이메일을 작성해주세요.",
     password: "비밀번호를 작성해주세요.",
     name: "이름을 작성해주세요.",
     nickName: "닉네임을 작성해주세요."
 });
+
+let isEmailCheck = false;
+let timerCount = 179;
+let timer;
 
 document.addEventListener('DOMContentLoaded', () => {
     bindEvent();
@@ -27,22 +35,28 @@ const bindEvent = () => {
     })
 
     document.getElementById('password').addEventListener('keyup', function() {
-        const target = document.getElementById('passwordMsg');
-        if(!this.value || PASSWORD_REGEX.test(this.value)) {
-            target.style.display = 'none';
-        } else {
-            target.style.display = 'block';
-        }
+        targetShowOn('passwordMsg', !!this.value && !PASSWORD_REGEX.test(this.value));
     })
 
     document.getElementById('passwordCheck').addEventListener('keyup', function() {
-        const target = document.getElementById('passwordCheckMsg');
         const password = document.getElementById('password').value;
-        if(!this.value || password === this.value) {
-            target.style.display = 'none';
+        targetShowOn('passwordCheckMsg', !!this.value && password !== this.value);
+    })
+
+    document.getElementById('email').addEventListener('keyup', function() {
+        targetShowOn('emailMsg', !!this.value && !EMAIL_REGEX.test(this.value));
+    })
+
+    document.getElementById('emailBtn').addEventListener('click', function() {
+        if(this.getAttribute('type') === 'reBtn') { 
+            emailReInput();
         } else {
-            target.style.display = 'block';
+            emailCheck();
         }
+    })
+
+    document.getElementById('temporaryNumberBtn').addEventListener('click', () => {
+        temporaryNumberCheck();
     })
 }
 
@@ -68,9 +82,8 @@ const signUp = () => {
     .then((res) => {
         console.log(res);
         if(!!res) {
-            navigate('/', { replace: true});
+            //navigate('/', { replace: true});
         } else {
-            console.log('회원가입 실패');
             showErrorMsg();
         }
         
@@ -106,7 +119,135 @@ const signUpValidation = (data) => {
     if(!agreeCheck)
         errMsgs.push(MESSAGE.AGREE_EMPTY);
 
+    if(!isEmailCheck)
+        errMsgs.push(MESSAGE.EMAIL_AUTH);
+
     return errMsgs;
+}
+
+const emailCheck = () => {
+    const emailEl = document.getElementById('email');
+    const email = emailEl.value;
+    if(!email || !EMAIL_REGEX.test(email)) {
+        showErrorMsg(MESSAGE.EMAIL_CHECK);
+        return;
+    }
+
+
+    // request('get', '/api/mail/authenticate', null) // TODO post? get?
+    // .then((res) => {
+    //     if(res == 'isEmailDuplicated') {
+    //         showErrorMsg('이미 존재하는 이메일 입니다.');
+    //     } else if(res == 'success') {
+    //         const emailBtnEl = document.getElementById('emailBtn');
+    //         emailBtnEl.setAttribute('type', 'reBtn');
+    //         emailBtnEl.innerText = '재입력';
+    //         emailEl.disabled = true;
+    //         targetShowOn('temporaryNumberDiv', true, '');
+    //         const timerEl = document.getElementById('timer');
+    //         timer = setInterval(() => {
+    //             let minutes = parseInt((timerCount / 60)+'', 10);
+    //             let seconds = parseInt((timerCount % 60)+'', 10);
+    
+    //             timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+    //              if(timerCount == 0) {
+    //                 clearInterval(timer);
+    //             } else {
+    //                 timerCount--;
+    //             }
+    //         }, 1000);
+    //     } else {
+    //         console.log('오류 발생');
+    //         showErrorMsg();
+    //     }
+    // })
+    // .catch((err) => {
+    //     console.log(err);
+    //     showErrorMsg();
+    // });
+
+
+    let isSuccess = true; //TODO 테스트
+
+    if(isSuccess) {
+        const emailBtnEl = document.getElementById('emailBtn');
+        emailBtnEl.setAttribute('type', 'reBtn');
+        emailBtnEl.innerText = '재입력';
+        emailEl.disabled = true;
+        targetShowOn('temporaryNumberDiv', true, '');
+        const timerEl = document.getElementById('timer');
+        timer = setInterval(() => {
+            let minutes = parseInt((timerCount / 60)+'', 10);
+            let seconds = parseInt((timerCount % 60)+'', 10);
+
+            timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+             if(timerCount == 0) {
+                clearInterval(timer);
+            } else {
+                timerCount--;
+            }
+        }, 1000);
+
+
+    } else {
+        showErrorMsg();
+    }
+}
+
+const emailReInput = () => {
+    clearInterval(timer);
+    targetShowOn('temporaryNumberDiv', false);
+    targetShowOn('emailMsg', false);
+    const emailBtnEl = document.getElementById('emailBtn');
+    emailBtnEl.setAttribute('type', '');
+    emailBtnEl.innerText = '인증';
+    isEmailCheck = false;
+    timerCount = 179;
+    document.getElementById('timer').innerText = '03:00';
+    document.getElementById('email').disabled = false;
+    document.getElementById('temporaryNumber').value = '';
+}
+
+const temporaryNumberCheck = () => {
+    const temporaryNumber = document.getElementById('temporaryNumber').value;
+    if(!temporaryNumber) {
+        showErrorMsg(MESSAGE.TEMP_NUM_EMPTY);
+        return;
+    }
+
+    // request('get', '/api/mail/temporaryNumberCheck', null) // TODO post? get?
+    // .then((res) => {
+    //    if(res == 'success') {
+    //         clearInterval(timer);
+    //         targetShowOn('temporaryNumberDiv', false);
+    //         const emailMsgEl = document.getElementById('emailMsg');
+    //         emailMsgEl.innerText = MESSAGE.EMAIL_SUCCESS;
+    //         emailMsgEl.style.color = '#35ff01';
+    //         emailMsgEl.style.display = 'block';
+    //         isEmailCheck = true;
+    //     } else {
+    //         console.log('오류 발생');
+    //         showErrorMsg();
+    //     }
+    // })
+    // .catch((err) => {
+    //     console.log(err);
+    //     showErrorMsg();
+    // });
+
+    let isSuccess = true; //TODO 테스트
+
+    if(isSuccess) {
+        clearInterval(timer);
+        targetShowOn('temporaryNumberDiv', false);
+        const emailMsgEl = document.getElementById('emailMsg');
+        emailMsgEl.innerText = MESSAGE.EMAIL_SUCCESS;
+        emailMsgEl.style.color = '#35ff01';
+        emailMsgEl.style.display = 'block';
+        isEmailCheck = true;
+    } else {
+        showErrorMsg();
+    }
 }
 
 

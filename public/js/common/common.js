@@ -83,4 +83,12 @@ const generateUUID = () => {
   });
 }
 
-export { changeTheme, initTheme, getDateStr, generateUUID }
+const targetShowOn = (tartgetId, isShow, showType = 'block') => {
+  const target = document.getElementById(tartgetId);
+  if(!target)
+      return;
+
+  target.style.display = isShow ? showType : 'none';
+}
+
+export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn }
