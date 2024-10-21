@@ -10,8 +10,9 @@ const MESSAGE = Object.freeze({
     EMAIL_CHECK: "이메일의 형식이 올바르지 않습니다.",
     AGREE_EMPTY: "동의를 체크해주세요.",
     EMAIL_AUTH: "이메일 인증을 완료해주세요.",
-    TEMP_NUM_EMPTY: "인증번호를 입력해주세요.",
-    TEMP_NUM_cHECK: "인증번호가 일치하지 않습니다.",
+    EMAIL_AUTH_FAIL: "이메일 인증이 실패하였습니다.",
+    TEMP_NUM_EMPTY: "인증코드를 입력해주세요.",
+    TEMP_NUM_cHECK: "인증코드가 일치하지 않습니다.",
     EMAIL_SUCCESS: "이메일 인증이 완료되었습니다.",
     gender: "성별을 체크해주세요.",
     email: "이메일을 작성해주세요.",
@@ -55,8 +56,8 @@ const bindEvent = () => {
         }
     })
 
-    document.getElementById('temporaryNumberBtn').addEventListener('click', () => {
-        temporaryNumberCheck();
+    document.getElementById('authCodeBtn').addEventListener('click', () => {
+        authCodeCheck();
     })
 }
 
@@ -78,8 +79,8 @@ const signUp = () => {
         return;
     }
 
-    request('post', '/api/user/register', data)
-    .then((res) => {
+    request('post', '/api/users/register', data)
+    .then(res => {
         console.log(res);
         if(!!res) {
             //navigate('/', { replace: true});
@@ -88,7 +89,7 @@ const signUp = () => {
         }
         
     })
-    .catch((err) => {
+    .catch(err => {
         console.log(err);
         showErrorMsg();
     });
@@ -134,69 +135,48 @@ const emailCheck = () => {
     }
 
 
-    // request('get', '/api/mail/authenticate', null) // TODO post? get?
-    // .then((res) => {
-    //     if(res == 'isEmailDuplicated') {
-    //         showErrorMsg('이미 존재하는 이메일 입니다.');
-    //     } else if(res == 'success') {
-    //         const emailBtnEl = document.getElementById('emailBtn');
-    //         emailBtnEl.setAttribute('type', 'reBtn');
-    //         emailBtnEl.innerText = '재입력';
-    //         emailEl.disabled = true;
-    //         targetShowOn('temporaryNumberDiv', true, '');
-    //         const timerEl = document.getElementById('timer');
-    //         timer = setInterval(() => {
-    //             let minutes = parseInt((timerCount / 60)+'', 10);
-    //             let seconds = parseInt((timerCount % 60)+'', 10);
-    
-    //             timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
-    //              if(timerCount == 0) {
-    //                 clearInterval(timer);
-    //             } else {
-    //                 timerCount--;
-    //             }
-    //         }, 1000);
-    //     } else {
-    //         console.log('오류 발생');
-    //         showErrorMsg();
-    //     }
-    // })
-    // .catch((err) => {
-    //     console.log(err);
-    //     showErrorMsg();
-    // });
-
-
-    let isSuccess = true; //TODO 테스트
-
-    if(isSuccess) {
-        const emailBtnEl = document.getElementById('emailBtn');
-        emailBtnEl.setAttribute('type', 'reBtn');
-        emailBtnEl.innerText = '재입력';
-        emailEl.disabled = true;
-        targetShowOn('temporaryNumberDiv', true, '');
-        const timerEl = document.getElementById('timer');
-        timer = setInterval(() => {
-            let minutes = parseInt((timerCount / 60)+'', 10);
-            let seconds = parseInt((timerCount % 60)+'', 10);
-
-            timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
-             if(timerCount == 0) {
-                clearInterval(timer);
+    request('post', '/api/auth/sendCode', {email}) 
+    .then(res => {
+        if(res?.status === 'SUCCESS') {
+            if(res.data === 'ALREADY_EXISTS') {
+                showErrorMsg('이미 존재하는 이메일 입니다.');
+            } else if(res.data === 'SUCCESS') {
+                const emailBtnEl = document.getElementById('emailBtn');
+                emailBtnEl.setAttribute('type', 'reBtn');
+                emailBtnEl.innerText = '재입력';
+                emailEl.disabled = true;
+                targetShowOn('authCodeDiv', true, '');
+                const timerEl = document.getElementById('timer');
+                timer = setInterval(() => {
+                    let minutes = parseInt((timerCount / 60)+'', 10);
+                    let seconds = parseInt((timerCount % 60)+'', 10);
+        
+                    timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+                     if(timerCount == 0) {
+                        clearInterval(timer);
+                    } else {
+                        timerCount--;
+                    }
+                }, 1000);
             } else {
-                timerCount--;
+                showErrorMsg();
             }
-        }, 1000);
 
+        } else {
+            showErrorMsg();
+        }
 
-    } else {
+    })
+    .catch((err) => {
+        console.log(err);
         showErrorMsg();
-    }
+    });
+
 }
 
 const emailReInput = () => {
     clearInterval(timer);
-    targetShowOn('temporaryNumberDiv', false);
+    targetShowOn('authCodeDiv', false);
     targetShowOn('emailMsg', false);
     const emailBtnEl = document.getElementById('emailBtn');
     emailBtnEl.setAttribute('type', '');
@@ -205,49 +185,37 @@ const emailReInput = () => {
     timerCount = 179;
     document.getElementById('timer').innerText = '03:00';
     document.getElementById('email').disabled = false;
-    document.getElementById('temporaryNumber').value = '';
+    document.getElementById('authCode').value = '';
 }
 
-const temporaryNumberCheck = () => {
-    const temporaryNumber = document.getElementById('temporaryNumber').value;
-    if(!temporaryNumber) {
+const authCodeCheck = () => {
+    const authCode = document.getElementById('authCode').value;
+    if(!authCode) {
         showErrorMsg(MESSAGE.TEMP_NUM_EMPTY);
         return;
     }
+    const email = document.getElementById('email').value;
 
-    // request('get', '/api/mail/temporaryNumberCheck', null) // TODO post? get?
-    // .then((res) => {
-    //    if(res == 'success') {
-    //         clearInterval(timer);
-    //         targetShowOn('temporaryNumberDiv', false);
-    //         const emailMsgEl = document.getElementById('emailMsg');
-    //         emailMsgEl.innerText = MESSAGE.EMAIL_SUCCESS;
-    //         emailMsgEl.style.color = '#35ff01';
-    //         emailMsgEl.style.display = 'block';
-    //         isEmailCheck = true;
-    //     } else {
-    //         console.log('오류 발생');
-    //         showErrorMsg();
-    //     }
-    // })
-    // .catch((err) => {
-    //     console.log(err);
-    //     showErrorMsg();
-    // });
-
-    let isSuccess = true; //TODO 테스트
-
-    if(isSuccess) {
-        clearInterval(timer);
-        targetShowOn('temporaryNumberDiv', false);
-        const emailMsgEl = document.getElementById('emailMsg');
-        emailMsgEl.innerText = MESSAGE.EMAIL_SUCCESS;
-        emailMsgEl.style.color = '#35ff01';
-        emailMsgEl.style.display = 'block';
-        isEmailCheck = true;
-    } else {
+    request('post', '/api/auth/verifyCode', {email, authCode}) 
+    .then(res => {
+       if(res?.status == 'SUCCESS') {
+            clearInterval(timer);
+            targetShowOn('authCodeDiv', false);
+            const emailMsgEl = document.getElementById('emailMsg');
+            emailMsgEl.innerText = MESSAGE.EMAIL_SUCCESS;
+            emailMsgEl.style.color = '#35ff01';
+            emailMsgEl.style.display = 'block';
+            isEmailCheck = true;
+        } else {
+            console.log('오류 발생');
+            showErrorMsg(MESSAGE.EMAIL_AUTH_FAIL);
+        }
+    })
+    .catch(err => {
+        console.log(err);
         showErrorMsg();
-    }
+    });
+
 }
 
 
