@@ -31,5 +31,15 @@ router.post('/verifyCode', (req, res) => {
     })
   });
 
+  router.post('/login', (req, res) => {
+    request("post", API_URL + '/auth/login', req.body)
+    .then(response => {
+        res.json(response);
+    })
+    .catch(err => {
+        res.status(500).json({ error: err.message });
+    })
+  });
+
 
 export default router;

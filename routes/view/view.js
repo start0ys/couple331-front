@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('pages/login', { layout: 'layouts/auth', css: 'pages/login', js: '' });
+  res.render('pages/login', { layout: 'layouts/auth', css: 'pages/login', js: '/login' });
 });
 
 router.get('/signUp', (req, res) => {

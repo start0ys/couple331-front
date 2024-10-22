@@ -13,10 +13,10 @@ const MESSAGE = Object.freeze({
     AUTH_NUM_EMPTY: "인증코드를 입력해주세요.",
     EMAIL_SUCCESS: "이메일 인증이 완료되었습니다.",
     gender: "성별을 체크해주세요.",
-    email: "이메일을 작성해주세요.",
-    password: "비밀번호를 작성해주세요.",
-    name: "이름을 작성해주세요.",
-    nickName: "닉네임을 작성해주세요."
+    email: "이메일을 입력해주세요.",
+    password: "비밀번호를 입력해주세요.",
+    name: "이름을 입력해주세요.",
+    nickName: "닉네임을 입력해주세요."
 });
 
 let isEmailCheck = false;
