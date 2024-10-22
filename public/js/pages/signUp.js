@@ -1,5 +1,5 @@
 import { request } from "../common/axios.js";
-import { targetShowOn } from '../common/common.js';
+import { targetShowOn, blockUI, unblockUI, showErrorModal } from '../common/common.js';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
 const EMAIL_REGEX = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
@@ -10,9 +10,7 @@ const MESSAGE = Object.freeze({
     EMAIL_CHECK: "이메일의 형식이 올바르지 않습니다.",
     AGREE_EMPTY: "동의를 체크해주세요.",
     EMAIL_AUTH: "이메일 인증을 완료해주세요.",
-    EMAIL_AUTH_FAIL: "이메일 인증이 실패하였습니다.",
-    TEMP_NUM_EMPTY: "인증코드를 입력해주세요.",
-    TEMP_NUM_cHECK: "인증코드가 일치하지 않습니다.",
+    AUTH_NUM_EMPTY: "인증코드를 입력해주세요.",
     EMAIL_SUCCESS: "이메일 인증이 완료되었습니다.",
     gender: "성별을 체크해주세요.",
     email: "이메일을 작성해주세요.",
@@ -75,24 +73,26 @@ const signUp = () => {
     const errMsgs = signUpValidation(data);
 
     if(errMsgs.length > 0) {
-        showErrorMsg(errMsgs.join('\n'));
+        showErrorModal(errMsgs.join('<br>'));
         return;
     }
 
+    blockUI();
     request('post', '/api/users/register', data)
     .then(res => {
-        console.log(res);
-        if(!!res) {
-            //navigate('/', { replace: true});
+        if(res?.status === 'SUCCESS') {
+            alert("가입되었습니다.");
+            window.location.href = '/login';
         } else {
-            showErrorMsg();
+            showErrorModal(res?.message);
         }
         
     })
     .catch(err => {
         console.log(err);
-        showErrorMsg();
-    });
+        showErrorModal();
+    })
+    .finally(unblockUI);
 
 }
 
@@ -130,47 +130,41 @@ const emailCheck = () => {
     const emailEl = document.getElementById('email');
     const email = emailEl.value;
     if(!email || !EMAIL_REGEX.test(email)) {
-        showErrorMsg(MESSAGE.EMAIL_CHECK);
+        showErrorModal(MESSAGE.EMAIL_CHECK);
         return;
     }
 
-
+    blockUI();
     request('post', '/api/auth/sendCode', {email}) 
     .then(res => {
         if(res?.status === 'SUCCESS') {
-            if(res.data === 'ALREADY_EXISTS') {
-                showErrorMsg('이미 존재하는 이메일 입니다.');
-            } else if(res.data === 'SUCCESS') {
-                const emailBtnEl = document.getElementById('emailBtn');
-                emailBtnEl.setAttribute('type', 'reBtn');
-                emailBtnEl.innerText = '재입력';
-                emailEl.disabled = true;
-                targetShowOn('authCodeDiv', true, '');
-                const timerEl = document.getElementById('timer');
-                timer = setInterval(() => {
-                    let minutes = parseInt((timerCount / 60)+'', 10);
-                    let seconds = parseInt((timerCount % 60)+'', 10);
-        
-                    timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
-                     if(timerCount == 0) {
-                        clearInterval(timer);
-                    } else {
-                        timerCount--;
-                    }
-                }, 1000);
-            } else {
-                showErrorMsg();
-            }
-
+            const emailBtnEl = document.getElementById('emailBtn');
+            emailBtnEl.setAttribute('type', 'reBtn');
+            emailBtnEl.innerText = '재입력';
+            emailEl.disabled = true;
+            targetShowOn('authCodeDiv', true, '');
+            const timerEl = document.getElementById('timer');
+            timer = setInterval(() => {
+                let minutes = parseInt((timerCount / 60)+'', 10);
+                let seconds = parseInt((timerCount % 60)+'', 10);
+    
+                timerEl.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+                 if(timerCount == 0) {
+                    clearInterval(timer);
+                } else {
+                    timerCount--;
+                }
+            }, 1000);
         } else {
-            showErrorMsg();
+            showErrorModal(res?.message);
         }
 
     })
-    .catch((err) => {
+    .catch(err => {
         console.log(err);
-        showErrorMsg();
-    });
+        showErrorModal();
+    })
+    .finally(unblockUI);
 
 }
 
@@ -191,11 +185,12 @@ const emailReInput = () => {
 const authCodeCheck = () => {
     const authCode = document.getElementById('authCode').value;
     if(!authCode) {
-        showErrorMsg(MESSAGE.TEMP_NUM_EMPTY);
+        showErrorModal(MESSAGE.AUTH_NUM_EMPTY);
         return;
     }
     const email = document.getElementById('email').value;
 
+    blockUI();
     request('post', '/api/auth/verifyCode', {email, authCode}) 
     .then(res => {
        if(res?.status == 'SUCCESS') {
@@ -207,19 +202,13 @@ const authCodeCheck = () => {
             emailMsgEl.style.display = 'block';
             isEmailCheck = true;
         } else {
-            console.log('오류 발생');
-            showErrorMsg(MESSAGE.EMAIL_AUTH_FAIL);
+            showErrorModal(res?.message);
         }
     })
     .catch(err => {
         console.log(err);
-        showErrorMsg();
-    });
+        showErrorModal();
+    })
+    .finally(unblockUI);
 
-}
-
-
-const showErrorMsg = (err = '오류가 발생하였습니다.') => {
-    // TODO 모달로 변경 필요
-    alert(err);
 }

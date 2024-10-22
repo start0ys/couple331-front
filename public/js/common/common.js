@@ -91,4 +91,123 @@ const targetShowOn = (tartgetId, isShow, showType = 'block') => {
   target.style.display = isShow ? showType : 'none';
 }
 
-export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn }
+const blockUI = () => {
+  // 블록 UI 요소 생성
+  const spinnerContainer = document.createElement("div");
+  spinnerContainer.className = "spinner-container";
+  spinnerContainer.innerHTML = `
+      <div class="spinner-border text-danger" role="status">
+          <span class="visually-hidden">Loading...</span>
+      </div>
+  `;
+
+  // body에 추가
+  document.body.appendChild(spinnerContainer);
+}
+
+const unblockUI = () => {
+  // 블록 UI 요소 제거
+  const spinnerContainer = document.querySelector(".spinner-container");
+  if (spinnerContainer) {
+      document.body.removeChild(spinnerContainer);
+  }
+}
+
+const  showErrorModal2 = (errMsg) => {
+  // 모달 요소 생성
+  const modal = document.createElement("div");
+  const modalId = "err-modal";
+  const backdropId = "err-backdrop";
+  modal.id = modalId;
+  modal.className = "modal fade show";
+  modal.tabIndex = "-1";
+  modal.style.display = "block";
+  modal.innerHTML = `
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5">오류</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="err-modal-btn"></button>
+              </div>
+              <div class="modal-body" style="text-align: center; font-weight: bold;">
+                  <p>${errMsg}</p>
+              </div>
+              
+          </div>
+      </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const backdrop = document.createElement("div");
+  backdrop.id = backdropId;
+  backdrop.className = "modal-backdrop fade show";
+  document.body.appendChild(backdrop);
+
+  document.getElementById("err-modal-btn").addEventListener('click', () => {
+    document.body.removeChild(document.getElementById(modalId));
+    document.body.removeChild(document.getElementById(backdropId));
+  })
+}
+
+
+const createModalElement = (modalId, modalContent) => {
+  const modal = document.createElement("div");
+  modal.id = modalId;
+  modal.className = "modal fade show";
+  modal.tabIndex = "-1";
+  modal.style.display = "block";
+  modal.innerHTML = `
+    <div class="modal-dialog">
+        <div class="modal-content">
+          ${modalContent}
+        </div>
+    </div>
+  `;
+  return modal;
+};
+
+const createBackdropElement = (backdropId) => {
+  const backdrop = document.createElement("div");
+  backdrop.id = backdropId;
+  backdrop.className = "modal-backdrop fade show";
+  return backdrop;
+};
+
+const removeElementsById = (ids = []) => {
+  ids.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      document.body.removeChild(element);
+    }
+  });
+};
+
+const showErrorModal = (errMsg = '오류가 발생하였습니다.') => {
+  const modalId = "err-modal";
+  const backdropId = "err-backdrop";
+  const modalRemoveBtnId = "err-modal-btn";
+
+  const modalContent = `
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">오류</h1>
+        <button type="button" class="btn-close" aria-label="Close" id="${modalRemoveBtnId}"></button>
+      </div>
+      <div class="modal-body" style="text-align: center; font-weight: bold;">
+          <p>${errMsg}</p>
+      </div>
+  `
+
+  const modal = createModalElement(modalId, modalContent);
+  const backdrop = createBackdropElement(backdropId);
+
+  document.body.appendChild(modal);
+  document.body.appendChild(backdrop);
+
+  document.getElementById(modalRemoveBtnId).addEventListener('click', () => {
+    removeElementsById([modalId, backdropId]);
+  });
+};
+
+
+export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal }

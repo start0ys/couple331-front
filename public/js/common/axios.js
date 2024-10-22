@@ -8,11 +8,10 @@ export const request = (method, url, data) => {
     url,
     data,
   })
-    .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .then(res => res.data)
+    .catch(err => {
+      console.log(err + ` [Status: ${err.response.data.status} Message: ${err.response.data.message}]`);
+      return err.response.data;
+    });
 };
 
-
-// export function createProject(dataToSubmit) {
-//     return request("post", PROJECT_URL + "/create", dataToSubmit);
-//   }
