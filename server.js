@@ -4,6 +4,7 @@ import expressLayouts from "express-ejs-layouts";
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import cookieParser from 'cookie-parser';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -33,6 +34,8 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.static(path.join(__dirname, 'dist')));
 app.use(expressLayouts);
+
+app.use(cookieParser());
 
 app.set('layout', 'layouts/main');
 app.set('layout extractScripts', true);

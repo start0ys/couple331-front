@@ -34,6 +34,32 @@ router.post('/verifyCode', (req, res) => {
   router.post('/login', (req, res) => {
     request("post", API_URL + '/auth/login', req.body)
     .then(response => {
+        let data = response.data || {};
+        const { accessToken, refreshToken } = data;
+        const isSuccess = accessToken && refreshToken;
+
+        if(isSuccess) {
+            res.cookie('accessToken', accessToken, { httpOnly: true, secure: false});
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: false});
+        }
+
+        delete data.accessToken;
+        delete data.refreshToken;
+        res.json(response);
+    })
+    .catch(err => {
+        res.status(500).json({ error: err.message });
+    })
+  });
+
+  router.post('/logout', (req, res) => {
+    const accessToken = req?.cookies?.accessToken;
+    request("post", API_URL + '/auth/logout', { accessToken })
+    .then(response => {
+        if (response && response?.status === 'SUCCESS') {
+            res.cookie('accessToken','',{maxAge:0});
+            res.cookie('refreshToken','',{maxAge:0});
+        }
         res.json(response);
     })
     .catch(err => {
