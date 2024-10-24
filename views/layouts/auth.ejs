@@ -22,6 +22,14 @@
             <%- body %>
         </div>
     </div>
+
+    <% if (param) { %>
+        <script> 
+            <% for (let key in param) { %>
+                const <%- key %> = '<%- param[key] %>';
+            <% } %>
+        </script>
+    <% } %>
     <script src="/auth.js"></script>
     <% if (js) { %>
         <script src="<%= js %>.js"></script>

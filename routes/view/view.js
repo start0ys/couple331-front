@@ -4,32 +4,33 @@ import { isAuthenticated } from "../authUtils.js";
 const router = express.Router();
 
 router.get('/', isAuthenticated, (req, res) => {
-  res.render('pages/index', { css: '', js: '/index' });
+  res.render('pages/index', { css: '', js: '/index', param: null });
 });
 
-router.get('/login', (req, res) => {
-  res.render('pages/login', { layout: 'layouts/auth', css: 'pages/login', js: '/login' });
+router.get('/login', isAuthenticated, (req, res) => {
+  const message = req.query.message || '';
+  res.render('pages/login', { layout: 'layouts/auth', css: 'pages/login', js: '/login', param: { message } });
 });
 
-router.get('/signUp', (req, res) => {
-  res.render('pages/signUp', { layout: 'layouts/auth', css: 'pages/signUp', js: '/signUp' });
+router.get('/signUp', isAuthenticated, (req, res) => {
+  res.render('pages/signUp', { layout: 'layouts/auth', css: 'pages/signUp', js: '/signUp', param: null });
 });
 
 router.get('/schedule', isAuthenticated, (req, res) => {
-  res.render('pages/schedule', { css: 'pages/schedule', js: '/schedule' });
+  res.render('pages/schedule', { css: 'pages/schedule', js: '/schedule', param: null });
 });
 
 router.get('/board', isAuthenticated, (req, res) => {
-  res.render('pages/boardList', { css: '', js: '/boardList' });
+  res.render('pages/boardList', { css: '', js: '/boardList', param: null });
 });
 
 router.get('/board/new', isAuthenticated, (req, res) => {
-  res.render('pages/boardEdit', { css: '', js: '/boardEdit' });
+  res.render('pages/boardEdit', { css: '', js: '/boardEdit', param: null });
 });
 
 router.get('/board/:id', isAuthenticated, (req, res) => {
   const id = req.params.id;
-  res.render('pages/boardView', { css: '', js: '/boardView', id: id });
+  res.render('pages/boardView', { css: '', js: '/boardView', id: id, param: null });
 });
 
 router.get('/couple', isAuthenticated, (req, res) => {
@@ -37,12 +38,12 @@ router.get('/couple', isAuthenticated, (req, res) => {
   const page = isCouple ? 'pages/coupleView' : 'pages/coupleEdit';
   const css = '';
   const js = isCouple ? '/coupleView' : '/coupleEdit';
-  res.render(page, { css: css, js: js });
+  res.render(page, { css: css, js: js, param: null });
 });
 
 
 router.get('/myPage', isAuthenticated, (req, res) => {
-  res.render('pages/myPage', { css: '', js: '' });
+  res.render('pages/myPage', { css: '', js: '', param: null });
 });
 
 export default router;

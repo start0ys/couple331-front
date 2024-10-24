@@ -7,6 +7,7 @@ const MESSAGE = Object.freeze({
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    loginMessage();
     document.getElementById('loginBtn').addEventListener('click', login);
     document.querySelectorAll('.form-control').forEach(formControl => {
         formControl.addEventListener('keyup', e => {
@@ -16,11 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
-const login = () => {
+const login = (duplicateLoginYn = '') => {
     const data = {
         email : document.getElementById('email').value,
         password : document.getElementById('password').value
     };
+
+    if(duplicateLoginYn === 'Y')
+        data.duplicateLoginYn = 'Y';
 
     const errMsgs = loginValidation(data);
 
@@ -34,6 +38,9 @@ const login = () => {
     .then(res => {
         if(res?.status === 'SUCCESS') {
             window.location.href = '/';
+        } else if(res.httpStatus === 409) {
+            if(confirm('이미 로그인 되어있는 ID 입니다. 강제 로그인 하시겠습니까?'))
+                login('Y');
         } else {
             showErrorModal(res?.message);
         }
@@ -58,4 +65,9 @@ const loginValidation = (data) => {
         }
     }
     return errMsgs;
+}
+
+const loginMessage = () => {
+    if(!!message)
+        showErrorModal(message);
 }

@@ -53,8 +53,9 @@ router.post('/verifyCode', (req, res) => {
   });
 
   router.post('/logout', (req, res) => {
-    const accessToken = req?.cookies?.accessToken;
-    request("post", API_URL + '/auth/logout', { accessToken })
+    let token = req?.cookies?.accessToken || req?.cookies?.refreshToken;
+    const headers = { 'Jwt-Auth-Access-Token': token };
+    request("post", API_URL + '/auth/logout', null, headers)
     .then(response => {
         if (response && response?.status === 'SUCCESS') {
             res.cookie('accessToken','',{maxAge:0});

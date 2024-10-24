@@ -11,13 +11,15 @@ export const request = (method, url, data, headers  = {}) => {
   })
     .then(res => {
       const data = res.data || {};
-      data.httpStatus = res.status;
+      if(!data.hasOwnProperty('httpStatus'))
+        data.httpStatus = res.status;
       return data;
     })
     .catch(err => {
-      console.log(err + ` [Status: ${err.response.data.status} Message: ${err.response.data.message}]`);
+      console.log(err + ` [Status: ${err.response.data.status} Message: ${err.response.data.message} HttpStatus: ${err.response.status}]`);
       const data = err.response.data || {};
-      data.httpStatus = err.response.status;
+      if(!data.hasOwnProperty('httpStatus'))
+        data.httpStatus = err.response.status;
       return data;
     });
 };
