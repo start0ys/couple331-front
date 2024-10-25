@@ -58,8 +58,8 @@ router.post('/verifyCode', (req, res) => {
     request("post", API_URL + '/auth/logout', null, headers)
     .then(response => {
         if (response && response?.status === 'SUCCESS') {
-            res.cookie('accessToken','',{maxAge:0});
-            res.cookie('refreshToken','',{maxAge:0});
+            res.clearCookie('accessToken', { httpOnly: true, secure: false});
+            res.clearCookie('refreshToken', { httpOnly: true, secure: false});
         }
         res.json(response);
     })

@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import { request } from "../public/js/common/axios.js";
 
 dotenv.config();
@@ -22,21 +23,24 @@ const isAuthenticated = async  (req, res, next) => {
     const publicPath = ['/login','/passwordFinder','/signUp'];
 
     if (!accessToken && !refreshToken) {
-        if(publicPath.includes(url))
+        if(publicPath.includes(url)) {
             return next();
-        else
+        } else {
             return res.redirect('/login');  
+        }
     }
 
     const headers = { 'Jwt-Auth-Access-Token': accessToken, 'Jwt-Auth-Refresh-Token': refreshToken };
 
     try {
         const response = await request("post", API_URL + '/auth/validateToken', req.body, headers);
-        const param = response.message ? `?message=${encodeURIComponent(response.message)}` : '';
+        const param = response?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(response.message)}` : `?redirect=${encodeURIComponent('/login')}`;
         if (response && response.status === 'SUCCESS') {
             if(publicPath.includes(url)) {
                 res.redirect('/'); 
             } else {
+                const { userId, email, name, gender, coupleId } = jwt.decode(accessToken);
+                res.locals.userInfo = { userId, email, name, gender, coupleId };
                 next();
             }
         } else if (response && response.httpStatus === 401) {
@@ -46,18 +50,20 @@ const isAuthenticated = async  (req, res, next) => {
                 if(publicPath.includes(url)) {
                     res.redirect('/'); 
                 } else {
+                    const { userId, email, name, gender, coupleId } = jwt.decode(newAccessToken);
+                    res.locals.userInfo = { userId, email, name, gender, coupleId };
                     next();
                 }
             } else {
                 res.cookie('accessToken','',{maxAge:0});
                 res.cookie('refreshToken','',{maxAge:0});
-                res.redirect('/login' + param);    
+                res.redirect('/redirect' + param);    
             }
         } else {
-            res.redirect('/login' + param);    
+            res.redirect('/redirect' + param);    
         }
     } catch (err) {
-        const param = err.response.message ? `?message=${encodeURIComponent(err.response.message)}` : '';
+        const param = err?.response?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(err.response.message)}` : `?redirect=${encodeURIComponent('/login')}`;
         if (err.response && err.response.httpStatus === 401) {
             const newAccessToken = await refreshAccessToken(refreshToken);
             if (newAccessToken) {
@@ -65,19 +71,22 @@ const isAuthenticated = async  (req, res, next) => {
                 if(publicPath.includes(url)) {
                     res.redirect('/'); 
                 } else {
+                    const { userId, email, name, gender, coupleId } = jwt.decode(newAccessToken);
+                    res.locals.userInfo = { userId, email, name, gender, coupleId };
                     next();
                 }
             } else {
                 res.cookie('accessToken','',{maxAge:0});
                 res.cookie('refreshToken','',{maxAge:0});
-                res.redirect('/login' + param);  
+                res.redirect('/redirect' + param);  
             }
         } else {
-            res.redirect('/login' + param);  
+            res.redirect('/redirect' + param);  
         }
     }
 
 
 }
+
 
 export { isAuthenticated };

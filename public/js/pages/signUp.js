@@ -16,7 +16,7 @@ const MESSAGE = Object.freeze({
     email: "이메일을 입력해주세요.",
     password: "비밀번호를 입력해주세요.",
     name: "이름을 입력해주세요.",
-    nickName: "닉네임을 입력해주세요."
+    nickname: "닉네임을 입력해주세요."
 });
 
 let isEmailCheck = false;
@@ -66,7 +66,7 @@ const signUp = () => {
         name : document.getElementById('name').value,
         email : document.getElementById('email').value,
         password : document.getElementById('password').value,
-        nickName : document.getElementById('nickName').value,
+        nickname : document.getElementById('nickname').value,
         userDesc : document.getElementById('desc').value
     };
 

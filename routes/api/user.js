@@ -21,4 +21,17 @@ router.post('/register', (req, res) => {
 
 });
 
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    const accessToken = req?.cookies?.accessToken;
+    const headers = { 'Jwt-Auth-Access-Token': accessToken };
+    request("get", API_URL + `/users/${id}`, null, headers)
+    .then(response => {
+        res.json(response);
+    })
+    .catch(err => {
+        res.status(500).json({ error: err.message });
+    })
+  });
+
 export default router;

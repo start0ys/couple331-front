@@ -7,7 +7,6 @@ const MESSAGE = Object.freeze({
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    loginMessage();
     document.getElementById('loginBtn').addEventListener('click', login);
     document.querySelectorAll('.form-control').forEach(formControl => {
         formControl.addEventListener('keyup', e => {
@@ -65,9 +64,4 @@ const loginValidation = (data) => {
         }
     }
     return errMsgs;
-}
-
-const loginMessage = () => {
-    if(!!message)
-        showErrorModal(message);
 }

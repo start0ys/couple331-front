@@ -7,9 +7,14 @@ router.get('/', isAuthenticated, (req, res) => {
   res.render('pages/index', { css: '', js: '/index', param: null });
 });
 
-router.get('/login', isAuthenticated, (req, res) => {
+router.get('/redirect', (req, res) => {
   const message = req.query.message || '';
-  res.render('pages/login', { layout: 'layouts/auth', css: 'pages/login', js: '/login', param: { message } });
+  const redirect = req.query.redirect || '';
+  res.render('common/redirect', { layout: false, message, redirect });
+});
+
+router.get('/login', isAuthenticated, (req, res) => {
+  res.render('pages/login', { layout: 'layouts/auth', css: 'pages/login', js: '/login', param: null });
 });
 
 router.get('/signUp', isAuthenticated, (req, res) => {
@@ -34,10 +39,10 @@ router.get('/board/:id', isAuthenticated, (req, res) => {
 });
 
 router.get('/couple', isAuthenticated, (req, res) => {
-  const isCouple = false;
-  const page = isCouple ? 'pages/coupleView' : 'pages/coupleEdit';
+  const coupleId = res?.locals?.userInfo?.coupleId || 0;
+  const page = coupleId > 0 ? 'pages/coupleView' : 'pages/coupleEdit';
   const css = '';
-  const js = isCouple ? '/coupleView' : '/coupleEdit';
+  const js = coupleId > 0 ? '/coupleView' : '/coupleEdit';
   res.render(page, { css: css, js: js, param: null });
 });
 

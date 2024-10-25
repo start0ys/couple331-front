@@ -204,9 +204,19 @@ const showErrorModal = (errMsg = '오류가 발생하였습니다.') => {
   document.body.appendChild(modal);
   document.body.appendChild(backdrop);
 
-  document.getElementById(modalRemoveBtnId).addEventListener('click', () => {
+  const removeModal = () => {
     removeElementsById([modalId, backdropId]);
-  });
+    document.removeEventListener('keydown', handleEscape);
+  };
+
+  const handleEscape = (event) => {
+    if (event.key === 'Escape') {
+      removeModal();
+    }
+  };
+
+  document.getElementById(modalRemoveBtnId).addEventListener('click', removeModal);
+  document.addEventListener('keydown', handleEscape);
 };
 
 

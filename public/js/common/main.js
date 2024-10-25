@@ -44,4 +44,18 @@ const bindEvent = () => {
         })
         .finally(unblockUI);
     })
+
+    document.getElementById('setting').addEventListener('click', () => {
+        blockUI();
+        request('get', `/api/users/${userId}`, null)
+        .then(res => {
+            console.log(res?.data);
+            
+        })
+        .catch(err => {
+            console.log(err);
+            showErrorModal();
+        })
+        .finally(unblockUI);
+    })
 }
