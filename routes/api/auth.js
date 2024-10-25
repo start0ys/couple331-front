@@ -54,7 +54,7 @@ router.post('/verifyCode', (req, res) => {
 
   router.post('/logout', (req, res) => {
     let token = req?.cookies?.accessToken || req?.cookies?.refreshToken;
-    const headers = { 'Jwt-Auth-Access-Token': token };
+    const headers = { Authorization: `Bearer ${token}` };
     request("post", API_URL + '/auth/logout', null, headers)
     .then(response => {
         if (response && response?.status === 'SUCCESS') {

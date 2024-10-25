@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
-const login = (duplicateLoginYn = '') => {
+const login = (duplicateLoginYn = '', _retry = false) => {
     const data = {
         email : document.getElementById('email').value,
         password : document.getElementById('password').value
     };
 
-    if(duplicateLoginYn === 'Y')
+    if(duplicateLoginYn === 'Y' && _retry)
         data.duplicateLoginYn = 'Y';
 
     const errMsgs = loginValidation(data);
@@ -37,9 +37,9 @@ const login = (duplicateLoginYn = '') => {
     .then(res => {
         if(res?.status === 'SUCCESS') {
             window.location.href = '/';
-        } else if(res.httpStatus === 409) {
+        } else if(!_retry && res.httpStatus === 409) {
             if(confirm('이미 로그인 되어있는 ID 입니다. 강제 로그인 하시겠습니까?'))
-                login('Y');
+                login('Y', true);
         } else {
             showErrorModal(res?.message);
         }

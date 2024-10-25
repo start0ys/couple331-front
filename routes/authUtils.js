@@ -8,7 +8,7 @@ const API_URL = process.env.API_URL;
 
 const refreshAccessToken = async (refreshToken) => {
     try {
-        const headers = { 'Jwt-Auth-Refresh-Token': refreshToken };
+        const headers = { Authorization: `Bearer ${refreshToken}` };
         const response = await request("post", API_URL + '/auth/refreshAccessToken', null, headers);
         return response?.data?.accessToken || null;
     } catch (err) {
@@ -30,7 +30,7 @@ const isAuthenticated = async  (req, res, next) => {
         }
     }
 
-    const headers = { 'Jwt-Auth-Access-Token': accessToken, 'Jwt-Auth-Refresh-Token': refreshToken };
+    const headers = { Authorization: `Bearer ${accessToken}` };
 
     try {
         const response = await request("post", API_URL + '/auth/validateToken', req.body, headers);
