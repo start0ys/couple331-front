@@ -59,6 +59,10 @@ const isAuthenticated = async  (req, res, next) => {
                 res.cookie('refreshToken','',{maxAge:0});
                 res.redirect('/redirect' + param);    
             }
+        } else if (response && response.httpStatus === 400) {
+            res.cookie('accessToken','',{maxAge:0});
+            res.cookie('refreshToken','',{maxAge:0});
+            res.redirect('/redirect' + param);    
         } else {
             res.redirect('/redirect' + param);    
         }
@@ -80,13 +84,64 @@ const isAuthenticated = async  (req, res, next) => {
                 res.cookie('refreshToken','',{maxAge:0});
                 res.redirect('/redirect' + param);  
             }
+        } else if (err.response && err.response.httpStatus === 400) {
+            res.cookie('accessToken','',{maxAge:0});
+            res.cookie('refreshToken','',{maxAge:0});
+            res.redirect('/redirect' + param);  
         } else {
             res.redirect('/redirect' + param);  
         }
     }
+}
 
+const authenticatedRequest = async (req, res, method, url, data = null)=> {
+    const accessToken = req?.cookies?.accessToken;
+    const refreshToken = req?.cookies?.refreshToken;
+  
 
+    try {
+        const response = await request(method, url, data, { Authorization: `Bearer ${accessToken}` });
+        if (response && response.status === 'SUCCESS') {
+            res.json(response);
+        } else if (response && response.httpStatus === 401) {
+            const newAccessToken = await refreshAccessToken(refreshToken);
+            if (newAccessToken) {
+                res.cookie('accessToken', newAccessToken, { httpOnly: true, secure: false});
+                const reTry = await request(method, url, data, { Authorization: `Bearer ${newAccessToken}` });
+                res.json(reTry);
+            } else {
+                res.cookie('accessToken','',{maxAge:0});
+                res.cookie('refreshToken','',{maxAge:0});
+                res.json(response);
+            }
+        } else if (response && response.httpStatus === 400) {
+            res.cookie('accessToken','',{maxAge:0});
+            res.cookie('refreshToken','',{maxAge:0});
+            res.json(response);
+        } else {
+            res.json(response);
+        }
+    } catch (err) {
+        if (err.response && err.response.httpStatus === 401) {
+            const newAccessToken = await refreshAccessToken(refreshToken);
+            if (newAccessToken) {
+                res.cookie('accessToken', newAccessToken, { httpOnly: true, secure: false });
+                const reTry = await request(method, url, data, { Authorization: `Bearer ${newAccessToken}` });
+                res.json(reTry);
+            } else {
+                res.cookie('accessToken','',{maxAge:0});
+                res.cookie('refreshToken','',{maxAge:0});
+                res.json(err?.response);
+            }
+        } else if (err.response && err.response.httpStatus === 400) {
+            res.cookie('accessToken','',{maxAge:0});
+            res.cookie('refreshToken','',{maxAge:0});
+            res.json(err?.response);
+        } else {
+            res.status(500).json({ error: err.message });
+        }
+    }
 }
 
 
-export { isAuthenticated };
+export { isAuthenticated, authenticatedRequest };

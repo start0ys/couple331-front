@@ -50,11 +50,15 @@ const bindEvent = () => {
         request('get', `/api/users/${userId}`, null)
         .then(res => {
             console.log(res?.data);
+            if(res.httpStatus === 401) {
+                const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+                window.location.href = '/redirect' + param;
+            }
             
         })
         .catch(err => {
             console.log(err);
-            showErrorModal();
+            showErrorModal(err?.message);
         })
         .finally(unblockUI);
     })
