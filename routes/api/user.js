@@ -23,9 +23,4 @@ router.post('/register', (req, res) => {
 });
 
 
-router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    authenticatedRequest(req, res, "get", API_URL + `/users/${id}`);
-  });
-
 export default router;

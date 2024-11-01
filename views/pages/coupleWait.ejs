@@ -1,0 +1,19 @@
+<div style="width: 100%; padding: 20px; background-color: #e2dcdc;">
+    <div style="width: 70%; margin: 0 auto; margin-top: 100px; background-color: #fff; border-radius: 19px; padding: 30px;">
+        <div style="text-align: center;">
+            <h5 style="margin-bottom: 15px;"><%- message %></h5>
+            <% if (senderYn == "N") { %>
+                <button type="button" id="statusChangeBtn"  class="btn btn-info red-small-btn">
+                    <% if (param["status"] == "REQUEST") { %>
+                        승인
+                    <% } else { %> 
+                        확인
+                    <% } %>         
+                </button>
+                <% if (param["status"] == "REQUEST") { %>
+                    <button type="button" id="statusChangeBtn"  class="btn btn-info blue-small-btn">거절</button>
+                <% } %>        
+            <% } %>
+        </div>
+    </div>
+</div>

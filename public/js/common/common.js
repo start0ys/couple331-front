@@ -220,4 +220,35 @@ const showErrorModal = (errMsg = '오류가 발생하였습니다.') => {
 };
 
 
-export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal }
+const showNotification = (msg = '', url = '') => {
+    // Toast 컨테이너가 이미 있는지 확인하고, 없으면 추가
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        document.body.insertAdjacentHTML("beforeend", `
+            <div class="toast-container position-fixed top-0 end-0 p-3"></div>
+        `);
+        toastContainer = document.querySelector('.toast-container');
+    }
+ 
+    
+    // Toast HTML 템플릿 생성
+    const toastHTML = `
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-suit-heart-fill" style="color: red;"></i>
+                <strong class="me-auto">알림</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${msg}
+                ${url ? `<br><a href="${url}">바로가기</a>` : ''}
+            </div>
+        </div>
+    `;
+
+    // 새 Toast 추가
+    toastContainer.insertAdjacentHTML("beforeend", toastHTML);
+};
+
+
+export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal, showNotification }

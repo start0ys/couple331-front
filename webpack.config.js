@@ -48,6 +48,7 @@ export default {
         boardEdit: path.join(PAGES_JS_DIR, 'boardEdit.js'),
         coupleEdit: path.join(PAGES_JS_DIR, 'coupleEdit.js'),
         coupleView: path.join(PAGES_JS_DIR, 'coupleView.js'),
+        coupleWait: path.join(PAGES_JS_DIR, 'coupleWait.js'),
     },
     output: {
         path: path.resolve('dist'),

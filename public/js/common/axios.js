@@ -16,10 +16,10 @@ export const request = (method, url, data, headers  = {}) => {
       return data;
     })
     .catch(err => {
-      console.log(err + ` [Status: ${err.response.data.status} Message: ${err.response.data.message} HttpStatus: ${err.response.status}]`);
-      const data = err.response.data || {};
+      console.log(err + ` [Status: ${err?.response?.data?.status} Message: ${err?.response?.data?.message} HttpStatus: ${err?.response?.status}]`);
+      const data = err?.response?.data || {};
       if(!data.hasOwnProperty('httpStatus'))
-        data.httpStatus = err.response.status;
+        data.httpStatus = err?.response?.status;
       return data;
     });
 };
