@@ -3,16 +3,12 @@
         <div style="text-align: center;">
             <h5 style="margin-bottom: 15px;"><%- message %></h5>
             <% if (senderYn == "N") { %>
-                <button type="button" id="statusChangeBtn"  class="btn btn-info red-small-btn">
-                    <% if (param["status"] == "REQUEST") { %>
-                        승인
-                    <% } else { %> 
-                        확인
-                    <% } %>         
-                </button>
                 <% if (param["status"] == "REQUEST") { %>
-                    <button type="button" id="statusChangeBtn"  class="btn btn-info blue-small-btn">거절</button>
-                <% } %>        
+                    <button type="button" class="btn btn-info red-small-btn status-change-btn" approval-status-type="01">승인</button>
+                    <button type="button" class="btn btn-info blue-small-btn status-change-btn" approval-status-type="02">거절</button>
+                <% } else { %> 
+                    <button type="button" class="btn btn-info red-small-btn status-change-btn" approval-status-type="">확인</button>
+                <% } %>         
             <% } %>
         </div>
     </div>

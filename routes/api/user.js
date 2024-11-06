@@ -22,5 +22,11 @@ router.post('/register', (req, res) => {
 
 });
 
+router.get('/oppositeGender/singles', async (req, res) => {
+    const gender = req.query.gender;
+    const response = await authenticatedRequest(req, res, "get", `/users/oppositeGender/singles?gender=${gender}`);
+    res.json(response);
+  });
+
 
 export default router;

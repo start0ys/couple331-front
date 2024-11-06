@@ -101,3 +101,7 @@
 .tui-datepicker {
   z-index: 100;
 }
+
+.dropdown-item {
+  cursor: pointer;
+}

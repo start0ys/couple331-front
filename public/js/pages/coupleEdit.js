@@ -1,7 +1,8 @@
 import DatePicker from 'tui-date-picker';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import EditorHelper from "../common/editorHelper.js";
-import { getDateStr } from '../common/common.js';
+import { getDateStr, blockUI, unblockUI, showErrorModal } from '../common/common.js';
+import { request } from "../common/axios.js";
 
 const EDITOR_ID = 'editor';
 let picker = null;
@@ -13,11 +14,41 @@ document.addEventListener('DOMContentLoaded', () => {
     bindEvent();
 });
 
+const getOppositeGenderSingleUsers = async () => {
+    if(!_gender)
+        return [];
 
-const coupleSelectSettingAndEventBind = () => {
+    try {
+        const res = await request('get', `/api/users/oppositeGender/singles?gender=${_gender}`, null);
+        if(res?.status === 'SUCCESS') {
+            return res?.data || [];
+        } else if(res?.httpStatus === 401) {
+            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+            window.location.href = '/redirect' + param;
+        }
+    } catch (err) {
+        console.log(err);
+        return [];
+    }
+}
+
+
+const coupleSelectSettingAndEventBind = async () => {
+    const oppositeGenderSingleUsers = await getOppositeGenderSingleUsers();
+    
     const displayCopleOption = document.getElementById('displayCopleOption');
     const coupleSelect = document.getElementById('coupleSelect');
     const searchInput = document.getElementById('searchInput');
+
+    oppositeGenderSingleUsers.forEach(user => {
+        const {userId, email, name} = user;
+        if(userId && email && name) {
+            const option = document.createElement("option");
+            option.text = `${name} [${email}]`;
+            option.value = userId;
+            coupleSelect.appendChild(option);
+        }
+    })
 
     // 숨겨진 select 요소의 옵션을 드롭다운 메뉴로 추가
     Array.from(coupleSelect.options).forEach(option => {
@@ -51,9 +82,14 @@ const coupleSelectSettingAndEventBind = () => {
     });
 }
 
+const initEditor = () => {
+    const option = {};
+    EditorHelper.init(EDITOR_ID, false, option);
+}
+
 const setDatePicker = () => {
 	picker = new DatePicker('#startDate', {
-        date: new Date(),
+        // date: new Date(),
         language: 'ko',
         input: {
             element: '#datepicker-input',
@@ -63,18 +99,57 @@ const setDatePicker = () => {
 }
 
 const bindEvent = () => {
-    document.getElementById('applyBtn').addEventListener('click', () => {
-        const couple = document.getElementById('coupleSelect').value;
-        const startDate = getDateStr(picker.getDate(), 'yyyyMMdd');
-        console.log(couple);
-        console.log(startDate);
-    })
+    document.getElementById('applyBtn').addEventListener('click', apply)
 }
 
-const initEditor = () => {
-    const option = {
+const apply = () => {
+    const couple = document.getElementById('coupleSelect').value;
+    const startDate = getDateStr(picker.getDate(), 'yyyyMMdd');
+    const errMsgs = applyValidation(couple, startDate);
 
-    };
+    if(errMsgs.length > 0) {
+        showErrorModal(errMsgs.join('<br>'));
+        return;
+    }
 
-    EditorHelper.init(EDITOR_ID, false, option);
+    const manId = _gender === '01' ? _userId : couple;
+    const womanId = _gender === '01' ? couple : _userId;
+    const coupleDesc = EditorHelper.getHTML(EDITOR_ID);
+
+    const data = { manId, womanId, coupleDesc, startDate, createUserId: _userId, updateUserId: _userId }
+
+    blockUI();
+    request('post', '/api/couple/register', data)
+    .then(res => {
+        if(res?.status === 'SUCCESS') {
+            alert("커플을 신청하였습니다..");
+            window.location.href = '/couple';
+        } else if(res?.httpStatus === 401) {
+            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+            window.location.href = '/redirect' + param;
+        } else {
+            showErrorModal(res?.message);
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        showErrorModal();
+    })
+    .finally(unblockUI);
+}
+
+const applyValidation = (couple, startDate) => {
+    const errMsgs = [];
+
+    const today = getDateStr(new Date(), 'yyyyMMdd');
+
+    if(!couple)
+        errMsgs.push('커플을 선택해주세요.');
+
+    if(!startDate)
+        errMsgs.push('사귄 날짜를 선택해주세요.');
+        
+
+    return errMsgs;
 }

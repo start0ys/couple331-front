@@ -50,6 +50,7 @@ router.get('/couple', isAuthenticated, async (req, res) => {
         const status = coupleStatusInfo.data.status || '';
         const message = coupleStatusInfo.data.message || '';
         const senderYn =  coupleStatusInfo.data.senderYn;
+        const coupleId = coupleStatusInfo.data.coupleId || '';
 
         const css = '';
         let page = 'pages/coupleWait';
@@ -60,28 +61,33 @@ router.get('/couple', isAuthenticated, async (req, res) => {
             case 'REQUEST':
                 param.status = status;
                 param._screen = 'coupleWait';
+                param._coupleId_ = coupleId;
                 break;
             case 'REJECT':
             case 'BREAKUP':
                 if(senderYn === 'N') {
                     param.status = status;
                     param._screen = 'coupleWait';
+                    param._coupleId_ = coupleId;
                 } else {
                     page = 'pages/coupleEdit';
                     js = '/coupleEdit';
                     param._screen = 'coupleEdit';
+                    param._coupleId_ = coupleId;
                 }
                 break;
             case 'APPROVAL':
                 page = 'pages/coupleView';
                 js = '/coupleView';
                 param._screen = 'coupleView';
+                param._coupleId_ = coupleId;
                 break;
             case 'TERMINATED':
             default:
                 page = 'pages/coupleEdit';
                 js = '/coupleEdit';
                 param._screen = 'coupleEdit';
+                param._coupleId_ = coupleId;
                 break;
         }
 

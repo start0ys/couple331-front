@@ -22,6 +22,29 @@ class EditorHelper {
             this.editors[editorId] = editor;
         }
     }
+
+    getEditor(editorId) {
+        return this.editors[editorId] || null;
+    }
+
+    getHTML(editorId) {
+        const editor = this.getEditor(editorId);
+        if (!editor) {
+            return '';
+        }
+
+        return editor.getHTML() || '';
+    }
+
+    getEditorElements(editorId) {
+        const editor = this.getEditor(editorId);
+        if (!editor) {
+            return '';
+        }
+        
+        return editor.getEditorElements() || '';
+    }
+
 }
 
 export default new EditorHelper();
