@@ -27,19 +27,21 @@
           <hr>
           <%- include('../partials/sidebar') %>
           <hr>
-          <div class="dropdown">
-            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-suit-heart-fill" style="color: red;"></i>
-              <!-- <i class="bi bi-person-circle" style="color: #919699; font-size: 18px;"></i> -->
-              <strong><%- userInfo["_name"] %></strong>
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-              <li><a class="dropdown-item" href="/myPage">마이페이지</a></li>
-              <li><a class="dropdown-item" href="/couple">커플</a></li>
-              <li><a class="dropdown-item" >설정</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" id="logoutBtn" style="cursor: pointer;">로그아웃</a></li>
-            </ul>
+          <div style="display: flex; justify-content: space-between;">
+            <div id="daysTogether"></div>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle" style="color: #919699; font-size: 18px;"></i>
+                <strong><%- userInfo["_name"] %></strong>
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="/myPage">마이페이지</a></li>
+                <li><a class="dropdown-item" href="/couple">커플</a></li>
+                <li><a class="dropdown-item" >설정</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" id="logoutBtn" style="cursor: pointer;">로그아웃</a></li>
+                </ul>
+            </div>
           </div>
         </div>
       

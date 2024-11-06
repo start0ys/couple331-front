@@ -48,8 +48,6 @@ const bindEvent = () => {
 }
 
 const setCoupleStatus = () => {
-    if(['coupleWait','coupleEdit','coupleView'].includes(_screen ))
-        return;
 
     request('get', `/api/couple/${_userId}/status`, null)
     .then(res => {
@@ -57,7 +55,8 @@ const setCoupleStatus = () => {
             const data = res?.data || {};
             _coupleStatus = data.status;
             _coupleId = data.coupleId;
-            if(data.senderYn == 'N' && data.message)
+            setDaysTogether(data.daysTogether);
+            if(!['coupleWait','coupleEdit','coupleView'].includes(_screen ) && data.senderYn == 'N' && data.message)
                 showNotification(data.message, '/couple');
         } else if(res?.httpStatus === 401) {
             const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
@@ -67,4 +66,11 @@ const setCoupleStatus = () => {
     .catch(err => {
         console.log(err);
     })
+}
+
+const setDaysTogether = (daysTogether) => {
+    if(!daysTogether)
+        return;
+
+    document.getElementById('daysTogether').insertAdjacentHTML("beforeend", `<i class="bi bi-suit-heart-fill" style="color: red;"></i>${daysTogether}일`);
 }

@@ -142,7 +142,6 @@ const apply = () => {
 const applyValidation = (couple, startDate) => {
     const errMsgs = [];
 
-    const today = getDateStr(new Date(), 'yyyyMMdd');
 
     if(!couple)
         errMsgs.push('커플을 선택해주세요.');

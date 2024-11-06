@@ -22,5 +22,11 @@ router.patch('/:coupleId/status', async (req, res) => {
     res.json(response);
 });
 
+router.get('/:coupleId/detail', async (req, res) => {
+    const coupleId = req.params.coupleId;
+    const response = await authenticatedRequest(req, res, "get", `/couple/${coupleId}/detail`, req.body);
+    res.json(response);
+});
+
 
 export default router;
