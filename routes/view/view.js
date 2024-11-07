@@ -77,8 +77,12 @@ router.get('/couple', isAuthenticated, async (req, res) => {
                 }
                 break;
             case 'APPROVAL':
+                if(senderYn === 'N')
+                    await authenticatedRequest(req, res, "patch", `/couple/${coupleId}/status`, {approvalStatusType: '06', updateUserId: userId});
+            case 'CONFIRMED':
                 page = 'pages/coupleView';
                 js = '/coupleView';
+                param.status = status;
                 param._screen = 'coupleView';
                 param._coupleId_ = coupleId;
                 break;
@@ -92,6 +96,18 @@ router.get('/couple', isAuthenticated, async (req, res) => {
         }
 
         res.render(page, { css, js, param, message, senderYn });
+    } else {
+        res.render('pages/coupleEdit', { css: '', js: '/coupleEdit', param: {_screen: 'coupleEdit'} });
+    }
+});
+
+router.get('/couple/edit', isAuthenticated, async (req, res) => {
+    const userId = res?.locals?.userInfo?._userId || 0;
+    const coupleStatusInfo = await authenticatedRequest(req, res, "get", `/couple/${userId}/status`);
+    if(coupleStatusInfo && coupleStatusInfo.data) {
+        const coupleId = coupleStatusInfo.data.coupleId || '';
+        const status = coupleStatusInfo.data.status || '';
+        res.render('pages/coupleEdit', { css: '', js: '/coupleEdit', param: {_screen: 'coupleEdit', _coupleId_: coupleId, status} });
     } else {
         res.render('pages/coupleEdit', { css: '', js: '/coupleEdit', param: {_screen: 'coupleEdit'} });
     }

@@ -1,34 +1,52 @@
 <div style="width: 100%; padding: 20px; text-align: center; background-color: #e2dcdc;">
     <div style="width: 70%; margin: 0 auto; margin-top: 100px; background-color: #fff; border-radius: 19px; padding: 30px;">
-        <h3 style="margin-bottom: 35px;">커플 신청</h3>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <div>
-                <select id="coupleSelect" class="form-select d-none">
-                    <option></option>
-                </select>
-                <label for="startDate" class="form-label">사귄 날짜</label>
-                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                    <input type="text" id="datepicker-input" aria-label="Date-Time" readonly>
-                    <span class="tui-ico-date"></span>
-                </div>
-                <div id="startDate" style="margin-top: -1px;"></div>
+        <% if (param["status"] == "APPROVAL" || param["status"] == "CONFIRMED") { %>
+            <h3 style="margin-bottom: 15px; text-align: center;">커플 정보</h3>
+        
+            <div style="text-align: center; margin-bottom: 15px;">
+               <span id="manName"></span>
+               <i class="bi bi-suit-heart-fill" style="color: red;"></i>
+               <span id="womanName"></span>
             </div>
-            <div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="displayCoupleSelect" data-bs-toggle="dropdown" aria-expanded="false">커플 선택</button>
-                    <ul class="dropdown-menu" aria-labelledby="displayCoupleSelect" id="displayCopleOption">
-                        <li class="dropdown-item">
-                            <input id="searchInput" class="form-control" placeholder="Search...">
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                    </ul>
+        <% } else { %> 
+            <h3 style="margin-bottom: 35px;">커플 신청</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <div>
+                    <select id="coupleSelect" class="form-select d-none">
+                        <option></option>
+                    </select>
+                    <label for="startDate" class="form-label">사귄 날짜</label>
+                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                        <input type="text" id="datepicker-input" aria-label="Date-Time" readonly>
+                        <span class="tui-ico-date"></span>
+                    </div>
+                    <div id="startDate" style="margin-top: -1px;"></div>
+                </div>
+                <div>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="displayCoupleSelect" data-bs-toggle="dropdown" aria-expanded="false">커플 선택</button>
+                        <ul class="dropdown-menu" aria-labelledby="displayCoupleSelect" id="displayCopleOption">
+                            <li class="dropdown-item">
+                                <input id="searchInput" class="form-control" placeholder="Search...">
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        <% } %> 
 
 
-        <div id='editor'></div>
+        <div id='editor' style="text-align: left;"></div>
+
+        <% if (param["status"] == "APPROVAL" || param["status"] == "CONFIRMED") { %>
+            <div style="width: 100%; margin-top: 13px; display: flex; justify-content: space-between;">
+                <button type="button" id="saveBtn" class="btn btn-info red-btn">저장</button>
+                <button type="button" id="breakUpBtn" class="btn btn-info blue-small-btn">이별</button>
+            </div>
+        <% } else { %> 
+            <button type="button" id="applyBtn" class="btn btn-info red-btn" style="width: 100%; margin-top: 13px; height: 50px;">신청</button>
+        <% } %> 
     
-        <input type="button" id="applyBtn" value="신청" class="btn btn-info red-btn" style="width: 100%; margin-top: 13px; height: 50px;">
     </div>
 </div>

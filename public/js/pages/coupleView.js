@@ -1,11 +1,12 @@
 import EditorHelper from "../common/editorHelper.js";
-import { getDateStr, blockUI, unblockUI, showErrorModal } from '../common/common.js';
+import { blockUI, unblockUI, showErrorModal } from '../common/common.js';
 import { request } from "../common/axios.js";
 
 const EDITOR_ID = 'editor';
 
 document.addEventListener('DOMContentLoaded', () => {
     setData();
+    bindEvent();
 });
 
 const setData = () => {
@@ -37,4 +38,10 @@ const initEditor = (initialValue = '') => {
     const option = { initialValue };
 
     EditorHelper.init(EDITOR_ID, true, option);
+}
+
+const bindEvent = () => {
+    document.getElementById('editBtn').addEventListener('click', () => {
+        window.location.href = '/couple/edit';
+    })
 }

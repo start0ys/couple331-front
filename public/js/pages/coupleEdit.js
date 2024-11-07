@@ -8,11 +8,22 @@ const EDITOR_ID = 'editor';
 let picker = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    coupleSelectSettingAndEventBind();
-    initEditor();
+    setDataAndBindEvent();
     setDatePicker();
-    bindEvent();
 });
+
+const setDataAndBindEvent = () => {
+
+    if(['APPROVAL', 'CONFIRMED'].includes(status)) {
+        setData();
+        document.getElementById('saveBtn').addEventListener('click', saveData);
+        document.getElementById('breakUpBtn').addEventListener('click', updateCoupleStatus);
+    } else {
+        coupleSelectSettingAndEventBind();
+        initEditor();
+        document.getElementById('applyBtn').addEventListener('click', apply);
+    }
+}
 
 const getOppositeGenderSingleUsers = async () => {
     if(!_gender)
@@ -82,8 +93,8 @@ const coupleSelectSettingAndEventBind = async () => {
     });
 }
 
-const initEditor = () => {
-    const option = {};
+const initEditor = (initialValue = '') => {
+    const option = { initialValue };
     EditorHelper.init(EDITOR_ID, false, option);
 }
 
@@ -98,9 +109,6 @@ const setDatePicker = () => {
     });
 }
 
-const bindEvent = () => {
-    document.getElementById('applyBtn').addEventListener('click', apply)
-}
 
 const apply = () => {
     const couple = document.getElementById('coupleSelect').value;
@@ -151,4 +159,78 @@ const applyValidation = (couple, startDate) => {
         
 
     return errMsgs;
+}
+
+const setData = () => {
+    blockUI();
+    request('get', `/api/couple/${_coupleId_}/detail`, null)
+    .then(res => {
+        if(res?.status === 'SUCCESS') {
+            const data = res?.data || {};
+            const {manName, womanName, coupleDesc} = data;
+            document.getElementById('manName').innerHTML = manName;
+            document.getElementById('womanName').innerHTML = womanName;
+            initEditor(coupleDesc);
+        } else if(res?.httpStatus === 401) {
+            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+            window.location.href = '/redirect' + param;
+        } else {
+            showErrorModal(res?.message);
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        showErrorModal();
+    })
+    .finally(unblockUI);
+}
+
+const saveData = () => {
+    const coupleDesc = EditorHelper.getHTML(EDITOR_ID);
+
+    blockUI();
+    request('patch', `/api/couple/${_coupleId_}/desc`,  {coupleDesc, updateUserId: _userId} )
+    .then(res => {
+        if(res?.status === 'SUCCESS') {
+            alert('저장되었습니다.');
+            window.location.href = '/couple';
+        } else if(res?.httpStatus === 401) {
+            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+            window.location.href = '/redirect' + param;
+        } else {
+            showErrorModal(res?.message);
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        showErrorModal();
+    })
+    .finally(unblockUI);
+}
+
+const updateCoupleStatus = () => {
+    if(!confirm('정말로 이별하시겠습니까?'))
+        return;
+
+    blockUI();
+    request('patch', `/api/couple/${_coupleId_}/status`,  {updateUserId: _userId} )
+    .then(res => {
+        if(res?.status === 'SUCCESS') {
+            alert('더 좋은 인연을 찾기를 바랍니다.');
+            window.location.href = '/couple';
+        } else if(res?.httpStatus === 401) {
+            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+            window.location.href = '/redirect' + param;
+        } else {
+            showErrorModal(res?.message);
+        }
+        
+    })
+    .catch(err => {
+        console.log(err);
+        showErrorModal();
+    })
+    .finally(unblockUI);
 }

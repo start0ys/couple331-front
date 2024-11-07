@@ -1,5 +1,8 @@
 import Editor from '@toast-ui/editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import "tui-color-picker/dist/tui-color-picker.css";
+import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
+import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 
 class EditorHelper {
     constructor() {
@@ -18,6 +21,8 @@ class EditorHelper {
             Editor.factory(Object.assign({}, defaultOption, option));
         } else {
             defaultOption.initialEditType = 'wysiwyg';
+            defaultOption.previewStyle =  'vertical';
+            defaultOption.plugins=[colorSyntax];
             const editor = new Editor(Object.assign({}, defaultOption, option));
             this.editors[editorId] = editor;
         }
