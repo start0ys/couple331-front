@@ -1,48 +1,48 @@
 import DatePicker from 'tui-date-picker';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import EditorHelper from "../common/editorHelper.js";
-import { getDateStr, blockUI, unblockUI, showErrorModal } from '../common/common.js';
+import { getDateStr, showErrorModal, handleApiResponse } from '../common/common.js';
 import { request } from "../common/axios.js";
 
 const EDITOR_ID = 'editor';
 let picker = null;
+const isUpdate = ['APPROVAL', 'CONFIRMED'].includes(status);
 
 document.addEventListener('DOMContentLoaded', () => {
-    setDataAndBindEvent();
-    setDatePicker();
+    initializeData();
+    bindEvent()
 });
 
-const setDataAndBindEvent = () => {
 
-    if(['APPROVAL', 'CONFIRMED'].includes(status)) {
+const initializeData = () => {
+    if (isUpdate) {
         setData();
+    } else {
+        coupleSelectSettingAndEventBind();
+        setDatePicker();
+        initEditor();
+    }
+};
+
+const bindEvent = () => {
+    if (isUpdate) {
         document.getElementById('saveBtn').addEventListener('click', saveData);
         document.getElementById('breakUpBtn').addEventListener('click', updateCoupleStatus);
     } else {
-        coupleSelectSettingAndEventBind();
-        initEditor();
         document.getElementById('applyBtn').addEventListener('click', apply);
     }
-}
+};
 
 const getOppositeGenderSingleUsers = async () => {
-    if(!_gender)
-        return [];
-
-    try {
-        const res = await request('get', `/api/users/oppositeGender/singles?gender=${_gender}`, null);
-        if(res?.status === 'SUCCESS') {
-            return res?.data || [];
-        } else if(res?.httpStatus === 401) {
-            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
-            window.location.href = '/redirect' + param;
-        }
-    } catch (err) {
-        console.log(err);
-        return [];
-    }
-}
-
+    if (!_gender) return [];
+    
+    return handleApiResponse(
+        () => request('get', `/api/users/oppositeGender/singles?gender=${_gender}`, null),
+        (res) => res?.data || [],
+        true,
+        []
+    );
+};
 
 const coupleSelectSettingAndEventBind = async () => {
     const oppositeGenderSingleUsers = await getOppositeGenderSingleUsers();
@@ -52,24 +52,22 @@ const coupleSelectSettingAndEventBind = async () => {
     const searchInput = document.getElementById('searchInput');
 
     oppositeGenderSingleUsers.forEach(user => {
-        const {userId, email, name} = user;
-        if(userId && email && name) {
+        const { userId, email, name } = user;
+        if (userId && email && name) {
             const option = document.createElement("option");
             option.text = `${name} [${email}]`;
             option.value = userId;
             coupleSelect.appendChild(option);
         }
-    })
+    });
 
-    // 숨겨진 select 요소의 옵션을 드롭다운 메뉴로 추가
     Array.from(coupleSelect.options).forEach(option => {
         if (option.value) {
             const listItem = document.createElement('li');
             listItem.className = 'dropdown-item';
             listItem.textContent = option.text;
             listItem.dataset.value = option.value;
-            
-            // 항목 클릭 시 선택된 값 업데이트
+
             listItem.addEventListener('click', function () {
                 const selectedValue = this.dataset.value;
                 const selectedText = this.textContent;
@@ -83,7 +81,6 @@ const coupleSelectSettingAndEventBind = async () => {
         }
     });
 
-    // 드롭다운 검색 기능 구현
     searchInput.addEventListener('input', function () {
         const searchText = searchInput.value.toLowerCase();
         Array.from(displayCopleOption.querySelectorAll('.dropdown-item:not(:first-child)')).forEach(item => {
@@ -91,31 +88,29 @@ const coupleSelectSettingAndEventBind = async () => {
             item.style.display = itemText.includes(searchText) ? '' : 'none';
         });
     });
-}
+};
 
 const initEditor = (initialValue = '') => {
     const option = { initialValue };
     EditorHelper.init(EDITOR_ID, false, option);
-}
+};
 
 const setDatePicker = () => {
-	picker = new DatePicker('#startDate', {
-        // date: new Date(),
+    picker = new DatePicker('#startDate', {
         language: 'ko',
         input: {
             element: '#datepicker-input',
             format: 'yyyy-MM-dd',
         }
     });
-}
-
+};
 
 const apply = () => {
     const couple = document.getElementById('coupleSelect').value;
     const startDate = getDateStr(picker.getDate(), 'yyyyMMdd');
     const errMsgs = applyValidation(couple, startDate);
 
-    if(errMsgs.length > 0) {
+    if (errMsgs.length > 0) {
         showErrorModal(errMsgs.join('<br>'));
         return;
     }
@@ -124,113 +119,61 @@ const apply = () => {
     const womanId = _gender === '01' ? couple : _userId;
     const coupleDesc = EditorHelper.getHTML(EDITOR_ID);
 
-    const data = { manId, womanId, coupleDesc, startDate, createUserId: _userId, updateUserId: _userId }
+    const data = { manId, womanId, coupleDesc, startDate, createUserId: _userId, updateUserId: _userId };
 
-    blockUI();
-    request('post', '/api/couple/register', data)
-    .then(res => {
-        if(res?.status === 'SUCCESS') {
-            alert("커플을 신청하였습니다..");
+    handleApiResponse(
+        () => request('post', '/api/couple/register', data),
+        (res) => {
+            alert("커플을 신청하였습니다.");
             window.location.href = '/couple';
-        } else if(res?.httpStatus === 401) {
-            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
-            window.location.href = '/redirect' + param;
-        } else {
-            showErrorModal(res?.message);
-        }
-        
-    })
-    .catch(err => {
-        console.log(err);
-        showErrorModal();
-    })
-    .finally(unblockUI);
-}
+        },
+        true
+    );
+};
 
 const applyValidation = (couple, startDate) => {
     const errMsgs = [];
-
-
-    if(!couple)
-        errMsgs.push('커플을 선택해주세요.');
-
-    if(!startDate)
-        errMsgs.push('사귄 날짜를 선택해주세요.');
-        
-
+    if (!couple) errMsgs.push('커플을 선택해주세요.');
+    if (!startDate) errMsgs.push('사귄 날짜를 선택해주세요.');
     return errMsgs;
-}
+};
 
 const setData = () => {
-    blockUI();
-    request('get', `/api/couple/${_coupleId_}/detail`, null)
-    .then(res => {
-        if(res?.status === 'SUCCESS') {
+    handleApiResponse(
+        () => request('get', `/api/couple/${_coupleId_}/detail`, null),
+        (res) => {
             const data = res?.data || {};
-            const {manName, womanName, coupleDesc} = data;
+            const { manName, womanName, coupleDesc } = data;
             document.getElementById('manName').innerHTML = manName;
             document.getElementById('womanName').innerHTML = womanName;
             initEditor(coupleDesc);
-        } else if(res?.httpStatus === 401) {
-            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
-            window.location.href = '/redirect' + param;
-        } else {
-            showErrorModal(res?.message);
-        }
-        
-    })
-    .catch(err => {
-        console.log(err);
-        showErrorModal();
-    })
-    .finally(unblockUI);
-}
+        },
+        true
+    );
+};
 
 const saveData = () => {
     const coupleDesc = EditorHelper.getHTML(EDITOR_ID);
 
-    blockUI();
-    request('patch', `/api/couple/${_coupleId_}/desc`,  {coupleDesc, updateUserId: _userId} )
-    .then(res => {
-        if(res?.status === 'SUCCESS') {
+    handleApiResponse(
+        () => request('patch', `/api/couple/${_coupleId_}/desc`, { coupleDesc, updateUserId: _userId }),
+        (res) => {
             alert('저장되었습니다.');
             window.location.href = '/couple';
-        } else if(res?.httpStatus === 401) {
-            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
-            window.location.href = '/redirect' + param;
-        } else {
-            showErrorModal(res?.message);
-        }
-        
-    })
-    .catch(err => {
-        console.log(err);
-        showErrorModal();
-    })
-    .finally(unblockUI);
-}
+        },
+        true
+    );
+};
 
 const updateCoupleStatus = () => {
-    if(!confirm('정말로 이별하시겠습니까?'))
-        return;
+    if (!confirm('정말로 이별하시겠습니까?')) return;
 
-    blockUI();
-    request('patch', `/api/couple/${_coupleId_}/status`,  {updateUserId: _userId} )
-    .then(res => {
-        if(res?.status === 'SUCCESS') {
+    handleApiResponse(
+        () => request('patch', `/api/couple/${_coupleId_}/status`, { updateUserId: _userId }),
+        (res) => {
             alert('더 좋은 인연을 찾기를 바랍니다.');
             window.location.href = '/couple';
-        } else if(res?.httpStatus === 401) {
-            const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
-            window.location.href = '/redirect' + param;
-        } else {
-            showErrorModal(res?.message);
-        }
-        
-    })
-    .catch(err => {
-        console.log(err);
-        showErrorModal();
-    })
-    .finally(unblockUI);
-}
+        },
+        true
+    );
+};

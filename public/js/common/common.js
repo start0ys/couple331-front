@@ -250,5 +250,29 @@ const showNotification = (msg = '', url = '') => {
     toastContainer.insertAdjacentHTML("beforeend", toastHTML);
 };
 
+const handleApiResponse = async (apiCall, onSuccess, useBlockUI, defaultReturnValue = null) => {
+  if(useBlockUI) blockUI();
+  try {
+      const res = await apiCall();
+      if (res?.status === 'SUCCESS') {
+          return onSuccess(res);
+      } else if (res?.httpStatus === 401) {
+          const param = res?.message ? `?redirect=${encodeURIComponent('/login')}&message=${encodeURIComponent(res.message)}` : `?redirect=${encodeURIComponent('/login')}`;
+          window.location.href = '/redirect' + param;
+      } else if(defaultReturnValue !== null) {
+          return defaultReturnValue;
+      } else {
+          showErrorModal(res?.message);
+      }
+  } catch (err) {
+      console.log(err);
+      if(defaultReturnValue !== null)
+          return defaultReturnValue;
+      showErrorModal();
+  } finally {
+      if(useBlockUI) unblockUI();
+  }
+};
 
-export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal, showNotification }
+
+export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal, showNotification, handleApiResponse }

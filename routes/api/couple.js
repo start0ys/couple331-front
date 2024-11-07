@@ -30,7 +30,7 @@ router.get('/:coupleId/detail', async (req, res) => {
 
 router.patch('/:coupleId/desc', async (req, res) => {
     const coupleId = req.params.coupleId;
-    const response = await authenticatedRequest(req, res, "patch", `/couple/${coupleId}/status`, req.body);
+    const response = await authenticatedRequest(req, res, "patch", `/couple/${coupleId}/desc`, req.body);
     res.json(response);
 });
 
