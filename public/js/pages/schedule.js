@@ -2,12 +2,11 @@ import DatePicker from 'tui-date-picker';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import CalendarHelper from "../common/calendarHelper.js";
 import TodoHelper from "../common/todoHelper.js";
-import { getDateStr, generateUUID } from '../common/common.js';
+import { getDateStr, generateUUID, targetShowOn, debounce } from '../common/common.js';
 
 const CALENDAR_ID = 'calendar';
 const SCHEDULE_DETAIL_TEMPLATE = (detail) => {
-	const start = detail.start;
-	const end = detail.end;
+	const {start, end} = detail;
 	const period = start === end ? start : `${start}~${end}`;
 	return `
 		<li>
@@ -18,8 +17,8 @@ const SCHEDULE_DETAIL_TEMPLATE = (detail) => {
 		</li>
 	`
 };
-const TODO_TEMPLATE = (id, todo, isFinish) => {
-	const checkd = isFinish ? 'checked' : '';
+const TODO_TEMPLATE = (id, todo, completedYn) => {
+	const checkd = completedYn === 'Y' ? 'checked' : '';
 	return `
 		 <div class="list-group list-group-horizontal rounded-0 bg-transparent" id="${id}">
 			<div class="form-check">
@@ -37,6 +36,7 @@ let picker = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 	initCalendar();
+	initTodo();
 	bindEvent();
   	setDatePicker();
 });
@@ -73,6 +73,7 @@ const bindEvent = () => {
 		}
 
 		CalendarHelper.setSchedule(CALENDAR_ID, {
+			id: generateUUID(),
 			title: scheduleText,
 			start: startDateStr,
 			end: endDateStr,
@@ -89,8 +90,8 @@ const bindEvent = () => {
 			const todoEl = document.getElementById('todoList');
 			const targetDayStr = document.getElementById('targetDay').value;
 			const id = generateUUID();
-			todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(id, this.value, false));
-			TodoHelper.setTodo(targetDayStr, id, this.value);
+			todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(id, this.value, 'N'));
+			TodoHelper.setTodo(targetDayStr, id, this.value, true);
 			setTodoCheckPoint(targetDayStr);
 			this.value = '';
 		}
@@ -102,8 +103,14 @@ const bindEvent = () => {
 		const targetDayStr = document.getElementById('targetDay').value;
 	
 		if (target.classList.contains('todo-check')) {
-			const isFinish = target.checked;
-			TodoHelper.changeStateTodo(targetDayStr, todoId, isFinish);
+			const completedYn = target.checked ? 'Y' : 'N';
+			if(completedYn == 'N') {
+				if(!confirm("해당 할 일의 상태를 처리하지 않은 상태로 변경 하시겠습니까?")) {
+					target.checked = true;
+					return;
+				}
+			}
+			TodoHelper.changeStateTodo(targetDayStr, todoId, completedYn, true);
 			setTodoCheckPoint(targetDayStr);
 		}
 	
@@ -128,7 +135,7 @@ const bindEvent = () => {
 
 				pElement.textContent = newTodo;
 				inputElement.replaceWith(pElement);
-				TodoHelper.updateTodo(targetDayStr, todoId, newTodo);
+				TodoHelper.updateTodo(targetDayStr, todoId, newTodo, true);
 				setTodoCheckPoint(targetDayStr);
 			}
 
@@ -141,7 +148,7 @@ const bindEvent = () => {
 	
 		if (target.classList.contains('todo-delete')) {
 			document.getElementById(todoId).remove();
-			TodoHelper.removeTodo(targetDayStr, todoId);
+			TodoHelper.removeTodo(targetDayStr, todoId, true);
 			setTodoCheckPoint(targetDayStr);
 		}
 	});
@@ -158,7 +165,7 @@ const setDetailTodo = (day) => {
 	if(!day) return;
 	const todoEl = document.getElementById('todoList');
 	todoEl.innerHTML = '';
-	TodoHelper.getTodos(day).forEach(todo => todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(todo.id, todo.todo, todo.isFinish)))
+	TodoHelper.getTodos(day).forEach(todo => todoEl.insertAdjacentHTML("beforeend", TODO_TEMPLATE(todo.id, todo.todo, todo.completedYn)))
 }
 
 const scheduleDetail = (date) => {
@@ -215,6 +222,28 @@ const setDatePicker = () => {
 }
 
 const initCalendar = () => {
+
+	const showCalenderDetail = eventInfo => {
+		const start = eventInfo.event.startStr;
+		let end = eventInfo.event.endStr;
+
+		if(end && start !== end) {
+			const endDate = new Date(end);
+			end = getDateStr(new Date(endDate.setDate(endDate.getDate() - 1)), 'yyyy-MM-dd');
+		}
+
+		const period = !end || start === end ? start : `${start}~${end}`;
+		document.getElementById('calendarTitle').innerText = eventInfo.event.title;
+		document.getElementById('calendarDate').innerHTML = `<i class="bi bi-calendar-event"></i>${period}`;
+		
+		const calendarDetail = document.getElementById('calendarDetail');
+		calendarDetail.style.top = `${eventInfo.jsEvent.pageY}px`;
+		calendarDetail.style.left = `${eventInfo.jsEvent.pageX}px`;
+		targetShowOn('calendarDetail', true, '');
+	}
+
+	const debouncedShowCalenderDetail = debounce(showCalenderDetail);
+
 	const calendarOption = {
 		dateClick: dateClick,
 		headerToolbar: {
@@ -256,7 +285,19 @@ const initCalendar = () => {
 			return {
 				html : number.outerHTML
 			};
-		  }
+		},
+		eventMouseEnter: eventInfo =>  {
+			debouncedShowCalenderDetail(eventInfo);
+        },
+        eventMouseLeave: eventInfo => {
+			targetShowOn('calendarDetail', false);
+        },
+		eventClick: selectData => {
+			const id = selectData.event.id;
+			console.log(selectData);
+		}
+		// selectable: true,
+        // eventDisplay: 'block'
 	}
 
 	CalendarHelper.init(CALENDAR_ID, calendarOption);
@@ -314,7 +355,7 @@ const textColor = (color) => {
 	const targetEl = document.querySelector(`td[data-date='${day}']`);
 
 	if(todos.length > 0) {
-		const isNotFinish = todos.some(data => !data.isFinish);
+		const isNotFinish = todos.some(data => data.completedYn === 'N');
 		const remove = isNotFinish ? 'finishList' : 'todoList';
 		const add = isNotFinish ? 'todoList' : 'finishList';
 		if(targetEl.classList.contains(remove)) targetEl.classList.remove(remove);
@@ -325,4 +366,19 @@ const textColor = (color) => {
 		targetEl.classList.remove('todoList');
 	}   
 }
+
+const initTodo = async() => {
+	await TodoHelper.init(_userId);
+
+	const todos = TodoHelper.getTodos();
+	const today = new Date();
+
+	const todoList = Object.keys(todos)?.filter(d => d.startsWith(getDateStr(today, 'yyyy-MM')));
+
+	for(const todoDay of todoList) {
+		setTodoCheckPoint(todoDay);
+	}
+	setDetailTodo(getDateStr(today));
+}
+
 

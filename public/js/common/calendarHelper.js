@@ -90,12 +90,12 @@ class CalendarHelper {
         
         calendar.addEvent(schedule);
 
-        const startDate = schedule.start;
-        const endDate = schedule.end;
-        const title = schedule.title;
+        const {id, start: startDate, end: endDate, title} = schedule;
+
         const detail = {
-            title: title,
-            start: startDate
+            title,
+            start: startDate,
+            id
         }
 
         let currentDate = new Date(startDate);

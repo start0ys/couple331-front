@@ -274,5 +274,12 @@ const handleApiResponse = async (apiCall, onSuccess, useBlockUI, defaultReturnVa
   }
 };
 
+const debounce = (func, delay = 200) => {
+  let timeoutId;
+  return (...args) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+}
 
-export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal, showNotification, handleApiResponse }
+export { changeTheme, initTheme, getDateStr, generateUUID, targetShowOn, blockUI, unblockUI, showErrorModal, showNotification, handleApiResponse, debounce }

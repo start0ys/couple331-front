@@ -124,5 +124,25 @@ th.fc-col-header-cell > div{
     padding: 4px 8px !important;
   }
 
+  #calendarDetail {
+    min-width: 200px; 
+    min-height: 100px; 
+    position: absolute; 
+    background: white; 
+    border: 1px solid #ddd; 
+    padding: 10px; 
+    z-index: 1000; 
+    box-shadow:0 2px 10px rgba(0,0,0,0.2); 
+  }
+
+  #calendarTitle {
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  /* #calendarDate {
+    font-size: 12px;
+  } */
+
 
   

@@ -2,12 +2,12 @@
   <div class="card" style="width: 100%;">
     <div class="card-body">
       <div id='calendar'></div>
-      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" checked>
-        <label class="btn btn-outline-primary small-btn" for="btncheck1">커플</label>
+      <div id="calendar-type" class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <input type="checkbox" class="btn-check" id="calendar-type-couple" autocomplete="off" checked>
+        <label class="btn btn-outline-primary small-btn" for="calendar-type-couple">커플</label>
       
-        <input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-        <label class="btn btn-outline-primary small-btn" for="btncheck2">개인</label>
+        <input type="checkbox" class="btn-check" id="calendar-type-private" autocomplete="off" checked>
+        <label class="btn btn-outline-primary small-btn" for="calendar-type-private">개인</label>
       
       </div>
     </div>
@@ -34,6 +34,11 @@
         <div id="todoList"></div>
       </div>
     </div>
+</div>
+
+<div id="calendarDetail" style="display: none;">
+  <div id="calendarTitle"></div>
+  <small id="calendarDate" class="text-body-secondary"></small>
 </div>
 
 

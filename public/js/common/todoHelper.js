@@ -1,10 +1,19 @@
+import { handleApiResponse } from './common.js';
+import { request } from "./axios.js";
+
 class TodoHelper {
     constructor() {
         this.todos = {};
     }
 
-    // 추후 DB 연결 시 DB 데이터 조회 후 처리 과정 필요
-    init() {
+    /**
+     * Todo Setting
+     * @param {Integer} id 
+     */
+    async init(id) {
+        const dbData = await this.#synchronizationDB(`/${id}`, 'get', null);
+        if(!!dbData)
+            this.todos = dbData;
     }
 
     /**
@@ -12,17 +21,26 @@ class TodoHelper {
      * @param {String} day 
      * @param {String} id 
      * @param {String} todo 
+     * @param {Boolean} isSynchronization
      */
-    setTodo(day, id, todo) {
+    setTodo(day, id, todo, isSynchronization = false) {
         if(!day || !id || !todo) return;
 
         const todos = this.todos[day] || [];
-        todos.push({
+        const data = {
             id: id,
             todo: todo,
-            isFinish: false
-        });
+            completedYn: 'N',
+            dayOrder: todos.length + 1
+        };
+        todos.push(data);
         this.todos[day] = todos;
+
+        if(isSynchronization) {
+            data.day = day;
+            data.createUserId = _userId;
+            this.#synchronizationDB('/register', 'post', data);
+        }
     }
 
     /**
@@ -38,21 +56,29 @@ class TodoHelper {
      * Todo 제거
      * @param {String} day 
      * @param {String} id 
+     * @param {Boolean} isSynchronization
      */
-    removeTodo(day, id) {
+    removeTodo(day, id, isSynchronization = false) {
         if(!day || !id) return;
         this.todos[day] = this.todos[day].filter(todo => todo.id !== id)
+        if(isSynchronization) {
+            this.#synchronizationDB(`/${id}`, 'delete', null);
+        }
     }
 
     /**
      * Todo 상태 변경
      * @param {String} day 
      * @param {String} id 
-     * @param {Boolean} isFinish 
+     * @param {"Y" | "N"} completedYn 
+     * @param {Boolean} isSynchronization
      */
-    changeStateTodo(day, id, isFinish) {
+    changeStateTodo(day, id, completedYn, isSynchronization = false) {
         if(!day || !id) return;
-        this.todos[day].find(todo => todo.id === id).isFinish = isFinish;
+        this.todos[day].find(todo => todo.id === id).completedYn = completedYn;
+        if(isSynchronization) {
+            this.#synchronizationDB('', 'patch', {id, completedYn, updateUserId: _userId});
+        }
     }
 
     /**
@@ -60,10 +86,33 @@ class TodoHelper {
      * @param {String} day 
      * @param {String} id 
      * @param {String} todo 
+     * @param {Boolean} isSynchronization
      */
-    updateTodo(day, id, todo) {
+    updateTodo(day, id, todo, isSynchronization = false) {
         if(!day || !id) return;
         this.todos[day].find(todo => todo.id === id).todo = todo;
+        if(isSynchronization) {
+            this.#synchronizationDB('', 'patch', {id, todo, updateUserId: _userId});
+        }
+    }
+
+    /**
+     * DB 동기화
+     * @param {String} url 
+     * @param {String} apiType 
+     * @param {Object} data 
+     * @returns 
+     */
+    async #synchronizationDB(url, apiType, data) {
+        if(!apiType)
+            return null;
+
+        return handleApiResponse(
+            () => request(apiType, `/api/todo${url}`,  data),
+            (res) => res?.data || null,
+            false,
+            ''
+        );
     }
 }
 
