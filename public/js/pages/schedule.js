@@ -55,8 +55,8 @@ const bindEvent = () => {
     	picker.setEndDate(date);
 		document.getElementById('scheduleText').value='';
 		document.getElementById('scheduleColor').value='#3788d8';
-		document.getElementById('scheduleType-couple').checked = true;
-		document.getElementById('scheduleType-private').checked = false;
+		document.getElementById('scheduleType-couple').checked = false;
+		document.getElementById('scheduleType-private').checked = true;
   	})
 
 	document.getElementById('editSchedule').addEventListener('click', () => {
@@ -64,6 +64,7 @@ const bindEvent = () => {
 		const startDateStr = document.getElementById('startDate').value;
 		const targetDayStr = document.getElementById('targetDay').value;
 		const scheduleColor = document.getElementById('scheduleColor').value;
+		const scheduleType = document.querySelector('input[name="scheduleType"]:checked').value;
 		let endDateStr = document.getElementById('endDate').value;
 
 		if(startDateStr !== endDateStr) {
@@ -78,8 +79,9 @@ const bindEvent = () => {
 			start: startDateStr,
 			end: endDateStr,
 			color : scheduleColor,
-            textColor: textColor(scheduleColor)
-		})
+            textColor: textColor(scheduleColor),
+			type: scheduleType
+		}, true)
 
 		setDetailSchedule(targetDayStr);
 		document.getElementById('closeModal').click();
@@ -221,7 +223,7 @@ const setDatePicker = () => {
 
 }
 
-const initCalendar = () => {
+const initCalendar = async() => {
 
 	const showCalenderDetail = eventInfo => {
 		const start = eventInfo.event.startStr;
@@ -300,7 +302,7 @@ const initCalendar = () => {
         // eventDisplay: 'block'
 	}
 
-	CalendarHelper.init(CALENDAR_ID, calendarOption);
+	await CalendarHelper.init(CALENDAR_ID, calendarOption, true);
   	dateClick({
 		date: new Date(),
 		dayEl: document.querySelector('.fc-day-today')

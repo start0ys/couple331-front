@@ -1,7 +1,8 @@
 import { Calendar } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { getDateStr } from './common.js';
+import { getDateStr, handleApiResponse } from './common.js';
+import { request } from "./axios.js";
 
 class CalendarHelper {
     constructor() {
@@ -14,8 +15,9 @@ class CalendarHelper {
      * 달력 생성
      * @param {String} calendarId 
      * @param {Object} option 
+     * @param {Boolean} isSynchronization
      */
-    init(calendarId, option = {}) {
+    async init(calendarId, option = {}, isSynchronization = false) {
         const calendarEl = document.getElementById(calendarId);
 
         const defaultOption = {
@@ -45,6 +47,17 @@ class CalendarHelper {
 
         this.calendars[calendarId] = calendar;
         this.schedules[calendarId] = [];
+
+        if(isSynchronization) {
+            const dbDatas = await this.#synchronizationDB(`/${_userId}`, 'get', null);
+            if(!!dbDatas && dbDatas.length > 0) {
+                for(const data of dbDatas) {
+                    data.start = data.startDay;
+                    data.end = data.endDay;
+                    this.setSchedule(calendarId, data, false);
+                }
+            }
+        }
     }
 
     /**
@@ -80,8 +93,9 @@ class CalendarHelper {
      * 달력 일정 등록
      * @param {String} calendarId 
      * @param {Object} schedule 
+     * @param {Boolean} isSynchronization
      */
-    setSchedule(calendarId, schedule) {
+    setSchedule(calendarId, schedule, isSynchronization = false) {
         const calendar = this.getCalendar(calendarId);
             
         if (!calendar || !schedule || typeof schedule !== 'object') {
@@ -89,6 +103,17 @@ class CalendarHelper {
         }
         
         calendar.addEvent(schedule);
+
+        if(isSynchronization) {
+            schedule.createUserId = _userId;
+            schedule.userId = _userId;
+            schedule.updateUserId = _userId;
+            schedule.startDay = schedule.start;
+            schedule.endDay = schedule.end;
+            if(schedule.type === '01' && ['APPROVAL', 'CONFIRMED'].includes(_coupleStatus))
+                schedule.coupleId = _coupleId;
+            this.#synchronizationDB('/register', 'post', schedule);
+        }
 
         const {id, start: startDate, end: endDate, title} = schedule;
 
@@ -150,6 +175,25 @@ class CalendarHelper {
      */
     getDateStr(calendarId, pattern) {
         return getDateStr(this.getDate(calendarId), pattern);
+    }
+
+    /**
+     * DB 동기화
+     * @param {String} url 
+     * @param {String} apiType 
+     * @param {Object} data 
+     * @returns 
+     */
+    async #synchronizationDB(url, apiType, data) {
+        if(!apiType)
+            return null;
+
+        return handleApiResponse(
+            () => request(apiType, `/api/calendar${url}`,  data),
+            (res) => res?.data || null,
+            false,
+            ''
+        );
     }
 
 }

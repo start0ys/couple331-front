@@ -9,6 +9,12 @@ router.post('/calendar/register', async (req, res) => {
     res.json(response);
 });
 
+router.get('/calendar/:id', async (req, res) => {
+    const id = req.params.id;
+    const response = await authenticatedRequest(req, res, "get", `/calendar/${id}`);
+    res.json(response);
+});
+
 router.post('/todo/register', async (req, res) => {
     const response = await authenticatedRequest(req, res, "post", '/todo/register', req.body);
     res.json(response);
