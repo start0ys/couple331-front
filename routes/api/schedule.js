@@ -9,9 +9,22 @@ router.post('/calendar/register', async (req, res) => {
     res.json(response);
 });
 
+router.put('/calendar/:id', async (req, res) => {
+    const id = req.params.id;
+    const response = await authenticatedRequest(req, res, "put", `/calendar/${id}`, req.body);
+    res.json(response);
+});
+
+router.delete('/calendar/:id', async (req, res) => {
+    const id = req.params.id;
+    const response = await authenticatedRequest(req, res, "delete", `/calendar/${id}`);
+    res.json(response);
+});
+
 router.get('/calendar/:id', async (req, res) => {
     const id = req.params.id;
-    const response = await authenticatedRequest(req, res, "get", `/calendar/${id}`);
+    const type = req.query.type || 'all';
+    const response = await authenticatedRequest(req, res, "get", `/calendar/${id}?type=${type}`);
     res.json(response);
 });
 

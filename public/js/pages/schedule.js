@@ -1,5 +1,6 @@
 import DatePicker from 'tui-date-picker';
 import 'tui-date-picker/dist/tui-date-picker.css';
+import { Modal, Dropdown  } from 'bootstrap';
 import CalendarHelper from "../common/calendarHelper.js";
 import TodoHelper from "../common/todoHelper.js";
 import { getDateStr, generateUUID, targetShowOn, debounce } from '../common/common.js';
@@ -18,11 +19,11 @@ const SCHEDULE_DETAIL_TEMPLATE = (detail) => {
 	`
 };
 const TODO_TEMPLATE = (id, todo, completedYn) => {
-	const checkd = completedYn === 'Y' ? 'checked' : '';
+	const checked = completedYn === 'Y' ? 'checked' : '';
 	return `
 		 <div class="list-group list-group-horizontal rounded-0 bg-transparent" id="${id}">
 			<div class="form-check">
-			<input class="form-check-input me-0 todo-check" type="checkbox" value="" targe-id="${id}" ${checkd}/>
+			<input class="form-check-input me-0 todo-check" type="checkbox" value="" targe-id="${id}" ${checked}/>
 			</div>
 			<p>${todo}</p>
 			<div class="d-flex flex-row justify-content-end mb-1" style="margin-left: 5px;">
@@ -50,13 +51,15 @@ const bindEvent = () => {
   	})
 
 	document.querySelector('.schedule-modal-opener').addEventListener('click', () => {
+		targetShowOn('deleteSchedule', false);
  		const date = new Date(document.getElementById('targetDay').value);
     	picker.setStartDate(date);
     	picker.setEndDate(date);
 		document.getElementById('scheduleText').value='';
 		document.getElementById('scheduleColor').value='#3788d8';
-		document.getElementById('scheduleType-couple').checked = false;
-		document.getElementById('scheduleType-private').checked = true;
+		document.getElementById('coupleSharing').checked = false;
+		document.getElementById('scheduleId').value = '';
+		document.getElementById('coupleSharing').disabled = false;
   	})
 
 	document.getElementById('editSchedule').addEventListener('click', () => {
@@ -64,7 +67,8 @@ const bindEvent = () => {
 		const startDateStr = document.getElementById('startDate').value;
 		const targetDayStr = document.getElementById('targetDay').value;
 		const scheduleColor = document.getElementById('scheduleColor').value;
-		const scheduleType = document.querySelector('input[name="scheduleType"]:checked').value;
+		const isCoupleSharing = document.getElementById('coupleSharing').checked;
+		const scheduleId = document.getElementById('scheduleId').value;
 		let endDateStr = document.getElementById('endDate').value;
 
 		if(startDateStr !== endDateStr) {
@@ -73,15 +77,21 @@ const bindEvent = () => {
 			endDateStr = getDateStr(tomorrow, 'yyyy-MM-dd');
 		}
 
-		CalendarHelper.setSchedule(CALENDAR_ID, {
-			id: generateUUID(),
+		const schedule = {
+			id: scheduleId ? scheduleId : generateUUID(),
 			title: scheduleText,
 			start: startDateStr,
 			end: endDateStr,
 			color : scheduleColor,
             textColor: textColor(scheduleColor),
-			type: scheduleType
-		}, true)
+			type: isCoupleSharing ? '01' : '02'
+		}
+
+		if(scheduleId) {
+			CalendarHelper.updateSchedule(CALENDAR_ID, schedule, calendarType(), true);
+		} else {
+			CalendarHelper.setSchedule(CALENDAR_ID, schedule, true);
+		}
 
 		setDetailSchedule(targetDayStr);
 		document.getElementById('closeModal').click();
@@ -154,6 +164,48 @@ const bindEvent = () => {
 			setTodoCheckPoint(targetDayStr);
 		}
 	});
+
+	document.getElementById('deleteSchedule').addEventListener('click', () => {
+		if(!confirm("일정을 삭제하시겠습니까?"))
+			return;
+
+		const id = document.getElementById('scheduleId').value;
+		const targetDayStr = document.getElementById('targetDay').value;
+	
+		CalendarHelper.removeSchedule(CALENDAR_ID, id, true);
+
+		setDetailSchedule(targetDayStr);
+		document.getElementById('closeModal').click();
+	})
+
+	document.querySelectorAll('.dropdown-toggle').forEach(el => {
+        el.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded');
+			if(isExpanded === 'true') {
+				new Dropdown(this).hide();
+			} else {
+				new Dropdown(this).show();
+			}
+		})
+    })
+
+	document.querySelectorAll('input[name="calendar-type"').forEach(el => {
+		el.addEventListener('change', () => {	
+			const type = calendarType();
+			CalendarHelper.changeCalendarType(CALENDAR_ID, type);
+		})
+	})
+
+}
+
+const calendarType = () => {
+	const checkboxes = document.querySelectorAll('input[name="calendar-type"');
+	  
+	const checkedValues = Array.from(checkboxes)
+		.filter(checkbox => checkbox.checked)
+		.map(checkbox => checkbox.value);
+	
+	return checkedValues.length == 0 ? null : checkedValues.length == 1 ? checkedValues[0] : 'all';
 }
 
 const setDetailSchedule = (day) => {
@@ -210,17 +262,6 @@ const setDatePicker = () => {
 			language: 'ko',
 			format: 'YYYY-MM-dd'
 		});
-
-	// const month = new tui.DatePicker('#datepicker-month-ko', {
-	// 	date: new Date(date),
-	// 	language: 'ko',
-	// 	type: 'month',
-	// 	input: {
-	// 		element: '#datepicker-input-ko',
-	// 		format: 'yyyy-MM'
-	// 	}
-	// });
-
 }
 
 const initCalendar = async() => {
@@ -289,17 +330,51 @@ const initCalendar = async() => {
 			};
 		},
 		eventMouseEnter: eventInfo =>  {
+			targetShowOn('calendarDetail', false);
 			debouncedShowCalenderDetail(eventInfo);
         },
         eventMouseLeave: eventInfo => {
 			targetShowOn('calendarDetail', false);
         },
 		eventClick: selectData => {
-			const id = selectData.event.id;
-			console.log(selectData);
+			targetShowOn('calendarDetail', false);
+			const event = selectData.event;
+
+			
+			picker.setStartDate(event.start);
+			if(event.end) {
+				const endDate = event.end;
+				picker.setEndDate(new Date(endDate.setDate(endDate.getDate() - 1)));
+			} else {
+				picker.setEndDate(event.start);
+			}
+
+			const id = event.id;
+			const targetData = CalendarHelper.getSchedules(CALENDAR_ID, event.startStr).find(schedule => schedule.id === id);
+			const type = targetData?.type;
+			const userId = targetData?.userId;
+
+			document.getElementById('scheduleText').value=event.title;
+			document.getElementById('scheduleColor').value=event.backgroundColor;
+			document.getElementById('coupleSharing').checked = type === '01';
+			document.getElementById('scheduleId').value = event.id;
+			document.getElementById('coupleSharing').disabled = userId != _userId;
+			targetShowOn('deleteSchedule', true);
+
+			new Modal(document.getElementById('scheduleModal')).show();
+
+			// event.jsEvent.stopPropagation();
+			// 	event.jsEvent.preventDefault();
+			// 	if($(event.el).hasClass('holiday')) return;
+			// 	addData = event.event;
+			// 	$('#event-content').val(addData.title);
+			// 	$('#event-color').val(addData.backgroundColor);
+			// 	$('#empty-area').removeClass('hide').addClass('show');
+			// 	$('#modal-delete').removeClass('hide').addClass('show');
+			// 	$modal.css('display','block');
+			// 	$body.css('overflow', 'hidden');
+			// 	$modal.addClass('active');
 		}
-		// selectable: true,
-        // eventDisplay: 'block'
 	}
 
 	await CalendarHelper.init(CALENDAR_ID, calendarOption, true);
@@ -307,6 +382,7 @@ const initCalendar = async() => {
 		date: new Date(),
 		dayEl: document.querySelector('.fc-day-today')
 	});
+
 }
 
   /**

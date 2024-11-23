@@ -49,14 +49,7 @@ class CalendarHelper {
         this.schedules[calendarId] = [];
 
         if(isSynchronization) {
-            const dbDatas = await this.#synchronizationDB(`/${_userId}`, 'get', null);
-            if(!!dbDatas && dbDatas.length > 0) {
-                for(const data of dbDatas) {
-                    data.start = data.startDay;
-                    data.end = data.endDay;
-                    this.setSchedule(calendarId, data, false);
-                }
-            }
+            this.changeCalendarType(calendarId, '');
         }
     }
 
@@ -115,12 +108,14 @@ class CalendarHelper {
             this.#synchronizationDB('/register', 'post', schedule);
         }
 
-        const {id, start: startDate, end: endDate, title} = schedule;
+        const {id, start: startDate, end: endDate, title, type, userId} = schedule;
 
         const detail = {
             title,
             start: startDate,
-            id
+            id,
+            type,
+            userId
         }
 
         let currentDate = new Date(startDate);
@@ -139,6 +134,32 @@ class CalendarHelper {
                 this.schedules[calendarId][date] = details;
                 currentDate.setDate(currentDate.getDate() + 1);
             }
+        }
+    }
+
+     /**
+     * 달력 일정 제거
+     * @param {String} calendarId
+     * @param {String} id 
+     * @param {Boolean} isSynchronization
+     */
+     removeSchedule(calendarId, id, isSynchronization = false) {
+        if(!calendarId || !id) return;
+
+        const calendar = this.getCalendar(calendarId);
+        
+        if (calendar) {
+            calendar.getEventById(id).remove();
+        }
+
+        const allSchedules = this.schedules[calendarId];
+        if(allSchedules) {
+            for (let day in allSchedules) {
+                allSchedules[day] = allSchedules[day].filter(schedule => schedule.id !== id);
+            }
+        }
+        if(isSynchronization) {
+            this.#synchronizationDB(`/${id}`, 'delete', null);
         }
     }
 
@@ -194,6 +215,95 @@ class CalendarHelper {
             false,
             ''
         );
+    }
+
+    /**
+     * 달력 일정 타입 변경
+     * @param {String} calendarId 
+     * @param {null | "01" | "02" | "all"} type 01: 커플만, 02: 개인만, all: 전부
+     * @returns 
+     */
+    async changeCalendarType(calendarId, type) {
+        this.schedules[calendarId] = [];
+        const calendar = this.getCalendar(calendarId);
+        if (calendar) {
+            calendar.removeAllEvents();
+        }
+
+        if(type == null)
+            return;
+
+        const dbDatas = await this.#synchronizationDB(`/${_userId}?type=${type}`, 'get', null);
+        if(!!dbDatas && dbDatas.length > 0) {
+            this.schedules[calendarId] = [];
+            const calendar = this.getCalendar(calendarId);
+            if (calendar) {
+                calendar.removeAllEvents();
+            }
+
+            for(const data of dbDatas) {
+                data.start = data.startDay;
+                data.end = data.endDay;
+                this.setSchedule(calendarId, data, false);
+            }
+        }
+    }
+
+     /**
+     * 달력 일정 변경
+     * @param {String} calendarId 
+     * @param {Object} schedule 
+     * @param {null | "01" | "02" | "all"} calendarType 01: 커플만, 02: 개인만, all: 전부
+     * @param {Boolean} isSynchronization
+     */
+    updateSchedule(calendarId, schedule, calendarType, isSynchronization = false) {
+        const calendar = this.getCalendar(calendarId);
+            
+        if (!calendar || !schedule || typeof schedule !== 'object') {
+            return;
+        }
+
+        this.removeSchedule(calendarId, schedule.id);
+        
+        if(isSynchronization) {
+            schedule.updateUserId = _userId;
+            schedule.startDay = schedule.start;
+            schedule.endDay = schedule.end;
+            if(schedule.type === '01' && ['APPROVAL', 'CONFIRMED'].includes(_coupleStatus))
+                schedule.coupleId = _coupleId;
+            this.#synchronizationDB(`/${schedule.id}`, 'put', schedule);
+        }
+
+        if(calendarType !== 'all' && calendarType !== schedule.type)
+            return;
+        
+        calendar.addEvent(schedule);
+        const {id, start: startDate, end: endDate, title, type} = schedule;
+
+        const detail = {
+            title,
+            start: startDate,
+            id,
+            type
+        }
+
+        let currentDate = new Date(startDate);
+
+        if(startDate === endDate) {
+            const details = this.schedules[calendarId][startDate] || [];
+            detail.end = startDate;
+            details.push(detail);
+            this.schedules[calendarId][startDate] = details;
+        } else {
+            while (currentDate < new Date(endDate)) {
+                const date = getDateStr(currentDate, 'yyyy-MM-dd');
+                const details = this.schedules[calendarId][date] || [];
+                detail.end = date;
+                details.push(detail);
+                this.schedules[calendarId][date] = details;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+        }
     }
 
 }

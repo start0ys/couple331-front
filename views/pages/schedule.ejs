@@ -3,10 +3,10 @@
     <div class="card-body">
       <div id='calendar'></div>
       <div id="calendar-type" class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" id="calendar-type-couple" autocomplete="off" checked>
+        <input type="checkbox" class="btn-check" name="calendar-type" id="calendar-type-couple" autocomplete="off" value="01" checked>
         <label class="btn btn-outline-primary small-btn" for="calendar-type-couple">커플</label>
       
-        <input type="checkbox" class="btn-check" id="calendar-type-private" autocomplete="off" checked>
+        <input type="checkbox" class="btn-check" name="calendar-type" id="calendar-type-private" autocomplete="off" value="02" checked>
         <label class="btn btn-outline-primary small-btn" for="calendar-type-private">개인</label>
       
       </div>
@@ -52,6 +52,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closeModal"></button>
         </div>
         <div class="modal-body">
+            <input type="hidden" id="scheduleId">
             <div class="mb-3">
                 <input type="text" class="form-control" id="scheduleText" placeholder="일정을 입력해주세요.">
             </div>
@@ -73,23 +74,17 @@
                 <label for="scheduleColor" class="form-label">일정 색상</label>
                 <input type="color" class="form-control form-control-color" id="scheduleColor" value="#3788d8">
             </div>
-            <div>
-              <label class="form-label">일정 타입</label>
-                <div>
-                    <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="scheduleType" id="scheduleType-couple" value="01">
-                    <label class="form-check-label" for="scheduleType-couple">커플</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="scheduleType" id="scheduleType-private" value="02" checked>
-                    <label class="form-check-label" for="scheduleType-private">개인</label>
-                    </div>
-                </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="coupleSharing">
+              <label class="form-check-label" for="coupleSharing" style="font-weight: bold">
+                커플 공유
+              </label>
             </div>
         </div>
         <div class="modal-footer">
           <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
           <button type="button" class="btn btn-primary red-small-btn" id="editSchedule">저장</button>
+          <button type="button" class="btn btn-primary blue-small-btn" id="deleteSchedule">삭제</button>
         </div>
       </div>
     </div>
