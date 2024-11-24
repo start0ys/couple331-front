@@ -26,7 +26,97 @@ const exampleData = [
         title: '제목임ㅋㅋㅋ44',
         author: '천길동',
         createDate: '2020-03-31'
-    }
+    },
+    {
+        id: 500,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 600,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 700,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 800,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 900,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1000,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1100,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1200,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1300,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1400,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1500,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1600,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1700,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1800,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
+    {
+        id: 1900,
+        title: '제목임ㅋㅋㅋ44',
+        author: '천길동',
+        createDate: '2020-03-31'
+    },
   ]
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +133,12 @@ const initGrid = () => {
             { header: '작성자', name: 'author', width: '100', align: 'center' },
             { header: '등록일', name: 'createDate', width: '100', align: 'center' }
           ],
-          data: exampleData
+          data: exampleData,
+          pageOptions: {
+            perPage: 10,
+            useClient: true,
+        },
+
     };
 
     GridHelper.init(GRID_ID, gridOption);

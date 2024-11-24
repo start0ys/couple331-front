@@ -1,5 +1,6 @@
 import Grid from 'tui-grid';
 import 'tui-grid/dist/tui-grid.css';
+import 'tui-pagination/dist/tui-pagination.css';
 
 class GridHelper {
     constructor() {
@@ -26,6 +27,8 @@ class GridHelper {
             header: {
               height: 40
             },
+            scrollX: false,
+            scrollY: false,
         };
 
         const grid = new Grid(Object.assign({}, defaultOption, option));

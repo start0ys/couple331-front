@@ -105,3 +105,8 @@
 .dropdown-item {
   cursor: pointer;
 }
+
+.tui-pagination .tui-page-btn.tui-is-selected {
+  background-color: #f13050 !important; 
+  border-color: #f13050 !important; 
+}
