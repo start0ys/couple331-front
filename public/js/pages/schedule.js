@@ -3,7 +3,7 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import { Modal, Dropdown  } from 'bootstrap';
 import CalendarHelper from "../common/calendarHelper.js";
 import TodoHelper from "../common/todoHelper.js";
-import { getDateStr, generateUUID, targetShowOn, debounce } from '../common/common.js';
+import { getDateStr, generateUUID, targetShowOn } from '../common/common.js';
 
 const CALENDAR_ID = 'calendar';
 const SCHEDULE_DETAIL_TEMPLATE = (detail) => {
@@ -285,8 +285,6 @@ const initCalendar = async() => {
 		targetShowOn('calendarDetail', true, '');
 	}
 
-	const debouncedShowCalenderDetail = debounce(showCalenderDetail);
-
 	const calendarOption = {
 		dateClick: dateClick,
 		headerToolbar: {
@@ -331,7 +329,7 @@ const initCalendar = async() => {
 		},
 		eventMouseEnter: eventInfo =>  {
 			targetShowOn('calendarDetail', false);
-			debouncedShowCalenderDetail(eventInfo);
+			showCalenderDetail(eventInfo);
         },
         eventMouseLeave: eventInfo => {
 			targetShowOn('calendarDetail', false);
@@ -362,18 +360,6 @@ const initCalendar = async() => {
 			targetShowOn('deleteSchedule', true);
 
 			new Modal(document.getElementById('scheduleModal')).show();
-
-			// event.jsEvent.stopPropagation();
-			// 	event.jsEvent.preventDefault();
-			// 	if($(event.el).hasClass('holiday')) return;
-			// 	addData = event.event;
-			// 	$('#event-content').val(addData.title);
-			// 	$('#event-color').val(addData.backgroundColor);
-			// 	$('#empty-area').removeClass('hide').addClass('show');
-			// 	$('#modal-delete').removeClass('hide').addClass('show');
-			// 	$modal.css('display','block');
-			// 	$body.css('overflow', 'hidden');
-			// 	$modal.addClass('active');
 		}
 	}
 

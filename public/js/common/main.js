@@ -2,7 +2,7 @@ import '@fontsource/lobster';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import { initTheme, changeTheme, showNotification, handleApiResponse  } from "./common.js";
+import { initTheme, changeTheme, showNotification, handleApiResponse, targetShowOn  } from "./common.js";
 import { request } from "./axios.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +51,9 @@ const setCoupleStatus = () => {
             setDaysTogether(data.daysTogether);
             if(!['coupleWait','coupleEdit','coupleView'].includes(_screen ) && data.senderYn == 'N' && data.message)
                 showNotification(data.message, '/couple');
+            if(_screen === 'schedule' && !['APPROVAL', 'CONFIRMED'].includes(_coupleStatus)) {
+                targetShowOn('calendar-type', false);
+            }
         },
         false,
         ''

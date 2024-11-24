@@ -108,33 +108,7 @@ class CalendarHelper {
             this.#synchronizationDB('/register', 'post', schedule);
         }
 
-        const {id, start: startDate, end: endDate, title, type, userId} = schedule;
-
-        const detail = {
-            title,
-            start: startDate,
-            id,
-            type,
-            userId
-        }
-
-        let currentDate = new Date(startDate);
-
-        if(startDate === endDate) {
-            const details = this.schedules[calendarId][startDate] || [];
-            detail.end = startDate;
-            details.push(detail);
-            this.schedules[calendarId][startDate] = details;
-        } else {
-            while (currentDate < new Date(endDate)) {
-                const date = getDateStr(currentDate, 'yyyy-MM-dd');
-                const details = this.schedules[calendarId][date] || [];
-                detail.end = date;
-                details.push(detail);
-                this.schedules[calendarId][date] = details;
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-        }
+        this.setScheduleData(calendarId, schedule);
     }
 
      /**
@@ -278,13 +252,26 @@ class CalendarHelper {
             return;
         
         calendar.addEvent(schedule);
-        const {id, start: startDate, end: endDate, title, type} = schedule;
+        this.setScheduleData(calendarId, schedule);
+    }
+
+    /**
+     * 일정 데이터 Setting
+     * @param {String} calendarId 
+     * @param {Object} schedule 
+     */
+    setScheduleData(calendarId, schedule) {
+        if(!calendarId || !schedule)
+            return;
+
+        const {id, start: startDate, end: endDate, title, type, userId} = schedule;
 
         const detail = {
             title,
             start: startDate,
             id,
-            type
+            type,
+            userId
         }
 
         let currentDate = new Date(startDate);
