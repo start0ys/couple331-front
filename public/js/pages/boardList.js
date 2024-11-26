@@ -132,12 +132,14 @@ const initGrid = () => {
             { header: '제목', name: 'title', width: '800', align: 'left' },
             { header: '작성자', name: 'author', width: '100', align: 'center' },
             { header: '등록일', name: 'createDate', width: '100', align: 'center' }
-          ],
-          data: exampleData,
-          pageOptions: {
+        ],
+        data: exampleData,
+        pageOptions: {
             perPage: 10,
             useClient: true,
         },
+        useRowNum: 'Y',
+        rowNumOrder: 'desc'
 
     };
 

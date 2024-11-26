@@ -5,6 +5,7 @@ import 'tui-pagination/dist/tui-pagination.css';
 class GridHelper {
     constructor() {
       this.grids = {};
+      this.gridOption = {};
     }
 
     /**
@@ -23,7 +24,6 @@ class GridHelper {
             // pageOptions: {
             //     perPage: 5
             // },
-            rowHeaders: ['rowNum'],
             header: {
               height: 40
             },
@@ -31,10 +31,17 @@ class GridHelper {
             scrollY: false,
         };
 
-        const grid = new Grid(Object.assign({}, defaultOption, option));
+        const useRowNum = option.useRowNum === 'Y';
+        if(useRowNum) option.columns.unshift({header: 'No.', name: 'rowNum', align: 'center', width: 30});
+
+        const gridOption = Object.assign({}, defaultOption, option);
+
+        const grid = new Grid(gridOption);
 
         
         this.grids[gridId] = grid;
+        this.gridOption[gridId] = gridOption;
+        if(useRowNum) this.setRowNum(gridId);
     }
 
     /**
@@ -62,6 +69,21 @@ class GridHelper {
     }
 
     /**
+     * 전체 Row 데이터 가져오기
+     * @param {String} gridId 
+     * @returns 
+     */
+    getAllRowData(gridId) {
+        const grid = this.getGrid(gridId);
+        if(!grid) {
+            return [];
+        }
+
+        return grid.getData() || [];
+    }
+    
+
+    /**
      * Click Event Setting
      * @param {String} gridId 
      * @param {"click" | "dblclick"} clickType 
@@ -78,6 +100,60 @@ class GridHelper {
             });
         }
     }
+
+    /**
+     * Grid Option 반환
+     * @param {String} gridId 
+     * @param {String} optionName
+     * @returns 
+     */
+    getGridOption(gridId, optionName) {
+        const gridOption = this.gridOption[gridId] || {};
+        return gridOption[optionName] || null;
+    }
+
+    /**
+     * Grid Value Setting
+     * @param {String} gridId 
+     * @param {Integer} rowKey 
+     * @param {String} colName 
+     * @param {String} value 
+     */
+    setValue(gridId, rowKey, colName, value) {
+        const grid = this.getGrid(gridId);
+        if(!grid)
+            return;
+    
+        if (rowKey && typeof rowKey === 'string') rowKey = parseInt(rowKey);
+
+        grid.setValue(rowKey, colName, value);
+    }
+
+    /**
+     * Row Num Setting
+     * @param {String} gridId 
+     */
+    setRowNum(gridId) {
+        if(!gridId)
+            return;
+
+        const useRowNum = this.getGridOption(gridId, 'useRowNum');
+        const datas = this.getAllRowData(gridId);
+        if(useRowNum !== 'Y' || datas.length === 0)
+            return;
+
+        const isDesc = this.getGridOption(gridId, 'rowNumOrder') === 'desc';
+        const increment = isDesc ? -1 : 1; 
+        let rowNum = isDesc ? datas.length : 1;
+
+        for(const data of datas) {
+            const rowKey = data.rowKey;
+            this.setValue(gridId, rowKey, 'rowNum', rowNum);
+            rowNum += increment;
+        }
+        
+    }
+
 }
 
 export default new GridHelper();
