@@ -3,7 +3,7 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import { Modal, Dropdown  } from 'bootstrap';
 import CalendarHelper from "../common/calendarHelper.js";
 import TodoHelper from "../common/todoHelper.js";
-import { getDateStr, generateUUID, targetShowOn } from '../common/common.js';
+import { getDateStr, generateUUID, targetShowOn, debounce } from '../common/common.js';
 
 const CALENDAR_ID = 'calendar';
 const SCHEDULE_DETAIL_TEMPLATE = (detail) => {
@@ -285,6 +285,8 @@ const initCalendar = async() => {
 		targetShowOn('calendarDetail', true, '');
 	}
 
+	const debounceTargetShowOn = debounce(targetShowOn);
+
 	const calendarOption = {
 		dateClick: dateClick,
 		headerToolbar: {
@@ -328,11 +330,11 @@ const initCalendar = async() => {
 			};
 		},
 		eventMouseEnter: eventInfo =>  {
-			targetShowOn('calendarDetail', false);
+			// targetShowOn('calendarDetail', false);
 			showCalenderDetail(eventInfo);
         },
         eventMouseLeave: eventInfo => {
-			targetShowOn('calendarDetail', false);
+			debounceTargetShowOn('calendarDetail', false);
         },
 		eventClick: selectData => {
 			targetShowOn('calendarDetail', false);
