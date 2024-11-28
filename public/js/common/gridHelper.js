@@ -29,6 +29,7 @@ class GridHelper {
             },
             scrollX: false,
             scrollY: false,
+            contextMenu: null
         };
 
         const useRowNum = option.useRowNum === 'Y';
@@ -152,6 +153,42 @@ class GridHelper {
             rowNum += increment;
         }
         
+    }
+
+    /**
+     * 데이터 초기화
+     * @param {String} gridId 
+     */
+    clearDatas(gridId) {
+        const grid = this.getGrid(gridId);
+        if(!grid)
+            return;
+
+        grid.clear();
+    }
+
+    setDatas(gridId, datas) {
+        const grid = this.getGrid(gridId);
+        if(!grid)
+            return;
+
+        grid.clear();
+        if(datas.length === 0)
+            return;
+
+        const useRowNum = this.getGridOption(gridId, 'useRowNum');
+        if(useRowNum === 'Y') {
+            const isDesc = this.getGridOption(gridId, 'rowNumOrder') === 'desc';
+            const increment = isDesc ? -1 : 1; 
+            let rowNum = isDesc ? datas.length : 1;
+    
+            for(const data of datas) {
+                data.rowNum = rowNum;
+                rowNum += increment;
+            }
+        }
+
+        grid.appendRows(datas);
     }
 
 }

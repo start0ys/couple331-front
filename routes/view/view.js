@@ -39,8 +39,8 @@ router.get('/board/new', isAuthenticated, (req, res) => {
 
 router.get('/board/:id', isAuthenticated, (req, res) => {
     const _screen = 'boardView';
-    const id = req.params.id;
-    res.render('pages/boardView', { css: '', js: '/boardView', id: id, param: {_screen} });
+    const _boardId = req.params.id;
+    res.render('pages/boardView', { css: '', js: '/boardView', param: {_screen, _boardId} });
 });
 
 router.get('/couple', isAuthenticated, async (req, res) => {
