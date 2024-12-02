@@ -110,3 +110,20 @@
   background-color: #f13050 !important; 
   border-color: #f13050 !important; 
 }
+
+.grid-bold-font {
+  font-weight: bold;
+}
+
+.grid-bold-font > .tui-grid-cell-content{
+  font-weight: bold;
+}
+
+.grid-red-font > .tui-grid-cell-content{
+  color: #f13050;
+}
+
+.tui-grid-row-hover {
+  background-color: #e5f2da;
+  font-weight: bold;
+}

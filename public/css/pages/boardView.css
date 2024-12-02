@@ -1,0 +1,13 @@
+#comment-btn:hover {
+    font-weight: bold;
+    font-size: 13px;
+    color: black;
+  }
+  
+  #comment-btn {
+    cursor: pointer; 
+    font-size: 13px; 
+    padding: 7px 17px; 
+    color: #696b6d; 
+    font-weight: bold;
+  }

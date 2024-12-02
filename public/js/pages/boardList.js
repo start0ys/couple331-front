@@ -148,8 +148,8 @@ const initGrid = () => {
     const gridOption = {
         columns: [
             { header: 'id', name: 'id', hidden: true },
-            { header: '분류', name: 'category', width: '50', align: 'center' },
-            { header: '제목', name: 'title', width: '800', align: 'left' },
+            { header: '분류', name: 'category', width: '50', align: 'center', className: 'grid-red-font' },
+            { header: '제목', name: 'title', width: '800', align: 'left'},
             { header: '작성자', name: 'author', width: '100', align: 'center' },
             { header: '등록일', name: 'createDate', width: '100', align: 'center' }
         ],
@@ -164,8 +164,7 @@ const initGrid = () => {
     };
 
     GridHelper.init(GRID_ID, gridOption);
-    // GridHelper.setClickEvent(GRID_ID, 'click', gridClickEvent);
-    GridHelper.setClickEvent(GRID_ID, 'dblclick', gridClickEvent);
+    GridHelper.setClickEvent(GRID_ID, 'click', gridClickEvent);
     // GridHelper.setDatas(GRID_ID, exampleData);
 }
 
