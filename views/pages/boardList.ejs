@@ -1,12 +1,12 @@
 <div style="width: 80%; margin: 0 auto; margin-top: 5px; padding: 30px;">
     <div style="width: 100%; min-height: 36px; background-color: #efefef; padding: 12px 17px 12px 12px; display: flex; justify-content: space-evenly; margin-bottom: 50px;">
         <span style="width: 90%; display: flex; justify-content: space-between;">
-            <select class="form-select" style="width: 100px;">
-                <option>제목</option>
-                <option>분류</option>
-                <option>작성자</option>
+            <select id="searchType" class="form-select" style="width: 100px;">
+                <option value="title">제목</option>
+                <option value="category">분류</option>
+                <option value="author">작성자</option>
             </select>
-            <input type="text" class="form-control" style="width: calc(100% - 110px);" placeholder="검색어를 입력해주세요.">
+            <input type="text" id="searchWord" class="form-control" style="width: calc(100% - 110px);" placeholder="검색어를 입력해주세요.">
         </span>
         <span style="width: 10%; margin-left: 10px;">
             <button type="button" id="search-btn"  class="btn btn-primary red-btn">검색</button>
@@ -16,4 +16,5 @@
         <button type="button" id="write-btn"  class="btn btn-primary red-small-btn">작성</button>
     </div>
     <div id='grid'></div>
+    <div id="pagination" class="tui-pagination"></div>
 </div>

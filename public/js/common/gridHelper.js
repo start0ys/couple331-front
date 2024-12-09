@@ -1,4 +1,5 @@
 import Grid from 'tui-grid';
+import Pagination from 'tui-pagination';
 import 'tui-grid/dist/tui-grid.css';
 import 'tui-pagination/dist/tui-pagination.css';
 
@@ -176,19 +177,36 @@ class GridHelper {
         if(datas.length === 0)
             return;
 
-        const useRowNum = this.getGridOption(gridId, 'useRowNum');
-        if(useRowNum === 'Y') {
-            const isDesc = this.getGridOption(gridId, 'rowNumOrder') === 'desc';
-            const increment = isDesc ? -1 : 1; 
-            let rowNum = isDesc ? datas.length : 1;
+        // const useRowNum = this.getGridOption(gridId, 'useRowNum');
+        // if(useRowNum === 'Y') {
+        //     const isDesc = this.getGridOption(gridId, 'rowNumOrder') === 'desc';
+        //     const increment = isDesc ? -1 : 1; 
+        //     let rowNum = isDesc ? datas.length : 1;
     
-            for(const data of datas) {
-                data.rowNum = rowNum;
-                rowNum += increment;
-            }
-        }
+        //     for(const data of datas) {
+        //         data.rowNum = rowNum;
+        //         rowNum += increment;
+        //     }
+        // }
 
         grid.appendRows(datas);
+    }
+
+    setPagination(paginationId, totalSize, page, size, visiblePages = 5, func) {
+
+        const pagination = new Pagination(document.getElementById(paginationId), {
+            totalItems: totalSize,
+            itemsPerPage: size,
+            visiblePages: visiblePages,
+            centerAlign: true,
+            page: page
+        });
+
+        if(func && typeof func === 'function') {
+            pagination.on('afterMove', function(eventData) {
+                func(eventData.page);
+            });
+        }
     }
 
 }
