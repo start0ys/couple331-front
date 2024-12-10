@@ -73,8 +73,17 @@ const getDateStr = (date, pattern = 'yyyy-MM-dd') => {
       case 'yyyy년 MM월 dd일 E요일': 
           str = `${year}년 ${month}월 ${day}일 ${dayObj[date.getDay()]}`;
           break;
+      case 'yyyy-MM-dd hh:mm:ss':
+          str = `${year}-${month}-${day} ${hour}:${min}:${sec}`;
+          break;
+      case 'yyyy-MM-dd hh:mm':
+          str = `${year}-${month}-${day} ${hour}:${min}:${sec}`;
+          break;
       case 'hh:mm:ss':
           str = `${hour}:${min}:${sec}`;
+          break;
+      case 'hh:mm':
+          str = `${hour}:${min}`;
           break;
 
   }

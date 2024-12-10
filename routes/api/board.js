@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:boardId', async (req, res) => {
     const boardId = req.params.boardId;
-    const page = req.query.page || '1';
+    const page = req.query.page || '0';
     const size = req.query.size || '10';
     const response = await authenticatedRequest(req, res, "get", `/board/${boardId}?page=${page}&size=${size}`);
     res.json(response);
@@ -35,6 +35,14 @@ router.patch('/:boardId', async (req, res) => {
 router.delete('/:boardId', async (req, res) => {
     const boardId = req.params.boardId;
     const response = await authenticatedRequest(req, res, "delete", `/board/${boardId}`);
+    res.json(response);
+});
+
+router.get('/:boardId/comment', async (req, res) => {
+    const boardId = req.params.boardId;
+    const page = req.query.page || '0';
+    const size = req.query.size || '10';
+    const response = await authenticatedRequest(req, res, "get", `/board/${boardId}/comment?page=${page}&size=${size}`);
     res.json(response);
 });
 
