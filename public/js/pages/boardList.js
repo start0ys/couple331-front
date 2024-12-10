@@ -1,5 +1,5 @@
 import GridHelper from "../common/gridHelper.js";
-import { handleApiResponse } from '../common/common.js';
+import { getDateStr, handleApiResponse } from '../common/common.js';
 import { request } from "../common/axios.js";
 
 const GRID_ID = 'grid';
@@ -12,20 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 const initGrid = () => {
+
+    const categoryOptions = [{text: '', value: ''},{text: '맛집', value: '01'},{text: '놀거리', value: '02'},{text: '여행', value: '03'},{text: '취미', value: '04'},{text: '쇼핑', value: '05'},{text: '선물', value: '06'},{text: '기념일', value: '07'},{text: '기타', value: '00'}]
+
     const gridOption = {
         columns: [
-            { header: 'id', name: 'id', hidden: true },
-            { header: '분류', name: 'category', width: '50', align: 'center', className: 'grid-red-font' },
+            { header: 'boardId', name: 'boardId', hidden: true },
+            { header: '분류', name: 'category', width: '50', align: 'center', className: 'grid-red-font', formatter: 'listItemText', editor: {options: {type: 'select', listItems: categoryOptions}}},
             { header: '제목', name: 'title', width: '800', align: 'left'},
             { header: '작성자', name: 'author', width: '100', align: 'center' },
             { header: '등록일', name: 'createDate', width: '100', align: 'center' }
         ],
-        // pageOptions: {
-        //     perPage: SIZE,
-        //     useClient: true,
-        // },
-        // useRowNum: 'Y',
-        rowNumOrder: 'desc'
+        useRowNum: 'Y'
 
     };
 
@@ -35,8 +33,8 @@ const initGrid = () => {
 }
 
 const gridClickEvent = (gridId, rowKey, rowData) => {
-    const id = rowData.id;
-    window.location.href = `/board/${id}`;
+    const boardId = rowData.boardId;
+    window.location.href = `/board/${boardId}`;
 }
 
 const bindEvent = () => {
@@ -55,11 +53,32 @@ const bindEvent = () => {
     });
 }
 
+const getCreateDate = (date) => {
+    if(!date)
+        return '';
+
+    const toDay = getDateStr(new Date(), 'yyyy-MM-dd');
+    const day = getDateStr(new Date(date), 'yyyy-MM-dd');
+    if(toDay === day) {
+        return getDateStr(new Date(date), 'hh:mm:ss');
+    } else {
+        return day;    
+    }
+}
+
 const searchData = async (page = 1) => {
     const data = await getBoarList(page);
     const content = data.content || [];
+    const totalSize = data.totalElements;
+    let rowNum = totalSize - ((page - 1) * SIZE);
+    for(const gridData of content) {
+        gridData.rowNum = rowNum--;
+        gridData.createDate = getCreateDate(gridData.createDateTime);
+    }
+
+
     GridHelper.setDatas(GRID_ID, content);
-	GridHelper.setPagination('pagination', data.totalElements, page, SIZE, 5, searchData);
+	GridHelper.setPagination('pagination', totalSize, page, SIZE, 5, searchData);
 }
 
 const getBoarList = async (page = 1) => {

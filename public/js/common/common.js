@@ -54,6 +54,9 @@ const getDateStr = (date, pattern = 'yyyy-MM-dd') => {
   const year = date.getFullYear();
   const month = getTimeNumber(date.getMonth() + 1);
   const day = getTimeNumber(date.getDate());
+  const hour = getTimeNumber(date.getHours());
+  const min = getTimeNumber(date.getMinutes());
+  const sec = getTimeNumber(date.getSeconds());
 
   let str = '';
 
@@ -70,6 +73,10 @@ const getDateStr = (date, pattern = 'yyyy-MM-dd') => {
       case 'yyyy년 MM월 dd일 E요일': 
           str = `${year}년 ${month}월 ${day}일 ${dayObj[date.getDay()]}`;
           break;
+      case 'hh:mm:ss':
+          str = `${hour}:${min}:${sec}`;
+          break;
+
   }
 
   return str;

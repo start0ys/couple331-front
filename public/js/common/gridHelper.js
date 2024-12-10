@@ -30,7 +30,9 @@ class GridHelper {
             },
             scrollX: false,
             scrollY: false,
-            contextMenu: null
+            contextMenu: null,
+            minBodyHeight: 40
+            
         };
 
         const useRowNum = option.useRowNum === 'Y';
@@ -43,7 +45,6 @@ class GridHelper {
         
         this.grids[gridId] = grid;
         this.gridOption[gridId] = gridOption;
-        if(useRowNum) this.setRowNum(gridId);
     }
 
     /**
@@ -168,6 +169,11 @@ class GridHelper {
         grid.clear();
     }
 
+    /**
+     * 데이터 Setting
+     * @param {String} gridId 
+     * @param {Array} datas 
+     */
     setDatas(gridId, datas) {
         const grid = this.getGrid(gridId);
         if(!grid)
@@ -177,21 +183,18 @@ class GridHelper {
         if(datas.length === 0)
             return;
 
-        // const useRowNum = this.getGridOption(gridId, 'useRowNum');
-        // if(useRowNum === 'Y') {
-        //     const isDesc = this.getGridOption(gridId, 'rowNumOrder') === 'desc';
-        //     const increment = isDesc ? -1 : 1; 
-        //     let rowNum = isDesc ? datas.length : 1;
-    
-        //     for(const data of datas) {
-        //         data.rowNum = rowNum;
-        //         rowNum += increment;
-        //     }
-        // }
-
         grid.appendRows(datas);
     }
 
+    /**
+     * 페이징 Setting
+     * @param {String} paginationId 
+     * @param {Number} totalSize 
+     * @param {Number} page 
+     * @param {Number} size 
+     * @param {Number} visiblePages 
+     * @param {Fuunction} func 
+     */
     setPagination(paginationId, totalSize, page, size, visiblePages = 5, func) {
 
         const pagination = new Pagination(document.getElementById(paginationId), {

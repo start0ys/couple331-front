@@ -54,7 +54,8 @@ const saveData = () => {
         () => request('post', `/api/board/register`, data),
         (res) => {
             alert('저장되었습니다.');
-            window.location.href = '/board';
+            const boardId = res?.data?.boardId;
+            window.location.href = '/board' + (boardId ? `/${boardId}` : '');
         },
         true
     );
