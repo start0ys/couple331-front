@@ -371,6 +371,10 @@ const initCalendar = async() => {
 		dayEl: document.querySelector('.fc-day-today')
 	});
 
+	document.getElementById('calendarDetail').addEventListener('click', () => {
+		targetShowOn('calendarDetail', false);
+	})
+
 }
 
   /**
