@@ -127,3 +127,11 @@
   background-color: #e5f2da;
   font-weight: bold;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bold-hover:hover {
+  font-weight: bold;
+}

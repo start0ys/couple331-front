@@ -1,8 +1,10 @@
 import EditorHelper from "../common/editorHelper.js";
+import CommentHelper from "../common/commentHelper.js";
 import { getDateStr, handleApiResponse } from '../common/common.js';
 import { request } from "../common/axios.js";
 
 const EDITOR_ID = 'editor';
+const COMMENT_AREA_ID = 'commentArea_';
 const CATEGORY_OBJ = Object.freeze({
     '01': '맛집',
     '02': '놀거리',
@@ -17,29 +19,10 @@ const CATEGORY_OBJ = Object.freeze({
 let _size = 10;
 let _page = 0
 
-const COMMENT_TEMPLATE = comment => {
-    const {commentId, createDateTime, content, author, parentAuthor} = comment;
-    return `
-        <div style="border-bottom: 1px solid #e5e5e5; margin-top: 5px; display: flex; padding: 10px;">
-            <div style="width: 35px;">
-                <i class="bi bi-person-circle" style="color: #919699; font-size: 30px; margin-right: 0;"></i>
-            </div>
-            <div style="width: calc(100% - 35px);">
-                <div style="font-size: 14px;">${author}</div>
-                <div style="font-size: 14px;">${content.replaceAll('\n','<br>')}</div>
-                <div>
-                    <small class="text-body-secondary">${getDateStr(new Date(createDateTime), 'yyyy-MM-dd')}</small>
-                    <small class="text-body-secondary">답글달기</small>
-                </div>
-            </div>
-        </div>
-    `
-}
-
 
 document.addEventListener('DOMContentLoaded', () => {
+    CommentHelper.init('commentInputArea', saveComment);
     setData();
-    bindEvent();
 });
 
 const setData = () => {
@@ -57,11 +40,12 @@ const setData = () => {
             document.getElementById('author').textContent = author;
             document.getElementById('createDateTime').textContent = getDateStr(new Date(createDateTime), 'yyyy-MM-dd hh:mm');
             initEditor(content);
+
             _page = commentInfo.number || _page;
             const comments = commentInfo.content || [];
-            const commentEl = document.getElementById('comment');
             for(const comment of comments) {
-                commentEl.insertAdjacentHTML("beforeend", COMMENT_TEMPLATE(comment));
+                const parentId = comment.parentId || '';
+                CommentHelper.setCommnet(COMMENT_AREA_ID + parentId, comment);
             }
         },
         true,
@@ -75,21 +59,25 @@ const initEditor = (initialValue = '') => {
     EditorHelper.init(EDITOR_ID, true, option);
 }
 
-const bindEvent = () => {
-    document.getElementById('comment-btn').addEventListener('click', saveComment);
-}
 
-const saveComment = () => {
-    const content = document.getElementById('content').value;
+const saveComment = (parentId = '', parentName = '') => {
+    const content = document.getElementById(`content_${parentId}`).value;
     const data = { content, boardId: _boardId, createUserId: _userId };
+    if(parentId)
+        data.parentId = parentId;
   
     handleApiResponse(
         () => request('post', `/api/board/${_boardId}/comment/register`, data),
         (res) => {
             const comment = res?.data || data;
             comment.author = _name;
-            document.getElementById('content').value = '';
-            document.getElementById('comment').insertAdjacentHTML("beforeend", COMMENT_TEMPLATE(comment));
+            comment.parentAuthor =  parentName;
+            if(parentId) {
+                document.getElementById(`commentInput_${parentId}`).remove();
+            } else {
+                document.getElementById('content_').value = '';
+            }
+            CommentHelper.setCommnet(COMMENT_AREA_ID + parentId, comment);
         },
         true
     );
