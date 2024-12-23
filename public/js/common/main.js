@@ -49,7 +49,7 @@ const setCoupleStatus = () => {
             _coupleStatus = data.status;
             _coupleId = data.coupleId;
             setDaysTogether(data.daysTogether);
-            if(!['coupleWait','coupleEdit','coupleView'].includes(_screen ) && data.senderYn == 'N' && data.message)
+            if(!['coupleWait','coupleEdit','coupleView','index'].includes(_screen ) && data.senderYn == 'N' && data.message)
                 showNotification(data.message, '/couple');
             if(_screen === 'schedule' && !['APPROVAL', 'CONFIRMED'].includes(_coupleStatus)) {
                 targetShowOn('calendar-type', false);

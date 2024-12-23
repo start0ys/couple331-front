@@ -135,3 +135,18 @@
 .bold-hover:hover {
   font-weight: bold;
 }
+
+.tui-is-selected {
+  background-color: #f7667e !important; 
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.tui-calendar .tui-calendar-today:not(.tui-is-selected) {
+  color: #ff002a !important;
+  font-weight: bold;
+}
+
+.tui-datepicker .tui-is-selectable:not(.tui-is-selected):hover {
+  background-color: #f8dde1 !important;
+}

@@ -66,8 +66,10 @@
         let _coupleId = '';
     </script>
     <script src="/main.js"></script>
-    <% if (js) { %>
-        <script src="<%= js %>.js"></script>
+    <% if (jsList) { %>
+        <% for (let key in jsList) { %>
+            <script src="<%= jsList[key] %>.js"></script>
+        <% } %>
     <% } %>
     
 </body>

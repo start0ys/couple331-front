@@ -1,1 +1,39 @@
-<div id="calendar-date-ko" style="margin-left: 10px;"></div>
+
+
+<div id='couple-container' style="width: calc(100% - 320px); float: left; height: 645px; padding: 20px;">
+    <div class="card" style="width: 100%;">
+        <div class="card-body" style="padding: 10px;">
+          <% if (couplePage == "coupleView") { %>
+            <%- include('../pages/coupleView') %>
+          <% } else if (couplePage == "coupleWait"){ %> 
+            <%- include('../pages/coupleWait') %>
+          <% } else { %> 
+            <%- include('../pages/coupleEdit') %>
+          <% } %>  
+        </div>
+      </div>
+    </div>
+  
+  <div id='todo-container' style=" width: 320px; float: right; height: 645px; padding: 20px;">
+      <div style="width: 100%; height: 380px;">
+          
+            <div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="display: none;">
+                <input type="text" id="todoDataPicker" aria-label="Date-Time">
+                <span class="tui-ico-date"></span>
+            </div>
+            <div id="wrapper" style="margin-top: -1px;"></div>
+      </div>
+      
+      <div class="card" style="width: 100%;">
+        <div class="card-body">
+          <p class="card-title" style="font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>일정</p>
+          
+          
+          <div id="todoList"></div>
+        </div>
+      </div>
+  </div>
+  
+
+  
+  
