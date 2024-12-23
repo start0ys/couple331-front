@@ -14,22 +14,20 @@
       </div>
     </div>
   
-  <div id='todo-container' style=" width: 320px; float: right; height: 645px; padding: 20px;">
+  <div id='schedule-container' style=" width: 320px; float: right; height: 645px; padding: 20px;">
       <div style="width: 100%; height: 380px;">
           
             <div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="display: none;">
-                <input type="text" id="todoDataPicker" aria-label="Date-Time">
+                <input type="text" id="schedulePicker" aria-label="Date-Time">
                 <span class="tui-ico-date"></span>
             </div>
             <div id="wrapper" style="margin-top: -1px;"></div>
       </div>
       
       <div class="card" style="width: 100%;">
-        <div class="card-body">
-          <p class="card-title" style="font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>일정</p>
-          
-          
-          <div id="todoList"></div>
+        <div class="card-body" style="padding-left: 0; padding-right: 0;">
+          <p class="card-title" style="text-align: center; font-weight: bold;"><i class="bi bi-check2-square" style="margin-right: 3px;"></i>일정</p>
+          <ul id="scheduleList"></ul>
         </div>
       </div>
   </div>

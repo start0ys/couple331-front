@@ -50,5 +50,11 @@ router.get('/todo/:id', async (req, res) => {
     res.json(response);
 });
 
+router.get('/schedule/detail/:day', async (req, res) => {
+    const day = req.params.day;
+    const response = await authenticatedRequest(req, res, "get", `/schedule/detail/${day}`);
+    res.json(response);
+});
+
 
 export default router;
