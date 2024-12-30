@@ -51,4 +51,8 @@ body::-webkit-scrollbar-thumb{ /* 스크롤바 */
   background: #f13050;
 }
 
+.top-menu:focus, .top-menu:hover {
+  border-bottom: 1px solid #f13050 !important;
+}
+
   

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couple331</title>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <!-- 저작자 표시 -->
+    <meta name="copyright" content="This favicon was generated using the following graphics from Twitter Twemoji: Graphics Title: 1f495.svg, Graphics Author: Copyright 2020 Twitter, Inc and other contributors (https://github.com/twitter/twemoji), Graphics Source: https://github.com/twitter/twemoji/blob/master/assets/svg/1f495.svg, Graphics License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/).">
+    <link rel="stylesheet" href="/css/common/common.css">
+    <link rel="stylesheet" href="/css/common/main.css">
+    <% if (css) { %>
+        <link rel="stylesheet" href="/css/<%= css %>.css">
+    <% } %>
+</head>
+<body>
+
+    <%- include('../partials/theme') %>
+
+    <div>
+      
+        <div style="display: flex; border-bottom: 1px solid #d2d2d2;">
+          <div style="width: 200px;">
+              <%- include('../partials/logo') %>
+          </div>
+          <%- include('../partials/sidebar_top') %>
+          <div style="display: flex; justify-content: space-between; padding: 20px;">
+            <div id="daysTogether"></div>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle" style="color: #919699; font-size: 18px;"></i>
+                <strong><%- userInfo["_name"] %></strong>
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="/myPage">마이페이지</a></li>
+                <li><a class="dropdown-item" href="/couple">커플</a></li>
+                <li><a class="dropdown-item" >설정</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" id="logoutBtn" style="cursor: pointer;">로그아웃</a></li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      
+        <div style="width: 100%;">
+            <div><%- body %></div>
+        </div>
+        
+      
+    </div>
+    
+    
+    <script> 
+        <% for (let key in userInfo) { %>
+            const <%- key %> = '<%- userInfo[key] %>';
+        <% } %>
+        <% if (param) { %>
+            <% for (let key in param) { %>
+                const <%- key %> = '<%- param[key] %>';
+            <% } %>
+        <% } %>
+        let _coupleStatus = '';
+        let _coupleId = '';
+    </script>
+    <script src="/main.js"></script>
+    <% if (jsList) { %>
+        <% for (let key in jsList) { %>
+            <script src="<%= jsList[key] %>.js"></script>
+        <% } %>
+    <% } %>
+    
+</body>
+</html>
