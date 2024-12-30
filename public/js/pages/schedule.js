@@ -25,7 +25,7 @@ const TODO_TEMPLATE = (id, todo, completedYn) => {
 			<div class="form-check">
 			<input class="form-check-input me-0 todo-check" type="checkbox" value="" targe-id="${id}" ${checked}/>
 			</div>
-			<p>${todo}</p>
+			<p style="max-width: calc(100% - 60px);">${todo}</p>
 			<div class="d-flex flex-row justify-content-end mb-1" style="margin-left: 5px;">
 			<span class="text-info" data-mdb-tooltip-init title="Edit todo" style="cursor: pointer;"><i class="bi bi-pencil-fill todo-edit" targe-id="${id}"></i></span>
 			<span class="text-danger" data-mdb-tooltip-init title="Delete todo" style="cursor: pointer;"><i class="bi bi-trash3-fill todo-delete" targe-id="${id}"></i></span>
