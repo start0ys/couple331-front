@@ -32,7 +32,6 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.static(path.join(__dirname, 'dist')));
 app.use(expressLayouts);
 
 app.use(cookieParser());
@@ -48,5 +47,5 @@ app.use('/', router);
 
 
 app.listen(port, () => {
-  console.log(`서버가 실행되었습니다. 접속주소 : http://localhost:${port}`)
+  console.log(`개발 서버 실행 중: http://localhost:${port}`);
 })
